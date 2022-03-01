@@ -1,0 +1,76 @@
+<template>
+  <el-dialog title="查看付款证明" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
+    <el-row style="padding-bottom: 20px;">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="80px" label-position="top">
+        <el-form-item label="提交日期" prop="imgUrl">
+          <span>{{ruleForm.date}}</span>
+        </el-form-item>
+        <el-form-item label="付款证明" prop="imgUrl">
+          <el-image style="width: 100px; height: 100px;margin-right: 10px;" :src="imgBasicUrl + img" fit="fit" v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+        </el-form-item>
+      </el-form>
+      <div class="title-bg mb10">适用规则</div>
+      <div>{{ruleForm.bizRuleName}}</div>
+    </el-row>
+  </el-dialog>
+</template>
+
+<script>
+  import { getPayDetail } from '@/api/settleRoleApi/supplierSupplySettlement/supplyBadPunish.js'
+  export default {
+    name: "index",
+    props: {
+      row: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
+    },
+    data() {
+      return {
+        isOpen: true,
+        ruleForm: {
+          date: '',
+          imgUrl: ['https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg','https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'],
+          bizRuleName: '',
+          bizRuleGuid: ''
+        },
+        imgBasicUrl: this.$store.state.basics.img_url_set_dis
+      };
+    },
+    methods: {
+      close() {
+        this.isOpen = false
+        this.$emit('close')
+      },
+      beforeClose() {
+        this.close()
+      },
+      async getPayDetail() {
+        await getPayDetail({
+          judgeFeeGuid: this.row.judgeFeeGuid,
+        }).then(res => {
+          console.log(res);
+          let data = res.Tag[0].Table[0]
+          this.ruleForm.date = data.payTime
+          this.ruleForm.bizRuleName = data.bizRuleName
+          this.ruleForm.bizRuleGuid = data.bizRuleGuid
+          this.ruleForm.imgUrl = data.payProve.split(',')
+        })
+      }
+    },
+    created() {
+      console.log(this.row);
+      this.getPayDetail()
+    }
+  };
+</script>
+
+<style lang="scss" scoped>
+  .title-bg {
+    background-color: #F2F2F2;
+    padding: 10px;
+    font-weight: bold;
+  }
+</style>
