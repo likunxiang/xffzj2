@@ -149,7 +149,7 @@
         await insertNameTree({
           catTreeGuid: this.guid,
           parentGuid: this.fatherSceneSure.guid ? this.fatherSceneSure.guid : this.guid,
-          name: this.ownByte
+          name: this.ownByte.trim()
         }).then(res => {
           console.log(res);
           if (res.Tag[0] > 0) {
