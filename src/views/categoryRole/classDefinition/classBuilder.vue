@@ -13,6 +13,7 @@
       <el-button type="primary" @click="openNewBatch">批量新建</el-button>
       <el-button type="primary" @click="toByteMain">字节标题管理</el-button>
       <el-button type="primary" :disabled="!tableData.length || building" @click="buildClass">生成品类名称</el-button>
+      <el-button type="primary" @click="toBatchDel">批量删除字节内容</el-button>
     </div>
     <!-- <el-row class="flex flex-center mt20 mb20">
       <div class="el-icon-circle-plus-outline" style="font-size: 30px;" @click="addByte"></div>
@@ -143,6 +144,16 @@
         obj.guid = this.guid
         this.$router.push({
           path: "byteMain",
+          query: obj,
+        });
+      },
+      toBatchDel() {
+        let obj = {}
+        obj.pageTitle = this.pageTitle
+        obj.treeTitle = this.treeTitle
+        obj.guid = this.guid
+        this.$router.push({
+          path: "batchdeleteByte",
           query: obj,
         });
       },
