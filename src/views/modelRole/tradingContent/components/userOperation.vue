@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose" :close-on-click-modal="false">
     <el-row>
       <el-descriptions border :column="1" size="medium">
         <el-descriptions-item label="品类名称">{{categoryName}}</el-descriptions-item>
@@ -66,7 +66,7 @@
                 <el-radio :label="5">文档上传</el-radio>
               </el-row>
             </el-radio-group>
-            <el-input type="textarea" placeholder="请输入需要需方填写或者上传时的注意要点" v-model="inputDemander"></el-input>
+            <el-input v-if="radioDemander==3" type="textarea" placeholder="请输入需要需方填写或者上传时的注意要点" v-model="inputDemander"></el-input>
             <!-- 是否能上传文档 -->
             <!-- <div v-if="radioDemander>3">
               <el-row>
@@ -136,7 +136,7 @@
               <el-radio :label="5">文档上传</el-radio>
             </el-row>
           </el-radio-group>
-          <el-input type="textarea" placeholder="请输入需要需方填写或者上传时的注意要点" v-model="inputDemander"></el-input>
+          <el-input v-if="radioDemander==3" type="textarea" placeholder="请输入需要需方填写或者上传时的注意要点" v-model="inputDemander"></el-input>
           <!-- 是否能上传文档 -->
           <!-- <div v-if="radioDemander>3">
             <el-row>

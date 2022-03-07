@@ -165,3 +165,14 @@ export function saveNameTitle_1_0_1(data) {
     data: data
   })
 }
+
+// web-品类定义-判断是否生成过品类名称_1_0_1
+export function genCatNameFlag_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\genCatNameFlag_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

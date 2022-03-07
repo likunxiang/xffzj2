@@ -220,8 +220,13 @@
       },
       submit() {
         if (this.fingdingReason && this.radioResult > 0) {
-          // this.SysMakeJudge()
-          this.$refs.upload.submit();
+
+          if(this.imgList.length > 0) {
+            this.$refs.upload.submit();
+          } else {
+            this.SysMakeJudge()
+          }
+
         } else {
           this.$message({
             type: 'error',

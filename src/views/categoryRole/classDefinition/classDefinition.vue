@@ -95,6 +95,7 @@
 				}
 			},
 			getParent(node) {
+        console.log('node111',node);
 				let nodeObj = node
 				let nodeTitle = node.data.name
 				let level = node.level

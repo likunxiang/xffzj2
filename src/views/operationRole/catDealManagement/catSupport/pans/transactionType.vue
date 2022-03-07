@@ -4,11 +4,11 @@
     <el-table :data="tableData" border v-loading="loading" >
       <el-table-column prop="categoryName" label="品类名称" align="center"></el-table-column>
       <el-table-column prop="cattypeName" label="品类类型" align="center"></el-table-column>
-      <el-table-column prop="cattypeName" label="交易规则是否发布" align="center">
+      <!-- <el-table-column prop="cattypeName" label="交易规则是否发布" align="center">
         <template slot-scope="scope">
           {{scope.row.dealModePublishFlag == 2?'是':''}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="cattypeName" label="供需需求信息是否发布" align="center">
         <template slot-scope="scope">
           {{scope.row.dealModePublishFlag == 2?'是':''}}
@@ -24,11 +24,11 @@
           {{scope.row.hasServiceFee == 1?'是':''}}
         </template>
       </el-table-column>
-      <el-table-column prop="cattypeName" label="是否已经有验收期限信息" align="center">
+      <!-- <el-table-column prop="cattypeName" label="是否已经有验收期限信息" align="center">
         <template slot-scope="scope">
           {{scope.row.hasServiceFee == 1?'是':''}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <pages :total="pageTotal" @changePage="changePage" :page="page"></pages>
   </div>

@@ -19,10 +19,10 @@
       <div class="el-icon-remove-outline" style="font-size: 30px; margin-left: 20px;" @click="delByte"></div>
     </el-row> -->
 
-    <el-tree v-loading="loading" :data="tableData" :props="defaultProps" @node-click="getFather" node-key="id" @node-expand="getSon"
-      @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
-      @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable
-      @node-contextmenu="rightClick" :allow-drop="allowDrop">
+    <el-tree v-loading="loading" :data="tableData" :props="defaultProps" @node-click="getFather" node-key="id"
+      @node-expand="getSon" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
+      @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
+      @node-drop="handleDrop" draggable @node-contextmenu="rightClick" :allow-drop="allowDrop">
     </el-tree>
 
     <div v-show="menuVisible" class="menu-box" :style="{left: menuX + 'px',top: menuY + 'px'}">
@@ -60,6 +60,7 @@
     getChildNameList_1_0_1, // 查询儿子
     updateNameTreeNorder1_0_1, // 变更字节内容节点
     deleteNameTree,
+    genCatNameFlag_1_0_1, // 判断是否生成过品类名称
   } from '@/api/categoryRole/classDefinition.js'
   export default {
     name: "index",
@@ -97,6 +98,7 @@
         editNode: {},
         parentData: {}, // 将要拖拽的父亲节点
         building: false, // 是否正在生成
+        isBuild: false, // 是否已经生成过品类
       };
     },
     watch: {
@@ -109,7 +111,7 @@
       }
     },
     methods: {
-      getFather(data,node) {
+      getFather(data, node) {
         console.log(node);
       },
       openEditName(row) {
@@ -145,8 +147,31 @@
         });
       },
       buildClass() {
-        this.building = true
-        this.getNoContentTitles()
+        // if (this.isBuild) {
+        //   this.$confirm('请务必你一定已经删除掉被修正的字节内容产生的品类名称.不然你要1个1个删除垃圾品类名称。', '警告', {
+        //     confirmButtonText: '生成品类名称',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //     center: true
+        //   }).then(() => {
+        //     this.building = true
+        //     this.getNoContentTitles()
+        //   }).catch(() => {});
+        // } else {
+        //   this.building = true
+        //   this.getNoContentTitles()
+        // }
+        this.$confirm('<p align="left">请务必<br>你一定已经删除掉被修正的字节内容产生的品类名称。<br /><br /><strong>不然<br>你要1个1个删除垃圾品类名称。</strong></p>', '警告', {
+          confirmButtonText: '生成品类名称',
+          dangerouslyUseHTMLString: true,
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          this.building = true
+          this.getNoContentTitles()
+        }).catch(() => {});
+
       },
       addByte() {
         this.insertTitle()
@@ -314,10 +339,10 @@
       handleDrop(draggingNode, dropNode, dropType, ev) {
         this.parentData = dropNode.parent.data
         let data = this.parentData
-        console.log('end data',this.parentData);
+        console.log('end data', this.parentData);
         this.loading = true
         this.updateType3Norder(data)
-        console.log('end data111',this.parentData);
+        console.log('end data111', this.parentData);
       },
       allowDrop(draggingNode, dropNode, type) {
         // console.log('dropNode',dropNode);
@@ -491,6 +516,25 @@
           }
         })
       },
+      // 判断是否生成过品类
+      async genCatNameFlag_1_0_1() {
+        await genCatNameFlag_1_0_1({
+          catTreeGuid: this.guid
+        }).then(res => {
+          console.log(res);
+          if (res.Tag[0].Table[0].genFlag > 0) {
+            this.isBuild = true
+            this.$confirm('该场景已经生成过品类名称，如果你要修正品类定义内容；请优先删除已生成的品类名称。避免制造垃圾品类名称。', '警告', {
+              confirmButtonText: '我知道了',
+              showCancelButton: false,
+              type: 'warning',
+              center: true
+            }).then(() => {}).catch(() => {});
+          } else {
+            this.isBuild = false
+          }
+        })
+      }
     },
     created() {
       this.pageTitle = this.$route.query.title
@@ -499,6 +543,7 @@
       this.code = this.$route.query.code
       // this.getTitleListByCatreeGuid()
       this.getTableData()
+      this.genCatNameFlag_1_0_1()
     }
   }
 </script>

@@ -599,7 +599,10 @@ export default {
         inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
       }).then(({ value }) => {
           resetUserPwd(row.userId, value).then(response => {
-            this.$modal.msgSuccess("修改成功，新密码是：" + value);
+            if (response.OK == 'True') {
+            	this.$modal.msgSuccess("修改成功，新密码是：" + value);
+            }
+            
           });
         }).catch(() => {});
     },
@@ -614,13 +617,19 @@ export default {
         if (valid) {
           if (this.form.userId != undefined) {
             updateUser(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+              if (response.OK == 'True') {
+              	this.$modal.msgSuccess("修改成功");
+              }
+
               this.open = false;
               this.getList();
             });
           } else {
             addUser(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
+              if (response.OK == 'True') {
+              	this.$modal.msgSuccess("新增成功");
+              }
+
               this.open = false;
               this.getList();
             });

@@ -1,58 +1,60 @@
 <template>
   <el-dialog title="添加型号" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
-    <el-row class="flex mb20 mt10">
-      <div class="bold" style="width: 120px;">品类名称</div>
-      <div>{{openRow.categoryName}}</div>
-    </el-row>
-    <el-row class="flex mb20">
-      <div class="bold" style="width: 120px;">收取范围</div>
-      <div>{{collectType==0?'按品类':collectType==1?'按供方型号':'按我方型号'}}</div>
-    </el-row>
-    <div class="flex flex-center mb20 jsb">
-      <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的型号名称' :isMb20="false"></searchCom>
-      <!-- 弹出窗 -->
-      <el-popover placement="bottom-end" width="400" trigger="click" @show="getModelList" @hide="saveModelList">
-        <el-row class="mb20">型号选择</el-row>
-        <searchCom @toSearch='searchFuc' :searchResult='searchModelResult' placeholderText='请输入你要找的型号名称'></searchCom>
-        <template v-if="radioVersionList.length">
-          <el-radio-group v-model="radioVersion">
-            <el-row class="mb10" v-for="(item,index) in radioVersionList" :key="index">
-              <el-radio :label="item.modelGuid" @change="chooseVersion" :disabled="item.addedFlag == '1'">{{item.modelName}}</el-radio>
-            </el-row>
+    <div v-loading="loading">
+      <el-row class="flex mb20 mt10">
+        <div class="bold" style="width: 120px;">品类名称</div>
+        <div>{{openRow.categoryName}}</div>
+      </el-row>
+      <el-row class="flex mb20">
+        <div class="bold" style="width: 120px;">收取范围</div>
+        <div>{{collectType==0?'按品类':collectType==1?'按供方型号':'按我方型号'}}</div>
+      </el-row>
+      <div class="flex flex-center mb20 jsb">
+        <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的型号名称' :isMb20="false"></searchCom>
+        <!-- 弹出窗 -->
+        <el-popover placement="bottom-end" width="400" trigger="click" @show="getModelList" @hide="saveModelList">
+          <el-row class="mb20">型号选择</el-row>
+          <searchCom @toSearch='searchFuc' :searchResult='searchModelResult' placeholderText='请输入你要找的型号名称'></searchCom>
+          <template v-if="radioVersionList.length">
+            <el-radio-group v-model="radioVersion">
+              <el-row class="mb10" v-for="(item,index) in radioVersionList" :key="index">
+                <el-radio :label="item.modelGuid" @change="chooseVersion" :disabled="item.addedFlag == '1'">{{item.modelName}}</el-radio>
+              </el-row>
 
-          </el-radio-group>
-        </template>
-        <template v-else>
-          <el-row>没有内容。</el-row>
+            </el-radio-group>
+          </template>
+          <template v-else>
+            <el-row>没有内容。</el-row>
 
-        </template>
-        <el-button slot="reference">引用型号</el-button>
-      </el-popover>
+          </template>
+          <el-button slot="reference">引用型号</el-button>
+        </el-popover>
+      </div>
+      <el-row>
+        <el-table :data="modelList" border style="width: 100%">
+          <el-table-column prop="modelName" label="引用型号" align="center">
+          </el-table-column>
+          <el-table-column prop="targetObject" label="收取对象" align="center">
+            <template slot-scope="scope">
+              {{scope.row.targetObject=='supply'?'供方':'需方'}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="ratio" label="收取比例" align="center">
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-row>
+                <el-button @click="delVersion(scope.row)" type="text" size="small">删除型号名称</el-button>
+              </el-row>
+              <el-row>
+                <el-button @click="openPricing(scope.row)" type="text" size="small">服务定价设置</el-button>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+      <modelPricing3 v-if="isSetting" @close="closePricing" :openRow="openRow" :modelObj="modelObj" @refresh="getAddedModels"></modelPricing3>
     </div>
-    <el-row>
-      <el-table :data="modelList" border style="width: 100%">
-        <el-table-column prop="modelName" label="引用型号" align="center">
-        </el-table-column>
-        <el-table-column prop="targetObject" label="收取对象" align="center">
-          <template slot-scope="scope">
-            {{scope.row.targetObject=="demand"?'需方':'供方'}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="ratio" label="收取比例" align="center">
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-row>
-              <el-button @click="delVersion(scope.row)" type="text" size="small">删除型号名称</el-button>
-            </el-row>
-            <el-row>
-              <el-button @click="openPricing(scope.row)" type="text" size="small">服务定价设置</el-button>
-            </el-row>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-row>
-    <modelPricing3 v-if="isSetting" @close="closePricing" :openRow="openRow" :modelObj="modelObj" @refresh="getAddedModels"></modelPricing3>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="submit">确 定</el-button>
@@ -105,6 +107,7 @@
         modelObj: {},
         isSetting: false,
         radioVersion: 0,
+        loading: true,
       };
     },
     methods: {
@@ -177,6 +180,7 @@
           type: this.collectType == '1' ? 2 : 3,
           modelName: this.searchVal || ''
         }).then(res => {
+          this.loading = false
           console.log('型号列表', res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table

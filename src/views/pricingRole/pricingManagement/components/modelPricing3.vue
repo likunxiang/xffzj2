@@ -24,7 +24,7 @@
     </el-row>
     <el-row class="flex mb20">
       <div class="bold" style="width: 120px;">收取对象</div>
-      <div>{{modelObj.targetObject=='demand'?'需方':'供方'}}</div>
+      <div>{{modelObj.targetObject=='supply'?'供方':'需方'}}</div>
     </el-row>
     <el-row class="flex mb20 flex-center">
       <div class="bold" style="width: 120px;">收取比例</div>

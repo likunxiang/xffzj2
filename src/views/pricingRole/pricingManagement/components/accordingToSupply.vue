@@ -1,58 +1,60 @@
 <template>
   <el-dialog title="服务定价设置" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
-    <el-row class="flex mb20 mt10">
-      <div class="bold" style="width: 120px;">品类名称</div>
-      <div>{{openRow.categoryName}}</div>
-    </el-row>
-    <el-row class="flex mb20">
-      <div class="bold" style="width: 120px;">收取范围</div>
-      <div>{{collectType==0?'按品类':collectType==1?'按供方型号':'按我方型号'}}</div>
-    </el-row>
-    <div class="flex flex-center mb20 jsb">
-      <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的供方姓名' :isMb20="false"></searchCom>
-      <!-- 弹出窗 -->
-      <el-popover placement="bottom-end" width="400" trigger="click" @show="getSuppliers" @hide="saveSupplier">
-        <el-row class="mb20">选择供方账号名称</el-row>
-        <searchCom @toSearch='searchSup' :searchResult='searchSupResult' placeholderText='请输入你要找的供方'></searchCom>
-        <template v-if="radioSupplierList.length">
-          <el-radio-group v-model="radioSup">
-            <el-row class="mb10" v-for="(item,index) in radioSupplierList" :key="index">
-              <el-radio :label="item.supplierGuId" @change="chooseSupplier">{{item.userName}} {{item.nation}}
-                {{item.phonenumber}}
-              </el-radio>
-            </el-row>
-
-          </el-radio-group>
-        </template>
-        <template v-else>
-          <el-row>没有内容。</el-row>
-
-        </template>
-        <el-button slot="reference">添加供方</el-button>
-      </el-popover>
-
-    </div>
-    <el-row>
-      <el-table :data="supplyList" border style="width: 100%">
-        <el-table-column prop="userName" label="供方姓名" align="center">
-        </el-table-column>
-        <el-table-column prop="phonenumber" label="绑定手机号" align="center">
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-row>
-              <el-button @click="delPricing(scope.row)" type="text" size="small">删除供方</el-button>
-            </el-row>
-            <el-row>
-              <el-button @click="openVersion(scope.row)" type="text" size="small">型号管理</el-button>
-            </el-row>
+    <div v-loading="loading">
+      <el-row class="flex mb20 mt10">
+        <div class="bold" style="width: 120px;">品类名称</div>
+        <div>{{openRow.categoryName}}</div>
+      </el-row>
+      <el-row class="flex mb20">
+        <div class="bold" style="width: 120px;">收取范围</div>
+        <div>{{collectType==0?'按品类':collectType==1?'按供方型号':'按我方型号'}}</div>
+      </el-row>
+      <div class="flex flex-center mb20 jsb">
+        <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的供方姓名' :isMb20="false"></searchCom>
+        <!-- 弹出窗 -->
+        <el-popover placement="bottom-end" width="400" trigger="click" @show="getSuppliers" @hide="saveSupplier">
+          <el-row class="mb20">选择供方账号名称</el-row>
+          <searchCom @toSearch='searchSup' :searchResult='searchSupResult' placeholderText='请输入你要找的供方'></searchCom>
+          <template v-if="radioSupplierList.length">
+            <el-radio-group v-model="radioSup">
+              <el-row class="mb10" v-for="(item,index) in radioSupplierList" :key="index">
+                <el-radio :label="item.supplierGuId" @change="chooseSupplier">{{item.userName}} {{item.nation}}
+                  {{item.phonenumber}}
+                </el-radio>
+              </el-row>
+      
+            </el-radio-group>
           </template>
-        </el-table-column>
-      </el-table>
-    </el-row>
-    <el-row v-if="supplyList.length <= 0">
-      <p>请添加供方</p>
-    </el-row>
+          <template v-else>
+            <el-row>没有内容。</el-row>
+      
+          </template>
+          <el-button slot="reference">添加供方</el-button>
+        </el-popover>
+      
+      </div>
+      <el-row>
+        <el-table :data="supplyList" border style="width: 100%">
+          <el-table-column prop="userName" label="供方姓名" align="center">
+          </el-table-column>
+          <el-table-column prop="phonenumber" label="绑定手机号" align="center">
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-row>
+                <el-button @click="delPricing(scope.row)" type="text" size="small">删除供方</el-button>
+              </el-row>
+              <el-row>
+                <el-button @click="openVersion(scope.row)" type="text" size="small">型号管理</el-button>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+      <el-row v-if="supplyList.length <= 0">
+        <p>请添加供方</p>
+      </el-row>
+    </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="submit">确 定</el-button>
@@ -109,6 +111,7 @@
         isModel: false,
         supplyObj: {},
         radioSup: 0,
+        loading: true,
       };
     },
     methods: {
@@ -215,6 +218,7 @@
           categoryGuid: this.openRow.categoryGuid,
           phonenumber: this.searchVal || ''
         }).then(res => {
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table

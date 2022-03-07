@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="targetObject" label="收取对象" align="center">
           <template slot-scope="scope">
-            {{scope.row.targetObject=="demand"?'需方':'供方'}}
+            {{scope.row.targetObject=='supply'?'供方':'需方'}}
           </template>
         </el-table-column>
         <el-table-column prop="ratio" label="收取比例" align="center">
