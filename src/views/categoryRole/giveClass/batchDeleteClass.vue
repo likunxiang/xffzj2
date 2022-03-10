@@ -88,6 +88,7 @@
     <chooseScreen v-if="isScreen" @close="closeScreen" @getScreen="getScreen" :openRow="this.searchForm.class">
     </chooseScreen>
     <chooseTime v-if="isTime" @close="closeTime" @getTime="getTime"></chooseTime>
+    <pages @changePage="changePage" :total="classTotal" :page="page"></pages>
   </div>
 </template>
 
@@ -101,13 +102,15 @@
   import chooseScreen from './components/chooseScreen.vue'
   import chooseByteTitle from './components/chooseByteTitle.vue'
   import chooseTime from './components/chooseTime.vue'
+  import pages from '@/views/components/common/pages.vue'
   export default {
     name: "index",
     components: {
       chooseClassType,
       chooseScreen,
       chooseByteTitle,
-      chooseTime
+      chooseTime,
+      pages
     },
     data() {
       return {
@@ -127,9 +130,14 @@
         loading: false,
         basicImgUrl: this.$store.state.basics.img_url_cat,
         classTotal: 0,
+        page: 1,
       };
     },
     methods: {
+      changePage(page) {
+        this.page = page
+        this.toSearch()
+      },
       resetFilter() {
         this.searchForm = {
           class: {},
@@ -241,7 +249,7 @@
         }
         await getCountByCon_1_0_1(param).then(res => {
           if (res.Tag.length > 0) {
-            this.classTotal = res.Tag[0].Table[0].catCount
+            this.classTotal = parseInt(res.Tag[0].Table[0].catCount)
           } else {
             this.classTotal = 0
           }
@@ -262,7 +270,9 @@
           treeName9: this.guidList[9] ? this.guidList[9] : '',
           treeName10: this.guidList[10] ? this.guidList[10] : '',
           categoryName: this.searchForm.searchVal ? this.searchForm.searchVal : '',
-          categoryRemainTime: this.searchForm.time > 0 ? this.searchForm.time : 9999999
+          categoryRemainTime: this.searchForm.time > 0 ? this.searchForm.time : 9999999,
+          size: '20',
+          page: this.page
         }
         await getListByCon_1_0_1(param).then(res => {
           this.loading = false

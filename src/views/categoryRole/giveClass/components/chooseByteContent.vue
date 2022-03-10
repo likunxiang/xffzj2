@@ -6,12 +6,14 @@
         <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClass">
         </i>
       </el-input>
-      <el-radio-group v-model="radio" @change="getByteObj">
-        <el-row v-for="(item,index) in tableData" :key="index">
-          <el-radio :label="item.guid">{{item.name}}</el-radio>
-        </el-row>
+      <el-row class="mt20">
+        <el-radio-group v-model="radio" @change="getByteObj">
+          <el-row style="margin-bottom: 5px;" v-for="(item,index) in tableData" :key="index">
+            <el-radio :label="item.guid">{{item.name}}</el-radio>
+          </el-row>
 
-      </el-radio-group>
+        </el-radio-group>
+      </el-row>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submit" :disabled="!radio">保 存</el-button>
@@ -51,7 +53,7 @@
         radio: 0,
         loading: false,
         searchVal: '',
-        
+
       };
     },
     methods: {
