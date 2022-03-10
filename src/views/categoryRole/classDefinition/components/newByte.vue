@@ -16,6 +16,10 @@
           <el-input type="text" :value="fatherSceneSure.name" placeholder="请选择" suffix-icon="el-icon-search"
             @focus="openFather" />
         </div>
+        <div class="flex flex-center">
+          <div class="input-text"></div>
+          <div>{{fatherSceneSure.treeTitleString}}</div>
+        </div>
         <div class="flex flex-center mt20">
           <div class="input-text">字节内容</div>
           <el-input type="text" v-model="ownByte" placeholder="请输入" />
@@ -28,6 +32,10 @@
           <div class="input-text">父级字节内容</div>
           <el-input type="text" :value="fatherSceneSure.name" placeholder="请选择" suffix-icon="el-icon-search"
             @focus="openFather" />
+        </div>
+        <div class="flex flex-center">
+          <div class="input-text"></div>
+          <div>{{fatherSceneSure.treeTitleString}}</div>
         </div>
         <div class="flex flex-center mt20">
           <div class="input-text">字节内容</div>
@@ -101,6 +109,7 @@
         title: '新建字节内容',
         fatherSceneSure: {},
         nowLevel: '1', // 初始level为1
+        treeTitleString: '',
       };
     },
     methods: {
@@ -226,6 +235,7 @@
         console.log('editObj',this.editObj);
         this.fatherSceneSure.name = this.editObj.parentName
         this.fatherSceneSure.guid = this.editObj.parentGuid
+        this.fatherSceneSure.treeTitleString = this.editObj.treeTitleString
         // this.nowLevel = (parseInt(this.editObj.level) + 1).toString()
         this.ownByte = this.editObj.name
       }

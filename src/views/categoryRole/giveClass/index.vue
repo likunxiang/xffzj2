@@ -5,16 +5,19 @@
 
       </el-tab-pane>
     </el-tabs> -->
-    <div class="flex flex-center">
-      <!-- <el-button type="primary" @click="openNew">新建</el-button>
-        <el-button type="primary" @click="openImport">批量导入</el-button>
-        <el-button type="primary" @click="openTemplate">下载模板</el-button> -->
-      <el-input placeholder="请输入你要找的品类名称" v-model="searchVal" @keyup.enter.native="searchClass"
-        style="width: 200px;" clearable @clear="clearSearch">
-        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClass">
-        </i>
-      </el-input>
-      <div v-if="isToSearch" class="ml0">搜索结果: {{searchResult}}</div>
+    <div class="flex flex-center jsb">
+      <div class="flex flex-center">
+        <!-- <el-button type="primary" @click="openNew">新建</el-button>
+          <el-button type="primary" @click="openImport">批量导入</el-button>
+          <el-button type="primary" @click="openTemplate">下载模板</el-button> -->
+        <el-input placeholder="请输入你要找的品类名称" v-model="searchVal" @keyup.enter.native="searchClass"
+          style="width: 200px;" clearable @clear="clearSearch">
+          <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClass">
+          </i>
+        </el-input>
+        <div v-if="isToSearch" class="ml0">搜索结果: {{searchResult}}</div>
+      </div>
+      <el-button type="primary" @click="toBatchDeleteClass">批量删除品类名称</el-button>
     </div>
     <el-divider></el-divider>
 
@@ -168,6 +171,12 @@
         this.searchVal = ''
         this.searchClass()
       },
+      toBatchDeleteClass() {
+        this.$router.push({
+          path: "batchDeleteClass",
+          query: {},
+        });
+      },
       // 删除类名
       delClass(index, row) {
         console.log(row);
@@ -200,7 +209,7 @@
           } else {
             this.$message({
               type: 'error',
-              message: '操作成功!'
+              message: '操作失败!'
             });
           }
 

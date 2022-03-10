@@ -17,6 +17,10 @@
           <el-input type="text" :value="fatherSceneSure.name" placeholder="请选择" suffix-icon="el-icon-search"
             @focus="openFather" />
         </div>
+        <div class="flex flex-center">
+          <div class="input-text"></div>
+          <div>{{fatherSceneSure.treeTitleString}}</div>
+        </div>
         <div class="mt20">
           <div class="bold my-label">字节内容</div>
           <p>请输入字段内容(一行一个)</p>

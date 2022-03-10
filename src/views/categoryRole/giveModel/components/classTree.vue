@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading">
 		<el-tree :data="tableData" :props="defaultProps" @node-expand="getSon" @node-click="getClassDate"></el-tree>
 		<div style="width: 100%;text-align: center;margin: 10px auto;">
 			<el-button type="primary" @click="saveObj">保存</el-button>
@@ -16,6 +16,12 @@
 	} from '@/api/categoryRole/categoryCommon.js'
 	export default {
 		name: "index",
+    props: {
+      isClass: {
+        type: Boolean,
+        default: false
+      }
+    },
 		data() {
 			return {
 				tableData: [],
@@ -25,6 +31,7 @@
 				},
 				classCheckObj: {}, // 预选品类
 				sureObj: {}, // 保存品类
+        loading: false,
 			};
 		},
 		methods: {
@@ -37,9 +44,15 @@
 				this.$emit('save', data)
 			},
 			async getWithHasCatTreeList() {
+        this.loading = true
 				await getWithHasCatTreeList().then(res => {
 					console.log(res);
+          this.loading = false
 					let data = res.Tag[0].Table
+          if (this.isClass) {
+            this.tableData = data
+            return
+          }
 					for (let i in data) {
 						if (data[i].hasSon == '1') {
 							data[i].children = [{
@@ -47,7 +60,8 @@
 							}]
 						}
 					}
-					this.tableData = data
+          this.tableData = data
+					
 				})
 			},
       async getFirstSceneList(data) {
@@ -77,6 +91,9 @@
         })
       },
 			getSon(data) {
+        if(this.isClass) {
+          return
+        }
 				if (data.hasSon == '1') {
           this.getFirstSceneList(data)
 					// this.getSonWithHasCatFlagList(data)
@@ -90,15 +107,20 @@
 				}
 			},
 			getClassDate(data) {
-				if (data.hasSon == '1') {
-					return
-				} else {
-					if (data.hasCategory == '1') {
-						return
-					} else {
-						this.classCheckObj = data
-					}
-				}
+        if (this.isClass) {
+          this.classCheckObj = data
+        } else {
+          if (data.hasSon == '1') {
+          	return
+          } else {
+          	if (data.hasCategory == '1') {
+          		return
+          	} else {
+          		this.classCheckObj = data
+          	}
+          }
+        }
+
 			},
 			async getSonWithHasCatFlagList(data) {
 				let id = data.guid

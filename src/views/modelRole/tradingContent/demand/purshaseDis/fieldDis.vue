@@ -9,7 +9,7 @@
       <el-button @click="newField">新建字段名称</el-button>
     </el-row>
     <el-row>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column prop="plateFieldName" label="字段名称" align="center">
         </el-table-column>
         <el-table-column prop="from" label="字段名称来源" align="center">
@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="440">
           <template slot-scope="scope">
-            <el-button @click="editFieldName(scope.row,scope.$index)" type="text" size="small">编辑字段名称</el-button>
+            <el-button @click="editFieldName(scope.row,scope.$index)" type="text" size="small">编辑字段别名</el-button>
             <el-button @click="delField(scope.row,scope.$index)" type="text" size="small">删除字段名称</el-button>
             <el-button @click="relevanceClass(scope.row,scope.$index)" type="text" size="small">关联板块类型</el-button>
             <el-button @click="disField(scope.row,scope.$index)" type="text" size="small">字段内容配置</el-button>
@@ -126,6 +126,7 @@
         isNewField: false,
         newFeildText: '',
         isEdit: false,
+        loading: false,
       };
     },
     mounted() {
@@ -204,10 +205,12 @@
       },
       // 关联板块类型
       async relateField2PlateType() {
+        this.loading=true
         await relateField2PlateType({
           plateFieldGuid: this.oldRow.plateFieldGuid,
           plateTypeGuid: this.radio,
         }).then(res => {
+          this.loading=false
           if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
@@ -217,7 +220,7 @@
             this.$message({
               type: 'error',
               message: '关联失败!'
-            });
+            }); 
           }
           this.getPlateFields()
         })

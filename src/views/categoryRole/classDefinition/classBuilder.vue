@@ -100,6 +100,8 @@
         parentData: {}, // 将要拖拽的父亲节点
         building: false, // 是否正在生成
         isBuild: false, // 是否已经生成过品类
+        treeTitle1: [],
+        treeTitleString1: ''
       };
     },
     watch: {
@@ -119,6 +121,30 @@
         this.openRow = row
         console.log(row);
         this.isEdit = true
+      },
+      getParent(node) {
+        console.log('node111',node);
+      	let nodeObj = node
+      	let nodeTitle = node.data.name
+      	let level = node.level
+        console.log('nodeLevel',level);
+      	this.treeTitle1.push(nodeTitle)
+      	if (level > 1) {
+      		this.getParent(nodeObj.parent)
+      	} else {
+          let treeTitle = this.treeTitle1
+
+          if (typeof(treeTitle) == 'string') {
+            console.log(777);
+            this.treeTitleString1 = treeTitle
+            this.editSelf.treeTitleString = this.treeTitleString1
+          } else {
+            treeTitle.shift()
+            console.log(888);
+            this.treeTitleString1 = treeTitle.reverse().join(" > ")
+            this.editSelf.treeTitleString = this.treeTitleString1
+          }
+      	}
       },
       closeEdit() {
         this.isEdit = false
@@ -434,12 +460,15 @@
 
       // 右键打开菜单
       rightClick(event, data, node) {
+        this.treeTitle1 = []
+        this.treeTitleString1 = ''
         this.menuX = event.clientX
         this.menuY = event.clientY
         this.editSelf = data
         this.editFather = node.parent.data
         this.editScreen = data.name
         this.editNode = node
+        this.getParent(node)
         this.editData = data
         this.menuVisible = true
       },
@@ -474,7 +503,8 @@
       getTableData() {
         this.loading = true
         getTopParentNameList_1_0_1({
-          catreeGuid: this.guid
+          catreeGuid: this.guid,
+		  name: '',
         }).then(res => {
           this.loading = false
           if (res.Tag.length) {
@@ -508,6 +538,7 @@
         let id = data.guid
         await getChildNameList_1_0_1({
           parentGuid: id,
+		  name: ''
         }).then(res => {
           this.loading = false
           console.log(res);

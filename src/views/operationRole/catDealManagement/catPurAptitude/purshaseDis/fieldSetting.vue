@@ -32,7 +32,7 @@
             <p v-else class="">未设置</p>
           </template>
         </el-table-column>
-        <el-table-column prop="demander" label="需方操作设置" align="center">
+        <el-table-column prop="demander" label="供方操作设置" align="center">
           <template slot-scope="scope">
             <p v-if="scope.row.operation > 0" class="el-icon-check"></p>
             <p v-else class="">未设置</p>
@@ -42,7 +42,7 @@
           <template slot-scope="scope">
             <p v-if="scope.row.plateFieldContentSource=='3'" class="el-icon-check">
             </p>
-            <p v-else-if="scope.row.content" class="el-icon-check"></p>
+            <p v-else-if="scope.row.content==='1'" class="el-icon-check"></p>
             <p v-else class="">未设置</p>
           </template>
         </el-table-column>

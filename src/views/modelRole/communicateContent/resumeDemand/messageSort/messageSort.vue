@@ -7,15 +7,17 @@
     <el-row class="mt20">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="采购需求信息配置" name="demand">
-          <el-tree :data="demandList" node-key="id" :props="defaultProps" @node-drag-start="handleDragStart"
-            @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver"
-            @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable :allow-drop="allowDrop">
+          <el-tree :data="demandList" v-loading="loading" node-key="id" @node-expand="getSon" :props="defaultProps"
+            @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
+            @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable
+            :allow-drop="allowDrop">
           </el-tree>
         </el-tab-pane>
         <el-tab-pane label="供应需求信息配置" name="supply">
-          <el-tree :data="demandList" :props="defaultProps" node-key="id" @node-drag-start="handleDragStart"
-            @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver"
-            @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable :allow-drop="allowDrop">
+          <el-tree :data="demandList" v-loading="loading" :props="defaultProps" @node-expand="getSon" node-key="id"
+            @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
+            @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable
+            :allow-drop="allowDrop">
           </el-tree>
         </el-tab-pane>
       </el-tabs>
@@ -25,7 +27,14 @@
 </template>
 
 <script>
-  import { getPlates,getPlateTypesByPlateGuid,getPlateFieldsByPlateTypeGuid,updatePlateNorder,updatePlateTypeNorder,updatePlateFieldNorder } from '@/api/modelRoleApi/tradingContent.js'
+  import {
+    getPlates,
+    getPlateTypesByPlateGuid,
+    getPlateFieldsByPlateTypeGuid,
+    updatePlateNorder,
+    updatePlateTypeNorder,
+    updatePlateFieldNorder
+  } from '@/api/modelRoleApi/tradingContent.js'
   export default {
     name: "index",
     data() {
@@ -36,7 +45,7 @@
         supplyList: [],
         defaultProps: {
           label: 'plateName',
-          children:'children',
+          children: 'children',
           isLeaf: true
         },
         type: 1,
@@ -44,85 +53,113 @@
         guid: '', // 对应的id
         oldNorder: 0, // 旧的顺序
         newNorder: 0, // 新的顺序
+        loading: false
       };
     },
     methods: {
+      getSon(data, node) {
+        console.log('getson', node);
+        this.level = node.level // 获取层级
+        if (data.hasSon == '1') {
+          if (this.level === 1) {
+            this.getPlateTypesByPlateGuid(data)
+          } else if (this.level === 2) {
+            this.getPlateFieldsByPlateTypeGuid(data)
+          }
+        } else {
+          return
+        }
+      },
       // 获取板块名称
       async getPlates() {
+        this.loading = true
         await getPlates({
           catTreeCode: this.activeName,
           categoryGuid: this.openRow.categoryGuid,
           bizType: this.openRow.bizType,
-		  fixedDataBizType: '1',
-		  plateTypeGuid: ''
+          fixedDataBizType: '1',
+          plateTypeGuid: ''
         }).then(res => {
+          this.loading = false
           console.log(res);
-          if(res.Tag.length) {
+          if (res.Tag.length) {
             let data = res.Tag[0].Table
             let arr = []
             for (let i in data) {
               let obj = {
                 pid: this.openRow.categoryGuid,
                 norder: data[i].norder,
-                plateName: data[i].plateName,
-                guid: data[i].plateGuid
+                plateName: data[i].plateName + '(' + data[i].plateAlias + ')',
+                guid: data[i].plateGuid,
+                hasSon: data[i].hasSon
+              }
+              if (data[i].hasSon == '1') {
+                obj.children = [{
+                  plateName: '加载中...'
+                }]
               }
               arr.push(obj)
             }
             this.demandList = arr
-            for(let i in this.demandList) {
-              this.getPlateTypesByPlateGuid(this.demandList[i].guid,i)
-            }
-            console.log(this.demandList);
           } else {
-			  this.demandList = []
-		  }
+            this.demandList = []
+          }
         })
       },
-      async getPlateTypesByPlateGuid(id,index) {
+      // 正常进来时候请求的接口
+      async getPlateTypesByPlateGuid(data) {
         await getPlateTypesByPlateGuid({
-          plateGuid: id
+          plateGuid: data.guid
         }).then(res => {
+          this.loading = false
           if (res.Tag.length) {
-            let data = res.Tag[0].Table
+            let data1 = res.Tag[0].Table
             let arr = []
-            for (let i in data) {
+            for (let i in data1) {
               let obj = {
-                pid: id,
-                norder: data[i].norder,
-                guid : data[i].plateTypeGuid,
-                plateName: data[i].plateTypeName
+                pid: data.guid,
+                norder: data1[i].norder,
+                guid: data1[i].plateTypeGuid,
+                plateName: data1[i].plateTypeName + '(' + data1[i].plateTypeAlias + ')',
+                hasSon: data1[i].hasSon
+              }
+              if (data1[i].hasSon == '1') {
+                obj.children = [{
+                  plateName: '加载中...'
+                }]
               }
               arr.push(obj)
             }
-            this.demandList[index].children = arr
-            this.demandList = this.clone(this.demandList)
-            for(let i in arr) {
-              this.getPlateFieldsByPlateTypeGuid(arr[i].guid,i,index)
-            }
+            data.children = arr
           } else {
             return
           }
         })
       },
-      async getPlateFieldsByPlateTypeGuid(id,index,index2) {
+      // 正常进来时候请求的接口
+      async getPlateFieldsByPlateTypeGuid(data) {
         await getPlateFieldsByPlateTypeGuid({
-          plateTypeGuid: id
+          plateTypeGuid: data.guid
         }).then(res => {
+          this.loading = false
           if (res.Tag.length) {
-            let data = res.Tag[0].Table
+            let data1 = res.Tag[0].Table
             let arr = []
-            for (let i in data) {
+            for (let i in data1) {
               let obj = {
-                pid: id,
-                norder: data[i].norder,
-                guid : data[i].plateFieldGuid,
-                plateName: data[i].plateFieldName
+                pid: data.guid,
+                norder: data1[i].norder,
+                guid: data1[i].plateFieldGuid,
+                plateName: data1[i].plateFieldName + '(' + data1[i].plateFieldAlias + ')'
+              }
+              if (data1[i].hasSon == '1') {
+                obj.children = [{
+                  plateName: '加载中...'
+                }]
               }
               arr.push(obj)
             }
-            this.demandList[index2].children[index].children = arr
-            this.demandList = this.clone(this.demandList)
+            data.children = arr
           } else {
             return
           }
@@ -145,15 +182,18 @@
         console.log('tree drag over: ', dropNode.label);
       },
       handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
         this.guid = draggingNode.data.guid
         this.oldNorder = draggingNode.data.norder
         this.newNorder = dropNode.data.norder
-		if(this.oldNorder === this.newNorder) {
-		  return
-		}
-		draggingNode.data.norder = this.newNorder
-		dropNode.data.norder = this.oldNorder
+        if (this.oldNorder === this.newNorder) {
+          return
+        }
+      },
+      handleDrop(draggingNode, dropNode, dropType, ev) {
+        this.parentData = dropNode.parent.data
+        let data = this.parentData
+        console.log('end data', this.parentData);
+        this.loading = true
         if (this.level === 1) {
           this.updatePlateNorder()
         } else if (this.level === 2) {
@@ -161,9 +201,7 @@
         } else if (this.level === 3) {
           this.updatePlateFieldNorder()
         }
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.label, dropType);
+        console.log('end data111', this.parentData);
       },
       allowDrop(draggingNode, dropNode, type) {
 
@@ -186,11 +224,12 @@
           norder: this.oldNorder,
           newNorder: this.newNorder
         }).then(res => {
-          if(res.Tag[0]>0) {
+          if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
               message: '修改成功'
             })
+            this.getPlates()
           } else {
             this.$message({
               type: 'error',
@@ -206,11 +245,13 @@
           norder: this.oldNorder,
           newNorder: this.newNorder
         }).then(res => {
-          if(res.Tag[0]>0) {
+          if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
               message: '修改成功'
             })
+            let data = this.parentData
+            this.getPlateTypesByPlateGuid(data)
           } else {
             this.$message({
               type: 'error',
@@ -226,11 +267,13 @@
           norder: this.oldNorder,
           newNorder: this.newNorder
         }).then(res => {
-          if(res.Tag[0]>0) {
+          if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
               message: '修改成功'
             })
+            let data = this.parentData
+            this.getPlateFieldsByPlateTypeGuid(data)
           } else {
             this.$message({
               type: 'error',

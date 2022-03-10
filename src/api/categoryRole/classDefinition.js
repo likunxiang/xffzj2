@@ -116,7 +116,7 @@ export function getTopParentNameList_1_0_1(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\cat\\getTopParentNameList_1_0_1&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\cat\\getTopParentNameList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -127,7 +127,7 @@ export function getChildNameList_1_0_1(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\cat\\getChildNameList_1_0_1&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\cat\\getChildNameList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })

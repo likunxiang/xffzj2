@@ -74,7 +74,9 @@
           children: 'children',
           label: 'name',
         },
-        loading: true
+        loading: true,
+        treeTitle1: [],
+        treeTitleString1: ''
       };
     },
     methods: {
@@ -85,9 +87,11 @@
       beforeClose() {
         this.close()
       },
-      fatherChoose(data) {
+      fatherChoose(data, node, nodeself) {
         console.log(data);
-
+        this.treeTitle1 = []
+        this.treeTitleString1 = ''
+        this.getParent(node)
         if (this.byteType=='edit' && this.parentId === data.guid) {
           this.$message({
             type: 'error',
@@ -98,8 +102,33 @@
         }
         this.fatherScene = data
       },
+      getParent(node) {
+        console.log('node111',node);
+      	let nodeObj = node
+      	let nodeTitle = node.data.name
+      	let level = node.level
+        console.log('nodeLevel',level);
+      	this.treeTitle1.push(nodeTitle)
+      	if (level > 1) {
+      		this.getParent(nodeObj.parent)
+      	} else {
+          let treeTitle = this.treeTitle1
+
+          if (typeof(treeTitle) == 'string') {
+            this.treeTitleString1 = treeTitle
+          } else {
+            if(this.byteType=='edit') {
+              treeTitle.shift()
+              this.treeTitleString1 = treeTitle.reverse().join(" > ")
+            } else {
+              this.treeTitleString1 = treeTitle.reverse().join(" > ")
+            }
+          }
+      	}
+      },
       submitFather() {
         let data = this.fatherScene
+        data.treeTitleString = this.treeTitleString1
         this.$emit('getFather', data)
         this.close()
       },
@@ -118,7 +147,8 @@
 
       getTableData() {
         getTopParentNameList_1_0_1({
-          catreeGuid: this.guid
+          catreeGuid: this.guid,
+		  name: '',
         }).then(res => {
           this.loading = false
           if (res.Tag.length) {
@@ -151,6 +181,7 @@
         let id = data.guid
         await getChildNameList_1_0_1({
           parentGuid: id,
+		  name: '',
         }).then(res => {
           console.log(res);
           if (res.Tag.length) {

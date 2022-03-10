@@ -66,3 +66,25 @@ export function deleteByCGuid(data) {
     data: data
   })
 }
+
+// 按条件统计品类名称数量_1_0_1
+export function getCountByCon_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\getCountByCon_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 按条件搜索品类名称列表_1_0_1
+export function getListByCon_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\getListByCon_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

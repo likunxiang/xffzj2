@@ -9,7 +9,7 @@
       <div>{{treeTitle}}</div>
     </div>
 
-    <el-button class="mb10" type="primary" @click="BatchDel">批量删除</el-button>
+    <el-button class="mb10" type="primary" @click="BatchDel" :disabled="delList.length<1">批量删除</el-button>
 
     <el-tree ref="tree" v-loading="loading" :data="tableData" :props="defaultProps" node-key="id" @node-expand="getSon"
       show-checkbox @check-change="handleCheckChange">
@@ -50,7 +50,8 @@
       getTableData() {
         this.loading = true
         getTopParentNameList_1_0_1({
-          catreeGuid: this.guid
+          catreeGuid: this.guid,
+		  name: '',
         }).then(res => {
           this.loading = false
           if (res.Tag.length) {
@@ -83,6 +84,7 @@
         let id = data.guid
         await getChildNameList_1_0_1({
           parentGuid: id,
+		  name: '',
         }).then(res => {
           this.loading = false
           console.log(res);

@@ -42,7 +42,7 @@
           <template slot-scope="scope">
             <p v-if="scope.row.plateFieldContentSource=='3'" class="el-icon-check">
             </p>
-            <p v-else-if="scope.row.content" class="el-icon-check"></p>
+            <p v-else-if="scope.row.content==='1'" class="el-icon-check"></p>
             <p v-else class="">未设置</p>
           </template>
         </el-table-column>
