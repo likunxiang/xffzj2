@@ -7,6 +7,7 @@
     <el-row class="mt20 mb20">
       <el-button @click="addField">添加库字段名称</el-button>
       <el-button @click="newField">新建字段名称</el-button>
+      <el-button @click="openBatch">批量新建</el-button>
     </el-row>
     <el-row>
       <el-table :data="tableData" border style="width: 100%">
@@ -85,6 +86,7 @@
       </span>
     </el-dialog>
 	<editField v-if="isEdit" @close="closeEditFieldName" @refresh="getPlateFields" :editRow="oldRow"></editField>
+  <newBatchFieldName v-if="isBatch" @close="closeBatch" @refresh="getPlateFields" :openRow="openRow"></newBatchFieldName>
   </div>
 </template>
 
@@ -103,10 +105,12 @@
     getFixedData
   } from '@/api/modelRoleApi/immobilizationContent.js'
   import editField from '@/views/modelRole/tradingContent/components/editFieldName.vue'
+  import newBatchFieldName from '@/views/modelRole/tradingContent/components/newBatchFieldName.vue'
   export default {
     name: "index",
 	components: {
-		editField
+		editField,
+    newBatchFieldName
 	},
     data() {
       return {
@@ -123,6 +127,7 @@
         isAdd: false,
         searchResult: 0,
         isNewField: false,
+        isBatch: false, // 批量新建开关
         newFeildText: '',
 		isEdit: false
       };
@@ -353,6 +358,12 @@
       },
       closeNewField() {
         this.isNewField = false
+      },
+      openBatch() {
+        this.isBatch = true
+      },
+      closeBatch() {
+        this.isBatch = false
       },
       submitNewField() {
         this.existPlateField()

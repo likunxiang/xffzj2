@@ -157,7 +157,7 @@
         await deleteByGuid({
           dealModeGuid: did
         }).then(res => {
-
+          this.getSupplyPriceList()
         })
       },
       // 发布

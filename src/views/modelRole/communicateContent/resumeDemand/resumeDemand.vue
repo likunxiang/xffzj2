@@ -148,7 +148,7 @@
         await deleteByCategoryGuid({
           categoryGuid: cid
         }).then(res => {
-
+          this.getModes()
         })
       },
       // 查询和发布先调用这个接口
