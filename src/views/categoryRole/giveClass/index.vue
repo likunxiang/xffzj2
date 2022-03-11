@@ -17,7 +17,7 @@
         </el-input>
         <div v-if="isToSearch" class="ml0">搜索结果: {{searchResult}}</div>
       </div>
-      <el-button type="primary" @click="toBatchDeleteClass">批量删除品类名称</el-button>
+      <!-- <el-button type="primary" @click="toBatchDeleteClass">批量删除品类名称</el-button> -->
     </div>
     <el-divider></el-divider>
 
