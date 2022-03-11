@@ -66,8 +66,11 @@
         this.close()
       },
       submitContentFrom() {
-
-        this.setPlateFieldContentSource()
+        if(this.fieldObj.plateFieldContentSource == this.radioContent) {
+          this.close()
+        } else{
+          this.setPlateFieldContentSource()
+        }
 
       },
       // 设置字段内容来源

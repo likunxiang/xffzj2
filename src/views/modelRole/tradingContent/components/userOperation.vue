@@ -237,19 +237,23 @@
         this.close()
       },
       submitDemander() {
-
-        if (this.radioDown == 2 && this.radioDemander > 3) {
-          if (!this.fileList.length) {
-            this.$message({
-              type: 'error',
-              message: '请选择上传文件'
-            })
+        if(this.fieldObj.operation == this.radioDemander) {
+          this.close()
+        } else {
+          if (this.radioDown == 2 && this.radioDemander > 3) {
+            if (!this.fileList.length) {
+              this.$message({
+                type: 'error',
+                message: '请选择上传文件'
+              })
+            } else {
+              this.setSDOperation()
+            }
           } else {
             this.setSDOperation()
           }
-        } else {
-          this.setSDOperation()
         }
+        
       },
       async setSDOperation() {
         let placeholder = ''

@@ -24,7 +24,7 @@
           <el-button @click="openAddLib" :disabled="fieldBuildList.length>0">添加库名称</el-button>
           <el-row class="mt10">
             <el-table :data='fieldBuildList' border>
-              <el-table-column prop="content" label="字段内容"></el-table-column>
+              <el-table-column prop="content" label="字段名称"></el-table-column>
               <el-table-column prop="fieldName" label="操作">
                 <template slot-scope="scope">
                   <el-button type="text" @click="delField(scope.row)">删除</el-button>
