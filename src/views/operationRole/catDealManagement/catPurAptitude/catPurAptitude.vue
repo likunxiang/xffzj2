@@ -200,7 +200,7 @@
         await deleteClass({
           qualificationGuid: qid
         }).then(res => {
-
+          this.getList()
         })
       },
       release(row) {

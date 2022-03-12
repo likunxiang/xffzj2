@@ -192,7 +192,7 @@
         await deleteByDealModeGuid({
           dealModeGuid: did
         }).then(res => {
-
+          this.getDealModes()
         })
       },
       release(row) {
