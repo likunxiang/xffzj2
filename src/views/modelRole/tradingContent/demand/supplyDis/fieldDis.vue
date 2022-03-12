@@ -8,7 +8,7 @@
       <el-button @click="addField">添加库字段名称</el-button>
     </el-row>
     <el-row>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column prop="plateFieldName" label="字段名称" align="center">
         </el-table-column>
         <el-table-column prop="from" label="字段名称来源" align="center">
@@ -109,6 +109,7 @@
         isAdd: false,
         searchResult: 0,
         isEdit: false,
+        loading: false,
       };
     },
     mounted() {
@@ -189,10 +190,12 @@
       },
       // 关联板块类型
       async relateField2PlateType() {
+        this.loading=true
         await relateField2PlateType({
           plateFieldGuid: this.oldRow.plateFieldGuid,
           plateTypeGuid: this.radio,
         }).then(res => {
+          this.loading=false
           if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
@@ -307,9 +310,9 @@
               type: 'info'
             })
           } else {
-      
+
             this.addPlateFieldFromDemand(id, source, index)
-      
+
           }
         })
       },
@@ -382,7 +385,7 @@
               query: obj,
             });
           } else {
-            this.$message('板块未关联')
+            this.$message('板块类型未关联')
           }
         })
       }

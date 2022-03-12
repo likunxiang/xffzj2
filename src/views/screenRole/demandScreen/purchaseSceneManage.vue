@@ -52,7 +52,7 @@
             @focus="openFather" />
 
         </div>
-        <div class="flex flex-center">
+        <div class="flex flex-center mt10">
           <div class="input-text"></div>
           <div>{{treeTitleString}}</div>
         </div>
@@ -119,7 +119,7 @@
           <div class="input-text">父级场景</div>
           <el-input type="text" :value="editFather.name" :disabled="true" />
         </div>
-        <div class="flex flex-center">
+        <div class="flex flex-center mt10">
           <div class="input-text"></div>
           <div>{{treeTitleString}}</div>
         </div>

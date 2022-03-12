@@ -117,7 +117,7 @@ export function getReturnPaidProve(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/ExSql?SqlCmdName=web\\order\\settle\\demandRefund\\getReturnPaidProve&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\order\\settle\\demandRefund\\getReturnPaidProve&DBC=w_m',
     method: 'post',
     data: data
   })

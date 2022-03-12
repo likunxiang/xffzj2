@@ -72,7 +72,7 @@
               <!-- 是否能上传文档 -->
               <div v-if="radioDemander>3">
                 <el-row>
-                  <p class="bold">是否需要下载待传文件模板</p>
+                  <p class="bold">是否需要下载待传图片/文件模板</p>
                 </el-row>
                 <el-row>
                   <el-radio-group v-model="radioDown">
@@ -143,7 +143,7 @@
             <!-- 是否能上传文档 -->
             <div v-if="radioDemander>3">
               <el-row>
-                <p class="bold">是否需要下载待传文件模板</p>
+                <p class="bold">是否需要下载待传图片/文件模板</p>
               </el-row>
               <el-row>
                 <el-radio-group v-model="radioDown">
@@ -253,14 +253,14 @@
             this.setSDOperation()
           }
         }
-        
+
       },
       async setSDOperation() {
         let placeholder = ''
         if (this.radioDemander == 3) {
           placeholder = this.inputDemander
         }
-        if (this.radioDemander > 3) {
+        if (this.radioDemander > 3 && this.radioDown == 2) {
           placeholder = this.fileList[0].url || this.inputDemander
         }
         if (this.fileList.length > 0 && this.radioDown == 2 && this.radioDemander > 3) {
@@ -311,14 +311,30 @@
         const extension2 = testmsg === 'xlsx'
         const extension3 = testmsg === 'doc'
         const extension4 = testmsg === 'docx'
-        // const isLt2M = file.size / 1024 / 1024 < 10
-        if (!extension && !extension2 && !extension3 && !extension4) {
-          this.$message({
-            message: '上传文件只能上传excel文件和word文件!',
-            type: 'warning'
-          });
+        const extension5 = testmsg === 'png'
+        const extension6 = testmsg === 'jpeg'
+        const extension7 = testmsg === 'jpg'
+        const extension8 = testmsg === 'gif'
+        if(this.radioDemander == 4) {
+          if (!extension5 && !extension6 && !extension7 && !extension8) {
+            this.$message({
+              message: '上传图片只能上传png、jpeg、jpg、gif格式!',
+              type: 'warning'
+            });
+          }
+          return extension5 || extension6 || extension7 || extension8
+        } else if (this.radioDemander == 5) {
+          if (!extension && !extension2 && !extension3 && !extension4) {
+            this.$message({
+              message: '上传文件只能上传excel文件和word文件!',
+              type: 'warning'
+            });
+          }
+          return extension || extension2 || extension3 || extension4
         }
-        return extension || extension2 || extension3 || extension4
+        // const isLt2M = file.size / 1024 / 1024 < 10
+
+
       },
       uploading() {
         console.log(888);

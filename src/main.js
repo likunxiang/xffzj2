@@ -48,6 +48,8 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 Vue.prototype.clone = clone // 刷新视图
+// 全局修改默认配置，按下ESC不能关闭弹窗
+Element.Dialog.props.closeOnPressEscape.default = false
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)

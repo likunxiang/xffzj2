@@ -17,7 +17,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button @click="editClass(scope.row,scope.$index)" type="text" size="small">编辑板类型别名</el-button>
+            <el-button @click="editClass(scope.row,scope.$index)" type="text" size="small">编辑板块类型别名</el-button>
             <el-button @click="delClass(scope.row,scope.$index)" type="text" size="small">删除板块类型</el-button>
             <el-button @click="relevanceClass(scope.row,scope.$index)" type="text" size="small">关联板块名称</el-button>
           </template>
@@ -191,7 +191,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           bizType: this.openRow.bizType,
           categoryGuid: this.openRow.categoryGuid,
-          plateTypeName: this.inputClass
+          plateTypeName: this.inputClass.trim()
         }).then(res => {
           console.log(res);
           this.isNew = false

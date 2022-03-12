@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column prop="fieldMessage" label="字段内容管理" align="center">
           <template slot-scope="scope">
-            <p v-if="scope.row.plateFieldContentSource=='3'" class="el-icon-check">
+            <p v-if="scope.row.plateFieldContentSource=='3' || scope.row.plateFieldContentSource=='4'" class="el-icon-check">
             </p>
             <p v-else-if="scope.row.content==='1'" class="el-icon-check"></p>
             <p v-else class="">未设置</p>
