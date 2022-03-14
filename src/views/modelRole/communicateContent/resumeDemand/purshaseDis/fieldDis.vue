@@ -10,7 +10,7 @@
       <el-button @click="openBatch">批量新建</el-button>
     </el-row>
     <el-row>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column prop="plateFieldName" label="字段名称" align="center">
         </el-table-column>
         <el-table-column prop="from" label="字段名称来源" align="center">
@@ -86,8 +86,9 @@
       </span>
     </el-dialog>
 
-	<editField v-if="isEdit" @close="closeEditFieldName" @refresh="getPlateFields" :editRow="oldRow"></editField>
-  <newBatchFieldName v-if="isBatch" @close="closeBatch" @refresh="getPlateFields" :openRow="openRow"></newBatchFieldName>
+    <editField v-if="isEdit" @close="closeEditFieldName" @refresh="getPlateFields" :editRow="oldRow"></editField>
+    <newBatchFieldName v-if="isBatch" @close="closeBatch" @refresh="getPlateFields" :openRow="openRow">
+    </newBatchFieldName>
   </div>
 </template>
 
@@ -109,10 +110,10 @@
   import newBatchFieldName from '@/views/modelRole/tradingContent/components/newBatchFieldName.vue'
   export default {
     name: "index",
-	components: {
-		editField,
-    newBatchFieldName
-	},
+    components: {
+      editField,
+      newBatchFieldName
+    },
     data() {
       return {
         tableData: [],
@@ -130,7 +131,8 @@
         searchResult: 0,
         isNewField: false,
         newFeildText: '',
-		isEdit: false,
+        isEdit: false,
+        loading: false,
       };
     },
     mounted() {
@@ -170,8 +172,8 @@
             }
             this.plate = data
           } else {
-			this.plate = []
-		  }
+            this.plate = []
+          }
         })
       },
       async getFixedData() {
@@ -195,8 +197,8 @@
       },
       relevanceClass(row, index) {
         this.isRelevance = true
-		this.oldRow = row
-		this.radio = 0
+        this.oldRow = row
+        this.radio = 0
         this.getPlateTypes()
 
       },
@@ -210,10 +212,12 @@
       },
       // 关联板块类型
       async relateField2PlateType() {
+        this.loading = true
         await relateField2PlateType({
           plateFieldGuid: this.oldRow.plateFieldGuid,
           plateTypeGuid: this.radio,
         }).then(res => {
+          this.loading = false
           if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
@@ -247,13 +251,13 @@
           this.getPlateFields()
         })
       },
-	  editFieldName(row, index) {
-	    this.oldRow = row
-	    this.isEdit = true
-	  },
-	  closeEditFieldName() {
-	    this.isEdit = false
-	  },
+      editFieldName(row, index) {
+        this.oldRow = row
+        this.isEdit = true
+      },
+      closeEditFieldName() {
+        this.isEdit = false
+      },
       delField(row, index) {
         this.$confirm('请确认要删除' + row.plateFieldName, '', {
           confirmButtonText: '确定',
@@ -302,7 +306,7 @@
               type: 'info'
             })
           } else {
-            if(id) {
+            if (id) {
               this.addPlateFieldFromDemand(id, index)
             } else {
               this.insertPlateField()
@@ -340,7 +344,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           bizType: this.openRow.bizType,
           categoryGuid: this.openRow.categoryGuid,
-          plateFieldName: this.newFeildText
+          plateFieldName: this.newFeildText.trim()
         }).then(res => {
           console.log(res);
           if (res.Tag[0] > 0) {
@@ -388,7 +392,7 @@
               query: obj,
             });
           } else {
-            this.$message('板块未关联')
+            this.$message('板块类型未关联')
           }
         })
       }

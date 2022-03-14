@@ -350,7 +350,7 @@
               query: obj,
             });
           } else {
-            this.$message('板块未关联')
+            this.$message('板块类型未关联')
           }
         })
       }

@@ -1,8 +1,8 @@
 <template>
   <el-dialog title="查看付款证明" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
-    <el-row style="padding-bottom: 20px;">
-      
-      <div>{{returnPayMsg}}</div>
+    <el-row style="padding-bottom: 40px;">
+
+      <div>{{returnPayMsg?returnPayMsg:'无'}}</div>
     </el-row>
   </el-dialog>
 </template>

@@ -190,7 +190,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           bizType: this.openRow.bizType,
           categoryGuid: this.openRow.categoryGuid,
-          plateTypeName: this.inputClass
+          plateTypeName: this.inputClass.trim()
         }).then(res => {
           console.log(res);
           this.isNew = false

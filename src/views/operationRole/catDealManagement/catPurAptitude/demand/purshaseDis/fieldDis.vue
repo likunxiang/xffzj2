@@ -306,7 +306,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           bizType: this.openRow.bizType,
           categoryGuid: this.openRow.categoryGuid,
-          plateFieldName: this.newFeildText
+          plateFieldName: this.newFeildText.trim()
         }).then(res => {
           console.log(res);
           if (res.Tag[0] > 0) {
@@ -348,7 +348,7 @@
               query: obj,
             });
           } else {
-            this.$message('板块未关联')
+            this.$message('板块类型未关联')
           }
         })
       }

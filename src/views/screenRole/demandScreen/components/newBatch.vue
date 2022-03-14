@@ -5,7 +5,7 @@
       <el-input type="text" :value="fatherSceneSureName" placeholder="请选择" suffix-icon="el-icon-search"
         @focus="openFather" />
     </div>
-    <div class="flex flex-center">
+    <div class="flex flex-center mt10">
       <div class="input-text"></div>
       <div>{{treeTitleString}}</div>
     </div>

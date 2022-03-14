@@ -219,9 +219,10 @@
         }
       },
       submit() {
-        if (this.fingdingReason && this.radioResult > 0) {
+        if (this.fingdingReason && this.radioResult > 0 && this.damageFree * 100 >= 0 && this.punishFree * 100) {
 
           if(this.imgList.length > 0) {
+            console.log(999999);
             this.$refs.upload.submit();
           } else {
             this.SysMakeJudge()
@@ -230,7 +231,7 @@
         } else {
           this.$message({
             type: 'error',
-            message: '有信息没填!'
+            message: '有信息没填或填写错误!'
           });
         }
       },
@@ -261,6 +262,10 @@
               type: 'error',
               message: '操作失败!'
             });
+            this.$refs.upload.clearFiles()
+            this.imgList = []
+            this.imgListShow = []
+            // this.uploadUrl = []
           }
         })
       },
