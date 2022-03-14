@@ -36,27 +36,20 @@
       </el-row>
 
       <el-row v-else-if="fieldObj.plateFieldContentSource == 2">
-        <!-- 自建 -->
-        <el-row v-if="fieldObj.plateFieldSource=='1'">
-          <!-- 字段来源固化 -->
-
+        <!-- 字段来源自建 -->
+        <el-row>
+          <el-button @click="openNewField">新建字段内容</el-button>
+          <el-button @click="openNewBatch">批量新建字段内容</el-button>
         </el-row>
-        <el-row v-else-if="fieldObj.plateFieldSource=='2'">
-          <!-- 字段来源自建 -->
-          <el-row>
-            <el-button @click="openNewField">新建字段内容</el-button>
-            <el-button @click="openNewBatch">批量新建字段内容</el-button>
-          </el-row>
-          <el-row class="mt10">
-            <el-table :data='fieldBuildList' border>
-              <el-table-column prop="content" label="字段内容"></el-table-column>
-              <el-table-column prop="fieldName" label="操作">
-                <template slot-scope="scope">
-                  <el-button type="text" @click="delField(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-row>
+        <el-row class="mt10">
+          <el-table :data='fieldBuildList' border>
+            <el-table-column prop="content" label="字段内容"></el-table-column>
+            <el-table-column prop="fieldName" label="操作">
+              <template slot-scope="scope">
+                <el-button type="text" @click="delField(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-row>
       </el-row>
 
@@ -76,7 +69,8 @@
       <el-button @click="close">确 定</el-button>
       <!-- <el-button type="primary" @click="submitFieldMessageObj">确 定</el-button> -->
     </span>
-    <addLibName v-if="isAddLib" :fieldObj="fieldObj" :contentSources="contentSources" @close="closeAddLib" @getField="getField"></addLibName>
+    <addLibName v-if="isAddLib" :fieldObj="fieldObj" :contentSources="contentSources" @close="closeAddLib"
+      @getField="getField"></addLibName>
     <newField v-if="isNew" @close="closeNewField" @submitNewField="submitNewField"></newField>
     <newBatch v-if="isBatch" @close="closeNewBatch" @submitNewBatch="submitNewBatch"></newBatch>
   </el-dialog>
@@ -87,7 +81,11 @@
   import batchImport from '@/views/modelRole/tradingContent/components/batchImport.vue' // 批量导入
   import newField from '@/views/modelRole/tradingContent/components/newField.vue' // 批量导入
   import newBatch from '@/views/modelRole/tradingContent/components/newBatch.vue' // 批量新建字段
-  import { getPlateFieldDetail,setPlateFieldContent,deletePlateFieldContent } from '@/api/modelRoleApi/tradingContent.js'
+  import {
+    getPlateFieldDetail,
+    setPlateFieldContent,
+    deletePlateFieldContent
+  } from '@/api/modelRoleApi/tradingContent.js'
   export default {
     name: "index",
     components: {
@@ -103,13 +101,17 @@
       },
       type: {
         type: String,
-        default:'demand'
+        default: 'demand'
       },
       fieldObj: {
         type: Object,
         default: () => {
           return {}
         }
+      },
+      bizType: {
+        type: String,
+        default: '1'
       }
     },
     data() {
@@ -119,7 +121,7 @@
         isNew: false,
         isBatch: false,
         contentSources: '',
-        fieldSolidifyList: [] ,// 将要提交的列表
+        fieldSolidifyList: [], // 将要提交的列表
         fieldBuildList: [], // 字段自建列表
       };
     },
@@ -136,7 +138,7 @@
       //   this.setPlateFieldContent()
       // },
       getField(data) {
-        console.log('data',data);
+        console.log('data', data);
         this.setPlateFieldContent(data)
       },
       async getPlateFieldDetail() {
@@ -145,7 +147,7 @@
           catTreeCode: this.type
         }).then(res => {
           console.log(res);
-          if(res.Tag.length) {
+          if (res.Tag.length) {
             let data = res.Tag[0].Table
             this.fieldBuildList = data
           } else {
@@ -158,7 +160,7 @@
         await deletePlateFieldContent({
           plateFieldContentGuid: id
         }).then(res => {
-          if (res.Tag[0]>0) {
+          if (res.Tag[0] > 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -190,7 +192,7 @@
           }
         } else {
           var data1 = []
-          for(let i in data) {
+          for (let i in data) {
             if (data[i].trim() === '') {
 
             } else {
@@ -198,7 +200,7 @@
                 plateFieldGuid: this.fieldObj.plateFieldGuid,
                 content: data.fixedDataGuid || data[i]
               }
-              console.log('datai',data.fixedDataGuid || data[i]);
+              console.log('datai', data.fixedDataGuid || data[i]);
               data1.push(obj)
             }
           }
@@ -217,7 +219,7 @@
         // }
         await setPlateFieldContent(JSON.stringify(data1)).then(res => {
           console.log(res);
-          if (res.Tag[0]>0) {
+          if (res.Tag[0] > 0) {
             // this.$message({
             //   type: 'success',
             //   message: '操作成功!'
@@ -251,7 +253,7 @@
         this.isBatch = false
       },
       submitNewBatch(data) {
-        console.log('数据',data);
+        console.log('数据', data);
         this.setPlateFieldContent(data)
         // for(let i in data) {
         //   if(data[i].length) {
@@ -267,7 +269,7 @@
         this.contentSources = '字段内容固化库'
       } else if (this.fieldObj.plateFieldContentSource == "2") {
         this.contentSources = '字段内容自建库'
-      }  else if (this.fieldObj.plateFieldContentSource == "3"){
+      } else if (this.fieldObj.plateFieldContentSource == "3") {
         this.contentSources = '需方'
       } else {
         this.contentSources = '供方'

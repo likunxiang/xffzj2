@@ -89,67 +89,47 @@
       console.log(this.fieldObj);
       let catTreeCode = this.fieldObj.catTreeCode
       let bizType = this.bizType
+      console.log('bizType',bizType);
+      console.log('catTreeCode',catTreeCode);
       this.radioContent = parseInt(this.fieldObj.plateFieldContentSource)
-      if (bizType == '2') {
-        if (this.fieldObj.plateFieldSource === '1') {
+      if (catTreeCode == 'demand') {
+        if (bizType == '1' || bizType == '3' || bizType == '4') {
           this.contentFromList = [{
               id: 1,
               name: '字段内容固化库'
             },
             {
+              id: 2,
+              name: '字段内容自建库'
+            },
+            {
+              id: 3,
+              name: '需方'
+            }
+          ]
+        }
+      } else if (catTreeCode == 'supply'){
+        if (bizType == '1') {
+          if (this.fieldObj.plateFieldSource == '1') {
+            this.contentFromList = [{
                 id: 4,
                 name: '供方'
-            }
-          ]
-        } else {
-          this.contentFromList = [{
-              id: 1,
-              name: '字段内容固化库'
-            },
-            {
-              id: 2,
-              name: '字段内容自建库'
-            },
-            {
-              id: 4,
-              name: '供方'
-            }
-          ]
-        }
-        return
-      }
-      if (this.fieldObj.plateFieldSource === '1') {
-        if (catTreeCode === 'supply') {
-          this.contentFromList = [{
-              id: 4,
-              name: '供方'
-            },
-            {
-              id: 3,
-              name: '需方'
-            }
-          ]
-        } else {
-          this.contentFromList = [{
-              id: 1,
-              name: '字段内容固化库'
-            },
-            {
-              id: 3,
-              name: '需方'
-            }
-          ]
-        }
+              },
+              {
+                id: 3,
+                name: '需方'
+              }
+            ]
+          } else {
+            this.contentFromList = [
+              {
+                id: 3,
+                name: '需方'
+              }
+            ]
+          }
 
-      } else {
-        if (catTreeCode === 'supply') {
-          this.contentFromList = [
-            {
-              id: 3,
-              name: '需方'
-            }
-          ]
-        } else {
+        } else if (bizType == '2') {
           this.contentFromList = [{
               id: 1,
               name: '字段内容固化库'
@@ -158,6 +138,13 @@
               id: 2,
               name: '字段内容自建库'
             },
+            {
+              id: 4,
+              name: '供方'
+            }
+          ]
+        } else if (bizType == '3') {
+          this.contentFromList = [
             {
               id: 3,
               name: '需方'

@@ -63,15 +63,15 @@
     </el-row>
     <!-- 内容来源配置 -->
     <contentSources v-if="isContentFrom" :categoryName="openRow.categoryName" :fieldObj="tableData[0]"
-      @close="closeContentFrom" @refresh="getPlateFieldContents"></contentSources>
+      @close="closeContentFrom" @refresh="getPlateFieldContents" :bizType="this.openRow.bizType"></contentSources>
 
     <!-- 需方操作设置 -->
     <userOperation v-if="isDemander" :type="openRow.catTreeCode" :categoryName="openRow.categoryName" :fieldObj="tableData[0]"
-      @close="closeDemander" @refresh="getPlateFieldContents"></userOperation>
+      @close="closeDemander" @refresh="getPlateFieldContents" :bizType="this.openRow.bizType"></userOperation>
 
     <!-- 字段内容管理 -->
     <fieldContentManagement v-if="isFieldMessage" :type="openRow.catTreeCode" :categoryName="openRow.categoryName"
-      :fieldObj="tableData[0]" @close="closeFieldMessage" @refresh="getPlateFieldContents"></fieldContentManagement>
+      :fieldObj="tableData[0]" @close="closeFieldMessage" @refresh="getPlateFieldContents" :bizType="this.openRow.bizType"></fieldContentManagement>
   </div>
 </template>
 
