@@ -35,20 +35,20 @@
         <el-table-column label="采购情况" align="center">
           <template slot-scope="scope">
             <el-row>
-              <el-button @click="supplyAccount(scope.row)" type="text" size="small">采购账号信息</el-button>
+              <el-button @click="demandAccount(scope.row)" type="text" size="small">采购账号信息</el-button>
             </el-row>
             <el-row>
-              <el-button @click="supplyOrderDetail(scope.row)" type="text" size="small">采购订单详情</el-button>
+              <el-button @click="demandOrderDetail(scope.row)" type="text" size="small">采购订单详情</el-button>
             </el-row>
           </template>
         </el-table-column>
         <el-table-column label="供应情况" align="center">
           <template slot-scope="scope">
             <el-row>
-              <el-button @click="demandAccount(scope.row)" type="text" size="small">供应账号信息</el-button>
+              <el-button @click="supplyAccount(scope.row)" type="text" size="small">供应账号信息</el-button>
             </el-row>
             <el-row>
-              <el-button @click="demandOrderDetail(scope.row)" type="text" size="small">供应订单详情</el-button>
+              <el-button @click="supplyOrderDetail(scope.row)" type="text" size="small">供应订单详情</el-button>
             </el-row>
           </template>
         </el-table-column>

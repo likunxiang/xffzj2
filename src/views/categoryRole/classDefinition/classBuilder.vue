@@ -34,6 +34,12 @@
         <el-menu-item index="2" class="menuItem">
           <span slot="title">删除字节内容</span>
         </el-menu-item>
+        <el-menu-item index="3" class="menuItem">
+          <span slot="title">复制字节内容</span>
+        </el-menu-item>
+        <el-menu-item index="4" class="menuItem">
+          <span slot="title">黏贴字节内容</span>
+        </el-menu-item>
       </el-menu>
     </div>
 
@@ -62,6 +68,7 @@
     updateNameTreeNorder1_0_1, // 变更字节内容节点
     deleteNameTree,
     genCatNameFlag_1_0_1, // 判断是否生成过品类名称
+    web_pasteNameTree_1_0_1
   } from '@/api/categoryRole/classDefinition.js'
   export default {
     name: "index",
@@ -101,7 +108,9 @@
         building: false, // 是否正在生成
         isBuild: false, // 是否已经生成过品类
         treeTitle1: [],
-        treeTitleString1: ''
+        treeTitleString1: '',
+        copyData: {}, // 复制的数据
+        pasteData: {}, // 黏贴的对象
       };
     },
     watch: {
@@ -123,15 +132,15 @@
         this.isEdit = true
       },
       getParent(node) {
-        console.log('node111',node);
-      	let nodeObj = node
-      	let nodeTitle = node.data.name
-      	let level = node.level
-        console.log('nodeLevel',level);
-      	this.treeTitle1.push(nodeTitle)
-      	if (level > 1) {
-      		this.getParent(nodeObj.parent)
-      	} else {
+        console.log('node111', node);
+        let nodeObj = node
+        let nodeTitle = node.data.name
+        let level = node.level
+        console.log('nodeLevel', level);
+        this.treeTitle1.push(nodeTitle)
+        if (level > 1) {
+          this.getParent(nodeObj.parent)
+        } else {
           let treeTitle = this.treeTitle1
 
           if (typeof(treeTitle) == 'string') {
@@ -144,7 +153,7 @@
             this.treeTitleString1 = treeTitle.reverse().join(" > ")
             this.editSelf.treeTitleString = this.treeTitleString1
           }
-      	}
+        }
       },
       closeEdit() {
         this.isEdit = false
@@ -198,13 +207,15 @@
         //   this.building = true
         //   this.getNoContentTitles()
         // }
-        this.$confirm('<p align="left">请务必<br>你一定已经删除掉被修正的字节内容产生的品类名称。<br /><br /><strong>不然<br>你要1个1个删除垃圾品类名称。</strong></p>', '警告', {
-          confirmButtonText: '生成品类名称',
-          dangerouslyUseHTMLString: true,
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true
-        }).then(() => {
+        this.$confirm(
+          '<p align="left">请务必<br>你一定已经删除掉被修正的字节内容产生的品类名称。<br /><br /><strong>不然<br>你要1个1个删除垃圾品类名称。</strong></p>',
+          '警告', {
+            confirmButtonText: '生成品类名称',
+            dangerouslyUseHTMLString: true,
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
           this.building = true
           this.getNoContentTitles()
         }).catch(() => {});
@@ -468,6 +479,7 @@
         this.editFather = node.parent.data
         this.editScreen = data.name
         this.editNode = node
+        console.log('editNode', this.editNode);
         this.getParent(node)
         this.editData = data
         this.menuVisible = true
@@ -480,8 +492,61 @@
           this.openEdit()
         } else if (key == 2) {
           this.delScreen()
+        } else if (key == 3) {
+          this.copyByte()
+        } else if (key == 4) {
+          this.pasteByte()
         }
         this.closeMenu()
+      },
+      // 复制内容
+      copyByte() {
+        this.copyData = this.editData
+        this.$message({
+          type: 'success',
+          message: '复制成功!'
+        });
+      },
+      // 黏贴内容
+      pasteByte() {
+        this.pasteData = this.editData
+        console.log('copyData', this.copyData);
+        console.log('pasteData', this.pasteData);
+        if (this.copyData.guid && this.pasteData.guid) {
+          this.web_pasteNameTree_1_0_1()
+        } else {
+          this.$message({
+            type: 'error',
+            message: '复制内容为空!'
+          });
+        }
+
+      },
+      //
+      async web_pasteNameTree_1_0_1() {
+        await web_pasteNameTree_1_0_1({
+          sourceNameTreeGuid: this.copyData.guid,
+          targetNameTreeGuid: this.pasteData.guid
+        }).then(res => {
+          console.log(res);
+          if (res.Tag > 0) {
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            });
+            let data = this.editFather
+            if (data.length > 0) {
+              this.getTableData()
+            } else {
+              this.getSonList(data)
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.Message || '操作失败！'
+            });
+          }
+        })
       },
       // 拖拽接口
       async updateType3Norder(data) {
@@ -504,7 +569,7 @@
         this.loading = true
         getTopParentNameList_1_0_1({
           catreeGuid: this.guid,
-		  name: '',
+          name: '',
         }).then(res => {
           this.loading = false
           if (res.Tag.length) {
@@ -538,7 +603,7 @@
         let id = data.guid
         await getChildNameList_1_0_1({
           parentGuid: id,
-		  name: ''
+          name: ''
         }).then(res => {
           this.loading = false
           console.log(res);
@@ -553,6 +618,8 @@
               }
             }
             data.children = arr
+            console.log('data.children',data.children);
+            data = this.clone(data)
           } else {
             data.children = []
           }

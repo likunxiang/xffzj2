@@ -176,3 +176,14 @@ export function genCatNameFlag_1_0_1(data) {
     data: data
   })
 }
+
+// web-黏贴品类字节内容_1_0_1
+export function web_pasteNameTree_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ProxyService/web_pasteNameTree_1_0_1?CustomMimeType=application/json',
+    method: 'post',
+    data: data
+  })
+}
