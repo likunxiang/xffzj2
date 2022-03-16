@@ -83,7 +83,8 @@
         <div>
           <div class="flex flex-center mb20">
             <div class="bold" style="width: 120px;">违约方违约费用</div>
-            <el-input v-model="damageFree" placeholder="请填写" style="width: 80px;"></el-input>
+            <el-input placeholder="请填写" style="width: 80px;" v-if="damageFree == 0"></el-input>
+            <el-input v-model="damageFree" placeholder="请填写" style="width: 80px;" v-else></el-input>
           </div>
           <div class="flex flex-center">
             <div class="bold" style="width: 120px;">收取对象</div>
@@ -100,7 +101,8 @@
         <div>
           <div class="flex flex-center mb20">
             <div class="bold" style="width: 120px;">守约方赔偿金额</div>
-            <el-input v-model="punishFree" placeholder="请填写" style="width: 80px;"></el-input>
+            <el-input placeholder="请填写" style="width: 80px;" v-if="punishFree == 0"></el-input>
+            <el-input v-model="punishFree" placeholder="请填写" style="width: 80px;" v-else></el-input>
           </div>
           <div class="flex flex-center">
             <div class="bold" style="width: 120px;">赔偿对象</div>

@@ -13,12 +13,12 @@
 <script>
   export default {
     name: "index",
-    // props: {
-    //   content: {
-    //     type: String,
-    //     default: ''
-    //   }
-    // },
+    props: {
+      content: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         isOpen: true,
