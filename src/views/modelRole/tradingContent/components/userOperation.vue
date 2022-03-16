@@ -52,7 +52,7 @@
             <el-row>
               <p class="bold">请选择</p>
             </el-row>
-            <el-radio-group v-model="radioDemander">
+            <el-radio-group v-model="radioDemander" @change="changeRadioDemander">
               <el-row class="mb10">
                 <el-radio :label="3">填写</el-radio>
                 <el-radio :label="4">图片上传</el-radio>
@@ -74,8 +74,8 @@
                   </el-row>
                 </el-radio-group>
                 <div>
-                  <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview"
-                    :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list
+                  <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview" :accept="accptSting"
+                    :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list :on-success="uploadSuccess"
                     multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :on-exceed="handleExceed"
                     :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
                     <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
@@ -101,7 +101,7 @@
               <el-input type="textarea" placeholder="请输入需方填写时的注意点或者提示语" v-model="inputDemander"></el-input>
             </el-row>
             <el-row v-else>
-              <el-radio-group v-model="radioDemander">
+              <el-radio-group v-model="radioDemander" @change="changeRadioDemander">
                 <el-row class="mb10">
                   <el-radio :label="3">填写</el-radio>
                   <el-radio :label="4">图片上传</el-radio>
@@ -123,8 +123,8 @@
                     </el-row>
                   </el-radio-group>
                   <div>
-                    <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview"
-                      :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list
+                    <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview" :accept="accptSting"
+                      :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list :on-success="uploadSuccess"
                       multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :on-exceed="handleExceed"
                       :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
                       <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
@@ -184,7 +184,7 @@
             </el-radio-group>
           </el-row>
           <el-row v-else-if="fieldObj.plateFieldContentSource == 4">
-            <el-radio-group v-model="radioDemander">
+            <el-radio-group v-model="radioDemander" @change="changeRadioDemander">
               <el-row class="mb10">
                 <el-radio :label="3">填写</el-radio>
                 <el-radio :label="4">图片上传</el-radio>
@@ -206,9 +206,9 @@
                   </el-row>
                 </el-radio-group>
                 <div>
-                  <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview"
+                  <el-upload ref="upload" class="upload-demo" action="" :on-preview="handlePreview" :on-success="uploadSuccess"
                     :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list
-                    multiple :http-request="uploadFile" :limit="1" :on-progress="uploading"
+                    multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :accept="accptSting"
                     :on-exceed="handleExceed" :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
                     <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
                   </el-upload>
@@ -301,9 +301,24 @@
         }, ],
         fileList: [], // 上传文件列表
         loading: false, // 上传文件提示
+        accptSting: '', // 文件类型限制
       };
     },
     methods: {
+      changeRadioDemander() {
+        this.fileList = []
+        this.radioDown = 0
+        if (this.radioDemander > 3) {
+          if (this.radioDemander == 4) {
+            this.accptSting= ".png, .jpeg, .jpg, .gif"
+          } else if (this.radioDemander == 5) {
+            this.accptSting= ".doc, .docx, .xls, .xlsx, .ppt, .pdf, .zip, .rar, .7z, .txt, .csv"
+          }
+        } else {
+          this.accptSting = ''
+        }
+        console.log('accptSting',this.accptSting);
+      },
       close() {
         this.isOpen = false
         this.$emit('close')
@@ -312,17 +327,18 @@
         this.close()
       },
       submitDemander() {
-        if (this.fieldObj.operation == this.radioDemander) {
+        if ((this.fieldObj.operation == this.radioDemander) && (this.fieldObj.placeholder == this.inputDemander) && !this.fileList.length > 0) {
           this.close()
         } else {
           if (this.radioDown == 2 && this.radioDemander > 3) {
             if (!this.fileList.length) {
               this.$message({
                 type: 'error',
-                message: '请选择上传文件'
+                message: '请选择上传文件/图片'
               })
             } else {
-              this.setSDOperation()
+              // this.setSDOperation()
+              this.submitUpload()
             }
           } else {
             this.setSDOperation()
@@ -332,31 +348,29 @@
       },
       async setSDOperation() {
         let placeholder = ''
-        if (this.radioDemander == 3) {
-          placeholder = this.inputDemander
-        }
-        if (this.radioDemander > 3 && this.radioDown == 2) {
-          placeholder = this.fileList[0].url || this.inputDemander
-        }
-        if (this.fileList.length > 0 && this.radioDown == 2 && this.radioDemander > 3) {
-          await setSDOperation({
-            plateFieldGuid: this.fieldObj.plateFieldGuid,
-            operation: this.radioDemander,
-            placeholder: placeholder,
-          }).then(res => {
-            this.submitUpload()
-          })
-
-        } else {
-          await setSDOperation({
-            plateFieldGuid: this.fieldObj.plateFieldGuid,
-            operation: this.radioDemander,
-            placeholder: placeholder,
-          }).then(res => {
-            this.$emit('refresh')
+        placeholder = this.inputDemander
+        await setSDOperation({
+          plateFieldGuid: this.fieldObj.plateFieldGuid,
+          operation: this.radioDemander,
+          placeholder: placeholder,
+          content: this.fileList.length > 0? this.fileList[0].name: ''
+        }).then(res => {
+          this.loading = false
+          if (res.Tag[0] > 0) {
+            // this.$message({
+            //   type: 'success',
+            //   message: '操作成功',
+            // })
             this.close()
-          })
-        }
+          } else {
+            this.$message({
+              type: 'error',
+              message: '操作失败',
+            })
+          }
+          
+        })
+
       },
 
 
@@ -379,35 +393,64 @@
       },
       // 检验文件类型
       beforeUpload(file) {
-        console.log(9999);
+        console.log(9999,file);
+
         var testmsg = file.name.substring(file.name.lastIndexOf('.') + 1)
         console.log('testmsg', testmsg);
         const extension = testmsg === 'xls'
         const extension2 = testmsg === 'xlsx'
         const extension3 = testmsg === 'doc'
         const extension4 = testmsg === 'docx'
+        const extension9 = testmsg === 'ppt'
+        const extension10 = testmsg === 'pdf'
+        const extension11 = testmsg === 'zip'
+        const extension12 = testmsg === 'rar'
+        const extension13 = testmsg === '7z'
+        const extension14 = testmsg === 'txt'
+        const extension15 = testmsg === 'csv'
         const extension5 = testmsg === 'png'
         const extension6 = testmsg === 'jpeg'
         const extension7 = testmsg === 'jpg'
         const extension8 = testmsg === 'gif'
+        // 限制文件大小
+        const isLt3M = file.size / 1024 / 1024 < 3
+        const isLt50M = file.size / 1024 / 1024 < 50
         if (this.radioDemander == 4) {
           if (!extension5 && !extension6 && !extension7 && !extension8) {
             this.$message({
               message: '上传图片只能上传png、jpeg、jpg、gif格式!',
               type: 'warning'
             });
+            return extension5 || extension6 || extension7 || extension8
           }
-          return extension5 || extension6 || extension7 || extension8
-        } else if (this.radioDemander == 5) {
-          if (!extension && !extension2 && !extension3 && !extension4) {
+          if (!isLt3M) {
             this.$message({
-              message: '上传文件只能上传excel文件和word文件!',
+              message: '上传图片大小不能超过 3MB!',
               type: 'warning'
             });
+            return isLt3M
           }
-          return extension || extension2 || extension3 || extension4
+          return extension5 || extension6 || extension7 || extension8 || isLt3M
+        } else if (this.radioDemander == 5) {
+          if (!extension && !extension2 && !extension3 && !extension4 && !extension9 && !extension10 && !extension11 && !extension12 && !extension13 && !extension14 && !extension15) {
+            this.$message({
+              message: '上传文件只能上传doc、docx、xls、xlsx、ppt、pdf、zip、rar、7z、txt、csv格式!',
+              type: 'warning'
+            });
+            return extension || extension2 || extension3 || extension4 || extension9 || extension10 || extension11 || extension12 || extension13 || extension14 || extension15
+          }
+          if (!isLt50M) {
+            this.$message({
+              message: '上传文件大小不能超过 50MB!',
+              type: 'warning'
+            });
+            return isLt50M
+          }
+          return extension || extension2 || extension3 || extension4 || extension9 || extension10 || extension11 || extension12 || extension13 || extension14 || extension15 || isLt50M
+
         }
-        // const isLt2M = file.size / 1024 / 1024 < 10
+
+
 
 
       },
@@ -421,13 +464,9 @@
         });
         this.loadingPop = loading
       },
-      // uploadSuccess(response, file, fileList) {
-      //   this.loadingPop.close()
-      //   this.$alert(response.msg, "导入结果", {
-      //     dangerouslyUseHTMLString: true
-      //   });
-      //   this.isLead = false
-      // },
+      uploadSuccess(response, file, fileList) {
+        this.setSDOperation()
+      },
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
@@ -463,15 +502,15 @@
         let FilePath = 'plate\\files\\'
         let data = base64File
         upLoadImgApi(data, FileName, FilePath).then(res => {
-          this.loading = false
+          // this.loading = false
           console.log(res);
           if (res.OK == 'True') {
             this.$message({
               type: 'success',
               message: res.Message
             })
-            this.$emit('refresh')
-            this.close()
+            // this.$emit('refresh')
+            // this.close()
           } else {
             this.$message({
               type: 'error',
@@ -507,6 +546,7 @@
       }
       console.log(this.fieldObj);
       this.inputDemander = this.fieldObj.placeholder
+      this.changeRadioDemander()
     }
   };
 </script>
