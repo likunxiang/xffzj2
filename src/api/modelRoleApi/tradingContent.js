@@ -383,7 +383,7 @@ export function setSDOperation(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/ExSql?SqlCmdName=web\\model\\setSDOperation&DBC=w_m',
+    url: '/ExSql?SqlCmdName=web\\model\\setSDOperation_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
