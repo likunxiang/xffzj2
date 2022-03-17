@@ -83,8 +83,7 @@
         <div>
           <div class="flex flex-center mb20">
             <div class="bold" style="width: 120px;">违约方违约费用</div>
-            <el-input placeholder="请填写" style="width: 80px;" v-if="damageFree == 0"></el-input>
-            <el-input v-model="damageFree" placeholder="请填写" style="width: 80px;" v-else></el-input>
+            <el-input v-model="damageFree" placeholder="请填写" style="width: 80px;"></el-input>
           </div>
           <div class="flex flex-center">
             <div class="bold" style="width: 120px;">收取对象</div>
@@ -101,8 +100,7 @@
         <div>
           <div class="flex flex-center mb20">
             <div class="bold" style="width: 120px;">守约方赔偿金额</div>
-            <el-input placeholder="请填写" style="width: 80px;" v-if="punishFree == 0"></el-input>
-            <el-input v-model="punishFree" placeholder="请填写" style="width: 80px;" v-else></el-input>
+            <el-input v-model="punishFree" placeholder="请填写" style="width: 80px;"></el-input>
           </div>
           <div class="flex flex-center">
             <div class="bold" style="width: 120px;">赔偿对象</div>
@@ -166,8 +164,8 @@
         url: '',
         uploadUrl: '',
         fingdingReason: '',
-        punishFree: 0, // 赔偿金，
-        damageFree: 0, // 违约金
+        punishFree: '', // 赔偿金，
+        damageFree: '', // 违约金
         radioResult: 0,
         radioColloct: 0, // 收取对象
         radioWin: 0, // 赔付对象
@@ -221,8 +219,7 @@
         }
       },
       submit() {
-        if (this.fingdingReason && this.radioResult > 0 && this.damageFree * 100 >= 0 && this.punishFree * 100) {
-
+        if (this.fingdingReason && this.radioResult > 0 && parseFloat(this.damageFree) * 100 >= 0 && parseFloat(this.punishFree) * 100 >= 0) {
           if(this.imgList.length > 0) {
             console.log(999999);
             this.$refs.upload.submit();
@@ -244,8 +241,8 @@
           reason: this.fingdingReason,
           result: this.radioResult,
           thirdReports: this.uploadUrl, // TODO
-          disobeyFee: this.damageFree * 100,
-          obeyFee: this.punishFree * 100,
+          disobeyFee: parseFloat(this.damageFree) * 100,
+          obeyFee: parseFloat(this.punishFree) * 100,
           disobeyFeeRemark: this.disobeyFeeRemark,
           obeyFeeRemark: this.obeyFeeRemark,
           feeNo1: this.feeNo1,

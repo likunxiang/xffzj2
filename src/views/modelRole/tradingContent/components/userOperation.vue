@@ -78,7 +78,8 @@
                     :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list :on-success="uploadSuccess"
                     multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :on-exceed="handleExceed"
                     :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
-                    <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
+                    <el-button size="small" type="primary" slot="tip" :disabled="true" v-if="radioDown!=2">点击上传</el-button>
+                    <el-button size="small" type="primary" v-else>点击上传</el-button>
                   </el-upload>
                 </div>
               </el-row>
@@ -127,7 +128,8 @@
                       :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list :on-success="uploadSuccess"
                       multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :on-exceed="handleExceed"
                       :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
-                      <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
+                      <el-button size="small" type="primary" slot="tip" :disabled="true" v-if="radioDown!=2">点击上传</el-button>
+                      <el-button size="small" type="primary" v-else>点击上传</el-button>
                     </el-upload>
                   </div>
                 </el-row>
@@ -210,7 +212,8 @@
                     :on-remove="handleRemove" :on-change="changeFile" :before-remove="beforeRemove" show-file-list
                     multiple :http-request="uploadFile" :limit="1" :on-progress="uploading" :accept="accptSting"
                     :on-exceed="handleExceed" :auto-upload="false" :before-upload="beforeUpload" :file-list="fileList">
-                    <el-button size="small" type="primary" :disabled="radioDown!=2">点击上传</el-button>
+                    <el-button size="small" type="primary" slot="tip" :disabled="true" v-if="radioDown!=2">点击上传</el-button>
+                    <el-button size="small" type="primary" v-else>点击上传</el-button>
                   </el-upload>
                 </div>
               </el-row>
@@ -368,7 +371,7 @@
               message: '操作失败',
             })
           }
-          
+
         })
 
       },

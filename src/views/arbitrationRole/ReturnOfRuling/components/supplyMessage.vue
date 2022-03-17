@@ -22,7 +22,7 @@
       <div v-for="(item,index) in supplyObj.plates" :key='index'>
         <div class="title-bg mb10">{{item.name}}</div>
         <div v-for="(type,index) in item.type">
-          <div class="mb10">{{type.name}}</div>
+          <div class="mb10">| {{type.name}}</div>
           <div v-for="(field,index) in type.field">
             <div class="mb10 bold">{{field.name}}</div>
             <template v-if="field.operation < 4">
@@ -36,9 +36,9 @@
                     :src="img"></el-image>
                 </div>
               </template>
-              <template v-if="field == 5">
+              <template v-if="field.operation == 5">
                 <div v-for="(value,index) in field.value" class="mb10 flex flex-center" style="flex-wrap: wrap;">
-                  <div class="mr10 mb10" v-for="(file,index) in getImgUrl(value.key)">{{file.key}}</div>
+                  <div class="mr10 mb10" >{{value.key}}</div>
                 </div>
               </template>
             </template>
