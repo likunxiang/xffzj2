@@ -188,7 +188,7 @@
           var data1 = {}
           data1 = {
             plateFieldGuid: this.fieldObj.plateFieldGuid,
-            content: data.fixedDataGuid || data
+            content: data.fixedDataGuid || data.trim()
           }
         } else {
           var data1 = []
@@ -198,7 +198,7 @@
             } else {
               let obj = {
                 plateFieldGuid: this.fieldObj.plateFieldGuid,
-                content: data.fixedDataGuid || data[i]
+                content: data.fixedDataGuid || data[i].trim()
               }
               console.log('datai', data.fixedDataGuid || data[i]);
               data1.push(obj)
