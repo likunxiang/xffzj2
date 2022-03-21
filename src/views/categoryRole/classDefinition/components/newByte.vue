@@ -44,7 +44,7 @@
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submit" :disabled="!ownByte">保存</el-button>
+      <el-button type="primary" @click="submit" :disabled="!ownByte.trim()">保存</el-button>
     </span>
     <chooseByte v-if="isChoose" @close="closeFather" @getFather="getFather" :pageTitle="pageTitle" :treeTitle="treeTitle" :guid="guid" :parentId='editObj.guid' :byteType="byteType"></chooseByte>
   </el-dialog>

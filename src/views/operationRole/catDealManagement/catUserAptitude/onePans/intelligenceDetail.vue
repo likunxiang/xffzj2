@@ -27,7 +27,7 @@
         <div v-for="(field,index) in type.field">
           <div class="mb10 bold">{{field.name}}</div>
           <template v-if="field.operation < 4">
-            <div v-for="(content,index) in field.content">{{content.display}}</div>
+            <div v-for="(value,index) in field.value">{{value.key}}</div>
           </template>
           <template v-else>
             <template v-if="field.operation == 4">
@@ -36,7 +36,7 @@
                   v-for="(img,index) in getImgUrl(value.key)" :key="index" :src="img"></el-image>
               </div>
             </template>
-            <template v-if="field == 5">
+            <template v-if="field.operation == 5">
               <div v-for="(value,index) in field.value" class="mb10 flex flex-center" style="flex-wrap: wrap;">
                 <div class="mr10 mb10" v-for="(file,index) in getImgUrl(value.key)">{{file.key}}</div>
               </div>

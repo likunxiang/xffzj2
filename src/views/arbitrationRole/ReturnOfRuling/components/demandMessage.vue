@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="loading">
       <div v-for="(item,index) in tableData" :key='index'>
       	<div class="title-bg mb10">{{item.name}}</div>
       	<div v-for="(type,index) in item.type">
@@ -47,7 +47,8 @@
     data() {
       return {
         tableData: [],
-        imgUrl: this.$store.state.basics.imgUrl
+        imgUrl: this.$store.state.basics.imgUrl,
+        loading: false,
       };
     },
     methods: {
@@ -61,9 +62,11 @@
       },
       // 需求信息
       async getDemandMessage() {
+        this.loading = true
         await getDemandMessage({
           orderGuid: this.orderGuid
         }).then(res => {
+          this.loading = false
           console.log(res);
           let data = []
           if (res.Tag.length) {

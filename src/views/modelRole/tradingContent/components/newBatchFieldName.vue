@@ -4,7 +4,7 @@
     <el-input class="mb10" type="textarea" placeholder="请输入" :rows="10" v-model="fieldObj.content"></el-input>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button type="primary" @click="submit" :disabled="!fieldObj.content.trim()">确 定</el-button>
     </span>
   </el-dialog>
 </template>

@@ -101,13 +101,12 @@
               console.log('statusOptions',statusOptions);
               for (var j in data) {
                 for (var i in statusOptions) {
-                  if (data[j].userTag == statusOptions[i].dictSort) {
+                  if (data[j].userTag == statusOptions[i].dictValue) {
                     data[j].roleType = statusOptions[i].dictLabel
-                    return
                   }
                 }
               }
-            
+
             });
           } else {
             data = []

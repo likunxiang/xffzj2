@@ -209,7 +209,7 @@
           } else {
             this.$message({
               type: 'error',
-              message: '操作失败!'
+              message: '已有供方，不可删除!'
             });
           }
 

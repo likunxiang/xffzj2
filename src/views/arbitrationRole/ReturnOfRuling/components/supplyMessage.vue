@@ -2,24 +2,24 @@
   <div class="">
     <div class="title-bg mb10">结算信息</div>
     <el-descriptions :colon="false" class="margin-top" :column="1">
-      <el-descriptions-item label-class-name="my-label" label="账号名称">{{supplyObj.bankUserName}}</el-descriptions-item>
-      <el-descriptions-item label-class-name="my-label" label="开户银行">{{supplyObj.bankName}}</el-descriptions-item>
-      <el-descriptions-item label-class-name="my-label" label="银行账号">{{supplyObj.bankNo}}</el-descriptions-item>
-      <el-descriptions-item label-class-name="my-label" label="银行地址">{{supplyObj.bankAddr}}</el-descriptions-item>
+      <el-descriptions-item label-class-name="my-label1" label="账号名称">{{supplyObj.bankUserName}}</el-descriptions-item>
+      <el-descriptions-item label-class-name="my-label1" label="开户银行">{{supplyObj.bankName}}</el-descriptions-item>
+      <el-descriptions-item label-class-name="my-label1" label="银行账号">{{supplyObj.bankNo}}</el-descriptions-item>
+      <el-descriptions-item label-class-name="my-label1" label="银行地址">{{supplyObj.bankAddr}}</el-descriptions-item>
     </el-descriptions>
     <div class="title-bg mb10">结算信息</div>
     <el-descriptions :colon="false" class="margin-top" :column="1">
-      <el-descriptions-item label-class-name="my-label" label="供应主体">{{supplyObj.supplyCompanyName}}
+      <el-descriptions-item label-class-name="my-label1" label="供应主体">{{supplyObj.supplyCompanyName}}
       </el-descriptions-item>
     </el-descriptions>
     <template v-if="supplyObj.modelName">
       <div class="title-bg mb10">型号信息</div>
       <el-descriptions :colon="false" class="margin-top" :column="1">
-        <el-descriptions-item label-class-name="my-label" label="型号名称">{{supplyObj.modelName}}</el-descriptions-item>
+        <el-descriptions-item label-class-name="my-label1" label="型号名称">{{supplyObj.modelName}}</el-descriptions-item>
       </el-descriptions>
     </template>
-    <div>
-      <div v-for="(item,index) in supplyObj.plates" :key='index'>
+    <div v-loading="loading">
+      <div v-for="(item,index) in supplyObj.plate" :key='index'>
         <div class="title-bg mb10">{{item.name}}</div>
         <div v-for="(type,index) in item.type">
           <div class="mb10">| {{type.name}}</div>
@@ -67,7 +67,8 @@
     data() {
       return {
         supplyObj: {},
-        imgUrl: this.$store.state.basics.imgUrl
+        imgUrl: this.$store.state.basics.imgUrl,
+        loading: true,
       };
     },
     methods: {
@@ -81,9 +82,11 @@
       },
       // 需求信息
       async getSupplydMessage() {
+        this.loding = true
         await getSupplydMessage({
           orderGuid: this.orderGuid
         }).then(res => {
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table[0]
@@ -101,14 +104,14 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .title-bg {
     background-color: #F2F2F2;
     padding: 10px;
+    font-weight: bold;
   }
 
-  .my-label {
-    width: 120px;
+  .my-label1 {
     font-weight: bold;
   }
 </style>

@@ -8,7 +8,7 @@
         </el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center">
         </el-table-column>
-        <el-table-column prop="userTag" label="角色类型" align="center">
+        <el-table-column prop="roleType" label="角色类型" align="center">
         </el-table-column>
       </el-table>
     </el-row>
@@ -73,7 +73,7 @@
         url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         fit: 'fit',
         userInfo: {},
-        imgUrl: this.$store.state.basics.imgUrl
+        imgUrl: this.$store.state.basics.img_url_user_idcard
       };
     },
 

@@ -31,7 +31,7 @@
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit" :disabled="!ownByte">确 定</el-button>
+      <el-button type="primary" @click="submit" :disabled="!ownByte.trim()">确 定</el-button>
     </span>
 
     <chooseByte v-if="isChoose" @close="closeFather" @getFather="getFather" :pageTitle="pageTitle" :treeTitle="treeTitle" :guid="guid" :parentId='editObj.guid' :byteType="byteType"></chooseByte>

@@ -215,7 +215,8 @@
           this.radioColloct = 2
           this.radioWin = 1
         } else {
-          return
+          this.radioColloct = 0
+          this.radioWin = 0
         }
       },
       submit() {

@@ -309,14 +309,14 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .title-bg {
     background-color: #F2F2F2;
     padding: 10px;
   }
 
   .my-label {
-    width: 120px;
+    // width: 120px;
     font-weight: bold;
   }
 </style>

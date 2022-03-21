@@ -32,7 +32,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeNew">取 消</el-button>
-        <el-button type="primary" @click="submitNew" :disabled="!inputClass">确 定</el-button>
+        <el-button type="primary" @click="submitNew" :disabled="!inputClass.trim()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -196,8 +196,19 @@
           plateTypeName: this.inputClass.trim()
         }).then(res => {
           console.log(res);
-          this.isNew = false
-          this.getPlateTypes()
+          if(res.Tag[0] > 0) {
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            });
+            this.isNew = false
+            this.getPlateTypes()
+          } else {
+            this.$message({
+              message: '操作失败!',
+              type: 'error'
+            })
+          }
         })
       },
       // 判断板块类型是否已添加
@@ -206,7 +217,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           bizType: this.openRow.bizType,
           categoryGuid: this.openRow.categoryGuid,
-          plateTypeName: this.inputClass
+          plateTypeName: this.inputClass.trim()
         }).then(res => {
           console.log(res);
           if (res.Tag[0].Table[0].existFlag > 0) {

@@ -2,13 +2,15 @@
   <el-dialog title="发布记录" width="700px" :visible.sync="isNew" destroy-on-close @close="beforeClose">
     <div class="p20" style="min-height: 20vh;">
       <div class="mb20 bold">【{{openRow.categoryName}}】</div>
-      <el-row class="mb10" v-for="(item,index) in recordList" :key="index">{{item.publishTime}}</el-row>
+      <el-row class="mb10" v-for="(item,index) in record" :key="index">{{item.publishTime}}</el-row>
     </div>
   </el-dialog>
 </template>
 
 <script>
-  import { getPublishHistoryChat } from '@/api/modelRoleApi/tradingContent.js'
+  import {
+    getDealRulePublishHistory
+  } from '@/api/modelRoleApi/transactionRules.js'
   export default {
     name: "newClassName",
     props: {
@@ -17,16 +19,12 @@
         default: () => {
           return {}
         }
-      },
-      bizType: {
-        type: String,
-        default: '1'
       }
     },
     data() {
       return {
         isNew: true,
-        recordList: []
+        record: []
       };
     },
     methods: {
@@ -39,22 +37,22 @@
         console.log(999);
         this.$emit('closeNew')
       },
-      // 查询供需需求信息发布记录
-      async getPublishHistoryChat() {
-        await getPublishHistoryChat({
-          chatModeGuid: this.openRow.chatModeGuid,
-          bizType: this.bizType
+      async getDealRulePublishHistory() {
+        await getDealRulePublishHistory({
+          categoryGuid: this.openRow.categoryGuid
         }).then(res => {
           console.log(res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table
-            this.recordList = data
+            this.record = data
+          } else {
+            this.record = []
           }
         })
-      },
+      }
     },
-    created() {
-      this.getPublishHistoryChat()
+    mounted() {
+      this.getDealRulePublishHistory()
     }
   };
 </script>

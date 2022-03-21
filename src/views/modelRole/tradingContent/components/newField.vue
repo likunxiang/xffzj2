@@ -6,7 +6,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submitNew" :disabled="!inputField">确 定</el-button>
+      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim()">确 定</el-button>
     </span>
   </el-dialog>
 </template>

@@ -82,7 +82,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeNewField">取 消</el-button>
-        <el-button type="primary" @click="submitNewField" :disabled="!newFeildText">确 定</el-button>
+        <el-button type="primary" @click="submitNewField" :disabled="!newFeildText.trim()">确 定</el-button>
       </span>
     </el-dialog>
     <editField v-if="isEdit" @close="closeEditFieldName" @refresh="getPlateFields" :editRow="oldRow"></editField>
@@ -295,7 +295,7 @@
           catTreeCode: this.openRow.type || this.openRow.catTreeCode,
           categoryGuid: this.openRow.categoryGuid,
           bizType: this.openRow.bizType,
-          plateFieldName: id || this.newFeildText,
+          plateFieldName: id || this.newFeildText.trim(),
         }).then(res => {
           console.log(res);
           if (res.Tag[0].Table[0].existFlag > 0) {
