@@ -34,7 +34,7 @@
     </el-descriptions>
     <div class="title-bg mb10 mt10">开票信息</div>
     <el-descriptions :colon="false" class="margin-top" :column="1">
-      <el-descriptions-item label-class-name="my-label" label="发票类型">{{orderDetailObj.invoiceType=='1'?'普通发票':'增值税专用发票'}}</el-descriptions-item>
+      <el-descriptions-item label-class-name="my-label" label="发票类型">{{orderDetailObj.invoiceType==''?'':orderDetailObj.invoiceType=='1'?'普通发票':'增值税专用发票'}}</el-descriptions-item>
       <el-descriptions-item label-class-name="my-label" label="发票抬头">{{orderDetailObj.invoiceTitle}}</el-descriptions-item>
       <el-descriptions-item label-class-name="my-label" label="发票单位">{{orderDetailObj.invoiceCompany}}</el-descriptions-item>
       <el-descriptions-item label-class-name="my-label" label="纳税识别号">{{orderDetailObj.invoiceTaxNumber}}</el-descriptions-item>

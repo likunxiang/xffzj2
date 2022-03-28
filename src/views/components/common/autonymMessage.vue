@@ -167,7 +167,7 @@
               var statusOptions = response.Tag;
               console.log('statusOptions',statusOptions);
               for (var i in statusOptions) {
-                if (this.userInfo.userTag == statusOptions[i].status) {
+                if (this.userInfo.userTag == statusOptions[i].dictValue) {
                   this.userInfo.roleType = statusOptions[i].dictLabel
                   console.log(this.userInfo);
                   return

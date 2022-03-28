@@ -28,7 +28,7 @@ export function getEarningsMonthOfYear(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=WEB\\guide\\getEarningsMonthOfYear&DBC=w_m',
+    url: '/QueryData?SqlCmdName=WEB\\guide\\getEarningsMonthOfYear_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -61,7 +61,7 @@ export function withdrawStatistic(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=WEB\\guide\\withdrawStatistic&DBC=w_m',
+    url: '/QueryData?SqlCmdName=WEB\\guide\\withdrawStatistic_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })

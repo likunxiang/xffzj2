@@ -29,7 +29,7 @@
 
     <pages @changePage="changePage" :page="page" :total="pageTotal" :showTotal="false"></pages>
 
-    <detail v-if="isDetail" @clsoe="closeDetail" :row="openRow"></detail>
+    <detail v-if="isDetail" @close="closeDetail" :row="openRow"></detail>
     <standardSetting v-if="isStandar" @close="closeStandar"></standardSetting>
   </div>
 </template>
@@ -98,7 +98,7 @@
 
       putInLibrary(row) {
         if (row.categoryGuid.length) {
-          this.$confirm('确认将回收的【' + row.userName + '】的人力资源放入至可认领库', '提示', {
+          this.$confirm('确认将回收的【' + row.categoryName + '】的人力资源放入至可认领库', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -141,6 +141,7 @@
               type: 'success',
               message: '操作成功!'
             });
+            this.getCategoryTakeBakeCount()
           } else {
             this.$message({
               type: 'error',
@@ -149,7 +150,7 @@
           }
         })
       },
-      //
+      // 放入详情--无品类时
       async unlockNoCatUserByCaGuid() {
         await unlockNoCatUserByCaGuid().then(res => {
           if(res.Tag[0]>0) {
@@ -157,6 +158,7 @@
               type: 'success',
               message: '操作成功!'
             });
+            this.getCategoryTakeBakeCount()
           } else {
             this.$message({
               type: 'error',

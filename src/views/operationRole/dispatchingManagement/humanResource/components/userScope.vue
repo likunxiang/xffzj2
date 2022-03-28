@@ -53,7 +53,7 @@
     <div class="flex flex-center">
       <div class="text-box">角色类型情况</div>
       <el-radio-group v-model="radioRole" @change="changeRole">
-        <el-radio class="radio-box" :label="role.dictSort" v-for="(role,index) in roleList" :key="index">{{role.dictLabel}}</el-radio>
+        <el-radio class="radio-box" :label="role.dictValue" v-for="(role,index) in roleList" :key="index">{{role.dictLabel}}</el-radio>
       </el-radio-group>
     </div>
     <span slot="footer" class="dialog-footer">

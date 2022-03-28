@@ -236,6 +236,7 @@ C<template>
           } else {
             this.tableData = []
           }
+          console.log('this.tableData.length',this.tableData.length);
           this.searchResult = this.tableData.length
           this.pageTotal = this.tableData.length > 0 ? (this.param.page - 1) * 20 + 21 : (this.param.page - 1) *
             20 + 1

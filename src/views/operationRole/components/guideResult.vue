@@ -99,7 +99,7 @@
               <el-table-column label="采购情况" align="center">
                 <template slot-scope="scope">
                   <el-row>
-                    <el-button type="text" size="small" @click="openOrderDetail(scope.row,'demand')">采购订单详情 TODO</el-button>
+                    <el-button type="text" size="small" @click="openOrderDetail(scope.row,'demand')">采购订单详情</el-button>
                   </el-row>
                 </template>
               </el-table-column>
@@ -120,7 +120,7 @@
               <el-table-column label="供应情况" align="center">
                 <template slot-scope="scope">
                   <el-row>
-                    <el-button type="text" size="small" @click="openOrderDetail(scope.row,'supply')">供应订单详情 TODO</el-button>
+                    <el-button type="text" size="small" @click="openOrderDetail(scope.row,'supply')">供应订单详情</el-button>
                   </el-row>
                 </template>
               </el-table-column>
@@ -234,7 +234,7 @@
         // this.getUserOrderCountByDate(row) // 旧
         let data = row
         data.month = row.orderDate
-        data.total = +row.demandCount + row.supplyCount
+        data.total = parseInt(row.demandCount) + parseInt(row.supplyCount)
         this.userOrderResult = data
       },
       closeResultDetail() {
@@ -258,7 +258,7 @@
       // 用户采购成果详情-月份详情
       async getOrderDemandMonthList() {
         await getOrderDemandMonthList({
-          userId: this.userOrderResult.userId,
+          userId:this.userResultList[0].guidedUserId,
           month: this.userOrderResult.month
         }).then(res => {
           if (res.Tag.length) {
@@ -285,11 +285,12 @@
         //   console.log(res);
         //   this.supplyDetailList = res.Tag[0].Table
         // })  // 旧
+        this.getOrderSupplyMonthList()
       },
       // 用户供应成果详情-月份详情
       async getOrderSupplyMonthList() {
         await getOrderSupplyMonthList({
-          userId: this.userOrderResult.userId,
+          userId: this.userResultList[0].guidedUserId,
           month: this.userOrderResult.month
         }).then(res => {
           if (res.Tag.length) {
@@ -310,7 +311,9 @@
       async getOutComeNumList() {
         await getOutComeNumList({
           userId: this.row.userId,
-          phonenumber: this.searchVal || ''
+          phonenumber: this.searchVal || '',
+          page: this.page,
+          size: '20'
         }).then(res => {
           console.log(res);
           if (res.Tag.length) {

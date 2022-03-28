@@ -26,13 +26,13 @@
         <el-radio class="radio-box" :label="2">不是引导专员</el-radio>
       </el-radio-group>
     </div>
-    <div class="flex flex-center">
+    <!-- <div class="flex flex-center">
       <div class="text-box">是否有引导专员情况</div>
       <el-radio-group v-model="radioHaveGuide" @change="changeHaveGuide">
         <el-radio class="radio-box" :label="1">有引导专员</el-radio>
         <el-radio class="radio-box" :label="2">没有引导专员</el-radio>
       </el-radio-group>
-    </div>
+    </div> -->
     <div class="flex flex-center">
       <div class="text-box">供应成果情况</div>
       <el-radio-group v-model="radioSupplyResult" @change="changeSupplyResult">
@@ -66,7 +66,7 @@
       <div class="text-box">角色类型情况</div>
       <el-radio-group v-model="radioRole" @change="changeRole">
         <el-radio class="radio-box" :label="role.dictValue" v-for="(role,index) in roleList" :key="index">
-          {{role.dictLabel}} {{role.dictValue}}
+          {{role.dictLabel}}
         </el-radio>
       </el-radio-group>
     </div>
@@ -114,14 +114,23 @@
         loading: true,
         radioRegister: 0,
         radioGuide: 0,
-        radioHaveGuide: 0,
+        // radioHaveGuide: 0,
         radioSupplyResult: 0,
         radioPurchaseResult: 0,
         radioClaim: 0,
         radioAdd: 0,
         radioRole: -1,
         roleList: [],
-        param: {},
+        param: {
+          registerFlag: '',
+          guideFlag: '',
+          // guidedFlag: '',
+          supplyFlag: '',
+          purchaseFlag: '',
+          guideSoure: '',
+          userTag: '',
+          categoryGuid: ''
+        },
         pageTotal: 0, // 总回收数
         suitableTotal: 0, // 合适的回收数
         suitableList: [], // 接口请求获取合适的用户列表
@@ -154,10 +163,10 @@
         this.param.guideNum = val == 1 ? 1 : 0
         this.getTakeBackTotalNum()
       },
-      changeHaveGuide(val) {
-        this.param.guidedFlag = val == 1 ? 1 : 0
-        this.getTakeBackTotalNum()
-      },
+      // changeHaveGuide(val) {
+      //   this.param.guidedFlag = val == 1 ? 1 : 0
+      //   this.getTakeBackTotalNum()
+      // },
       changeSupplyResult(val) {
         this.param.supplyFlag = val == 1 ? 1 : 0
         this.getTakeBackTotalNum()
@@ -185,7 +194,9 @@
           for(let i in suitableList) {
             let obj = {
               targetUserId: this.row.userId,
-              phonenumber: suitableList[i].phonenumber
+              phonenumber: suitableList[i].phonenumber,
+              userName: suitableList[i].userName,
+              nation: suitableList[i].nation
             }
             arr.push(obj)
           }
@@ -194,8 +205,8 @@
         } else {
           this.close()
         }
-        
-        
+
+
       },
       openClass() {
         this.isClass = true

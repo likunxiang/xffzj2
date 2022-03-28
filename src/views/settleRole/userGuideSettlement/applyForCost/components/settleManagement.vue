@@ -53,7 +53,7 @@
     <!-- 劳务报酬信息 -->
     <el-dialog title="劳务报酬信息" :visible.sync="isReward" width="700px" @close="beforeCloseReward" append-to-body>
       <el-row style="padding-bottom: 40px;">
-        <el-descriptions border column="1" size="medium">
+        <el-descriptions border :column="1" size="medium">
            <el-descriptions-item label="年度" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{contentFromObj.year}}</el-descriptions-item>
            <el-descriptions-item label="计酬月份" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{contentFromObj.month}}</el-descriptions-item>
            <el-descriptions-item label="采购服务费用分成" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{contentFromObj.purchaseEarnings}}</el-descriptions-item>
@@ -65,13 +65,13 @@
     </el-dialog>
     <!-- 劳务报酬信息 end -->
     <!-- 申请账号信息 -->
-    <userMessage v-if="isUserMessage" @close="closePersonalinformation" :row="openRow"></userMessage>
+    <userMessage v-if="isUserMessage" @close="closeAccountNumber" :row="openRow"></userMessage>
     <!-- 申请账号信息 end -->
     <!-- 收益提现信息 -->
     <el-dialog title="收益提现信息" :visible.sync="isEarnings" width="700px" @close="beforeCloseEarnings" append-to-body>
       <el-row style="padding-bottom: 40px;">
-        <el-descriptions border column="1" size="medium">
-           <el-descriptions-item label="提现金额" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{earningObj.year}}</el-descriptions-item>
+        <el-descriptions border :column="1" size="medium">
+           <el-descriptions-item label="提现金额" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{earningObj.earnings}}</el-descriptions-item>
            <el-descriptions-item label="提现申请时间" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{earningObj.withdrawSupplyTime}}</el-descriptions-item>
            <el-descriptions-item label="提现方式" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">{{earningObj.withdrawType == 1?'支付宝':(contentFromObj.withdrawType == 2?'微信':'银行卡')}}</el-descriptions-item>
            <el-descriptions-item label="国家/ 区号" :labelStyle="{'text-align': 'center'}" :contentStyle="{'text-align': 'center'}">中国大陆（+86）</el-descriptions-item>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-  import userMessage from "@/views/components/common/autonymMessage.vue"
+  import userMessage from "@/views/components/common/userMessage.vue"
   import { applyWithdrawDetailList,getEarningsMonthOfYear,withdrawDoneDetail } from '@/api/settleRoleApi/userGuideSettlement.js'
   export default {
     name: "index",
@@ -139,7 +139,7 @@
       // 劳务报酬信息相关
       openReward(row) {
         this.isReward = true
-        this.getEarningsMonthOfYear(row.month)
+        this.getEarningsMonthOfYear(row)
       },
       closeReward() {
         this.isReward = false
@@ -151,7 +151,7 @@
       // 收益提现信息
       openEarnings(row) {
         this.isEarnings = true
-        this.withdrawDoneDetail(row.month)
+        this.withdrawDoneDetail(row)
       },
       closeEarnings() {
         this.isEarnings = false
@@ -176,23 +176,24 @@
           this.tableData = res.Tag[0].Table
         })
       },
-      async getEarningsMonthOfYear(month) {
+      async getEarningsMonthOfYear(row) {
         await getEarningsMonthOfYear({
           year: this.row.year,
-          month: month
+          month: row.month,
+		  userId: row.userId
         }).then(res => {
           this.contentFromObj = res.Tag[0].Table[0]
           this.contentFromObj.total = parseFloat(res.Tag[0].Table[0].purchaseEarnings) + parseFloat(res.Tag[0].Table[0].supplyEarnings) + parseFloat(res.Tag[0].Table[0].guideEarnings)
           console.log(res);
         })
       },
-      async withdrawDoneDetail(month) {
+      async withdrawDoneDetail(row) {
         await withdrawDoneDetail({
           userId: '',
           year: this.row.year,
-          applyMonth: month
+          applyMonth: row.month
         }).then(res => {
-          this.earningObj = res.Tag[0].Table
+          this.earningObj = res.Tag[0].Table[0]
           console.log(res);
         })
       }

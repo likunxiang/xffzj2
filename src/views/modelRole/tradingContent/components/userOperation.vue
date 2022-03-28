@@ -313,7 +313,7 @@
         this.radioDown = 0
         if (this.radioDemander > 3) {
           if (this.radioDemander == 4) {
-            this.accptSting= ".png, .jpeg, .jpg, .gif"
+            this.accptSting= ".png, .jpeg, .jpg, .gif, .doc, .docx, .xls, .xlsx, .ppt, .pdf, .zip, .rar, .7z, .txt, .csv"
           } else if (this.radioDemander == 5) {
             this.accptSting= ".doc, .docx, .xls, .xlsx, .ppt, .pdf, .zip, .rar, .7z, .txt, .csv"
           }
@@ -419,21 +419,21 @@
         const isLt3M = file.size / 1024 / 1024 < 3
         const isLt50M = file.size / 1024 / 1024 < 50
         if (this.radioDemander == 4) {
-          if (!extension5 && !extension6 && !extension7 && !extension8) {
+          if (!extension5 && !extension6 && !extension7 && !extension8 && !extension && !extension2 && !extension3 && !extension4 && !extension9 && !extension10 && !extension11 && !extension12 && !extension13 && !extension14 && !extension15) {
             this.$message({
-              message: '上传图片只能上传png、jpeg、jpg、gif格式!',
+              message: '上传图片只能上传png、jpeg、jpg、gif、doc、docx、xls、xlsx、ppt、pdf、zip、rar、7z、txt、csv格式!',
               type: 'warning'
             });
-            return extension5 || extension6 || extension7 || extension8
+            return extension5 || extension6 || extension7 || extension8 || extension || extension2 || extension3 || extension4 || extension9 || extension10 || extension11 || extension12 || extension13 || extension14 || extension15
           }
-          if (!isLt3M) {
+          if (!isLt50M) {
             this.$message({
-              message: '上传图片大小不能超过 3MB!',
+              message: '上传文件大小不能超过 50MB!',
               type: 'warning'
             });
-            return isLt3M
+            return isLt50M
           }
-          return extension5 || extension6 || extension7 || extension8 || isLt3M
+          return extension5 || extension6 || extension7 || extension8 || extension || extension2 || extension3 || extension4 || extension9 || extension10 || extension11 || extension12 || extension13 || extension14 || extension15 || isLt50M
         } else if (this.radioDemander == 5) {
           if (!extension && !extension2 && !extension3 && !extension4 && !extension9 && !extension10 && !extension11 && !extension12 && !extension13 && !extension14 && !extension15) {
             this.$message({

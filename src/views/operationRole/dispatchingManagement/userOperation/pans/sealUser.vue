@@ -86,7 +86,7 @@
 						  console.log('statusOptions',statusOptions);
 						  for (var j in this.tableData) {
 						    for (var i in statusOptions) {
-						      if (this.tableData[j].userTag == statusOptions[i].dictSort) {
+						      if (this.tableData[j].userTag == statusOptions[i].dictValue) {
 						        this.tableData[j].roleType = statusOptions[i].dictLabel
 						      }
 						    }
