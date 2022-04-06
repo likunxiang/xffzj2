@@ -4,11 +4,12 @@
     <el-table v-loading="loading" :data="tableData" border>
       <el-table-column prop="categoryName" label="品类名称" align="center"></el-table-column>
       <el-table-column prop="cattypeName" label="品类类型" align="center"></el-table-column>
-      <!-- <el-table-column prop="chatModeRulePubFlag" label="沟通规则是否发布" align="center">
+      <el-table-column prop="chatModeRulePubFlag" label="沟通规则是否发布" align="center">
         <template slot-scope="scope">
-          {{scope.row.chatModeRulePubFlag == 2?'是':''}}
+          <!-- {{scope.row.chatModeRulePubFlag == 2?'是':''}} -->
+          是
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column prop="publishFlag" label="供需需求信息是否发布" align="center">
         <template slot-scope="scope">
           {{scope.row.publishFlag == 2?'是':''}}

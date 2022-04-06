@@ -1,10 +1,14 @@
 <template>
   <el-dialog title="变更记录" :visible.sync="isOpen" width="500px" @close="beforeClose">
-    <div class="flex mb10 flex-center">
+    <div class="flex mb10 flex-center" v-if="row.category_name">
       <div class="my-label bold">品类名称</div>
       <div>{{row.category_name}}</div>
     </div>
-    <div class="flex mb10 flex-center">
+    <div class="flex mb10 flex-center" v-if="row.categoryName">
+      <div class="my-label bold">品类类型</div>
+      <div>{{row.categoryName}}</div>
+    </div>
+    <div class="flex mb10 flex-center" v-if="row.cattypeName">
       <div class="my-label bold">品类类型</div>
       <div>{{row.cattypeName}}</div>
     </div>
@@ -12,7 +16,7 @@
       <div class="my-label bold mb10">记录内容</div>
       <div class="mb10 flex flex-center" v-for="(item,index) in list" :key="index">
         <div class="my-label">{{item.createTime}}</div>
-        <div>{{item.day}}</div>
+        <div>{{item.day}}小时</div>
       </div>
     </div>
   </el-dialog>
@@ -33,10 +37,7 @@
     data() {
       return {
         isOpen: true,
-        list: [
-          {date: '2021-12-13',day: '15天'},
-          {date: '2021-12-13',day: '15天'}
-        ]
+        list: []
       };
     },
     methods: {
@@ -50,11 +51,13 @@
       // 查看变更记录
       async getDeadlineHistory() {
         await getDeadlineHistory({
-          category_guid: this.row.category_guid
+          category_guid: this.row.category_guid || this.row.categoryGuid
         }).then(res => {
           console.log(res);
-          if(res.Tag) {
+          if(res.Tag.length) {
             this.list = res.Tag[0].Table
+          } else {
+            this.list = []
           }
 
         })

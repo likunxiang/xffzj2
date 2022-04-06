@@ -2,8 +2,7 @@
   <el-dialog title="字段内容管理" :visible.sync="isOpen" width="700px" @close="beforeClose">
     <el-row>
       <el-descriptions border :column="1" size="medium">
-        <el-descriptions-item label="品类名称" v-if="!isUniversal">{{categoryName}}</el-descriptions-item>
-        <el-descriptions-item label="品类类型" v-if="isUniversal">{{categoryName}}</el-descriptions-item>
+        <el-descriptions-item label="品类名称">{{categoryName}}</el-descriptions-item>
         <el-descriptions-item label="板块名称">{{fieldObj.plateName}}</el-descriptions-item>
         <el-descriptions-item label="板块类型">{{fieldObj.plateTypeName}}</el-descriptions-item>
         <el-descriptions-item label="字段名称">{{fieldObj.plateFieldName}}</el-descriptions-item>
@@ -113,10 +112,6 @@
       bizType: {
         type: String,
         default: '1'
-      },
-      isUniversal: {
-        type: Boolean,
-        default: false
       }
     },
     data() {

@@ -257,7 +257,6 @@
 							message: '操作成功!'
 						});
 						this.isAssign = false
-            this.getAssigns()
 					} else {
 						this.$message({
 							type: 'error',

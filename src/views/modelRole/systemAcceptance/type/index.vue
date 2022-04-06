@@ -16,8 +16,8 @@
 </template>
 
 <script>
-  import haveSet from '@/views/modelRole/systemAcceptance/class/pans/haveSet.vue'
-  import notSet from '@/views/modelRole/systemAcceptance/class/pans/notSet.vue'
+  import haveSet from '@/views/modelRole/systemAcceptance/type/pans/haveSet.vue'
+  import notSet from '@/views/modelRole/systemAcceptance/type/pans/notSet.vue'
   export default {
     name: "index",
     components: {

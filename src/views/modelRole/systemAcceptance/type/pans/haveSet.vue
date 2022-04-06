@@ -2,14 +2,14 @@
   <div style="min-height: 83vh;position: relative;padding-bottom: 60px;">
     <!-- <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的品类名称'></searchCom> -->
     <el-table :data="tableData" border v-loading="loading">
-      <el-table-column prop="cattypeName" label="品类类型" align="center"></el-table-column>
+      <el-table-column prop="categoryName" label="品类类型" align="center"></el-table-column>
       <el-table-column prop="day" label="验收期限" align="center">
         <template slot-scope="scope">{{scope.row.day}}小时</template>
       </el-table-column>
       <el-table-column label="变更记录" align="center">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="text" @click="changeRecord(scope.row)">{{scope.row.createTime}}</el-button>
+            <el-button type="text" @click="changeRecord(scope.row)">{{scope.row.updateTime}}</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -20,10 +20,10 @@
 </template>
 
 <script>
-  import record from '@/views/modelRole/systemAcceptance/class/components/changeRecord.vue'
+  import record from '@/views/modelRole/systemAcceptance/type/components/changeRecord.vue'
   import searchCom from '@/views/components/common/searchCom.vue'
   import {
-    getDeadlineList
+    getCattyeDoneDeadlineList_1_0_1
   } from "@/api/modelRoleApi/systemAcceptance.js"
   import pages from '@/views/components/common/pages'
   export default {
@@ -67,11 +67,7 @@
       // 获取数据
       async getDeadlineList() {
 		this.loading = true
-        await getDeadlineList({
-          category_name: this.searchVal || '',
-          size: '20',
-          page: this.page
-        }).then(res => {
+        await getCattyeDoneDeadlineList_1_0_1().then(res => {
 		  this.loading = false
           console.log(res);
           if (res.Tag.length) {

@@ -69,7 +69,6 @@
         })
       },
       getSon(data) {
-        this.closeMenu()
         if (data.hasSon == '1') {
           this.getSonList(data)
         } else {

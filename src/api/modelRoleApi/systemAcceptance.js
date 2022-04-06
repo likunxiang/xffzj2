@@ -12,6 +12,17 @@ export function getNoDeadlineList(data) {
   })
 }
 
+// web-查询类型验收期限列表-未设置_1_0_1
+export function getUnDoneCattypeDeadlineList_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\model\\getUnDoneCattypeDeadlineList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
 // 设置品类验收期限
 export function insertDeadline(data) {
   axios.defaults.baseURL = '/api'
@@ -29,6 +40,17 @@ export function getDeadlineList(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\cat\\getDeadlineList&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询类型验收期限列表-已设置_1_0_1
+export function getCattyeDoneDeadlineList_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\model\\getCattyeDoneDeadlineList_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })

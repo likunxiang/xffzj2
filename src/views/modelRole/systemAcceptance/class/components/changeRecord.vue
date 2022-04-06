@@ -12,7 +12,7 @@
       <div class="my-label bold mb10">记录内容</div>
       <div class="mb10 flex flex-center" v-for="(item,index) in list" :key="index">
         <div class="my-label">{{item.createTime}}</div>
-        <div>{{item.day}}</div>
+        <div>{{item.day}}小时</div>
       </div>
     </div>
   </el-dialog>
@@ -33,10 +33,7 @@
     data() {
       return {
         isOpen: true,
-        list: [
-          {date: '2021-12-13',day: '15天'},
-          {date: '2021-12-13',day: '15天'}
-        ]
+        list: []
       };
     },
     methods: {

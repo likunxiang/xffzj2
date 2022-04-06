@@ -12,6 +12,17 @@ export function getDealRules(data) {
   })
 }
 
+// web-查询类型节点交易规则管理列表_1_0_1
+export function getCattypeDealRules_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\model\\getCattypeDealRules_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
 // web-设置交接节点
 export function updateDealRule(data) {
   axios.defaults.baseURL = '/api'

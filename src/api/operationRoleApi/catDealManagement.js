@@ -149,7 +149,7 @@ export function getPublishFlagList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\cat\\chat\\getPublishFlagList&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\cat\\chat\\getPublishStatisticList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -160,7 +160,7 @@ export function getPublishStatisticList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\cat\\deal\\getPublishStatisticList&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\cat\\deal\\getPublishStatisticList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })

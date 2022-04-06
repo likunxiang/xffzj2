@@ -56,12 +56,56 @@ export function getDealModes(data) {
   })
 }
 
+// web-查询品类类型供需需求信息列表_1_0_1
+export function getCattypeDealModes_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\model\\getCattypeDealModes_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
 // web-发布供需需求信息-判断是否可以发布
 export function isDealModeCanPublish(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\cat\\model\\isCanPublishDealMode&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询需要一起发布的供需需求信息
+export function getNeedPublishDealMode(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\model\\getNeedPublishDealMode&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 清除发布供需需求信息产生的临时值
+export function clearTemporaryValue(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\cat\\model\\clearTemporaryValue&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-发布供需需求信息(一个个发布)
+export function publishDealMode1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\model\\publishDealMode1&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -488,6 +532,17 @@ export function getSupplyPriceList(data) {
   })
 }
 
+// web-查询类型供应报价信息列表_1_0_1
+export function getCattypeList_1_0_1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\model\\supplyprice\\getCattypeList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
 // web-查询供方指派规则列表
 export function getAssigns(data) {
   axios.defaults.baseURL = '/api'
@@ -550,6 +605,39 @@ export function supplypriceIsCanPublish(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\cat\\model\\supplyprice\\isCanPublish&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询需要一起发布的供应报价信息
+export function getNeedPublishSupplyPrice(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\model\\supplyprice\\getNeedPublishSupplyPrice&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-发布供应报价信息-发布(一个个发布)
+export function publish1(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\model\\supplyprice\\publish1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+//清除发布供应报价信息产生的临时值
+export function clearTemporaryValuePrice(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\cat\\model\\supplyprice\\clearTemporaryValue&DBC=w_m',
     method: 'post',
     data: data
   })

@@ -2,7 +2,7 @@
 	<el-row style="min-height: 83vh;position: relative;padding-bottom: 60px;">
 		<!-- <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的品类名称'></searchCom> -->
 		<el-table :data="tableData" border v-loading="loading">
-			<el-table-column prop="cattypeName" label="品类类型" align="center"></el-table-column>
+			<el-table-column prop="categoryName" label="品类类型" align="center"></el-table-column>
 			<el-table-column prop="day" label="验收期限" align="center">
 				<template slot-scope="scope">--</template>
 			</el-table-column>
@@ -21,10 +21,10 @@
 </template>
 
 <script>
-	import setting from '@/views/modelRole/systemAcceptance/class/components/settingDay.vue'
+	import setting from '@/views/modelRole/systemAcceptance/type/components/settingDay.vue'
 	import searchCom from '@/views/components/common/searchCom.vue'
 	import {
-		getNoDeadlineList
+		getUnDoneCattypeDeadlineList_1_0_1
 	} from "@/api/modelRoleApi/systemAcceptance.js"
 	import pages from '@/views/components/common/pages'
 	export default {
@@ -66,11 +66,7 @@
 			// 获取数据
 			async getNoDeadlineList() {
 				this.loading = true
-				await getNoDeadlineList({
-					categoryName: this.searchVal || '',
-					size: '20',
-					page: this.page
-				}).then(res => {
+				await getUnDoneCattypeDeadlineList_1_0_1().then(res => {
 					this.loading = false
 					console.log(res);
 					if (res.Tag.length) {

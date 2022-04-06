@@ -1,13 +1,9 @@
 <template>
   <el-dialog title="期限设置" :visible.sync="isOpen" width="700px" @close="beforeClose">
     <el-row>
-      <div class="flex mb20 flex-center">
-        <div class="my-label bold">品类名称</div>
-        <div>{{row.category_name}}</div>
-      </div>
 			<div class="flex mb20 flex-center">
 			  <div class="my-label bold">品类类型</div>
-			  <div>{{row.cattypeName}}</div>
+			  <div>{{row.categoryName}}</div>
 			</div>
       <div class="flex mb20 flex-center">
         <div class="my-label bold">验收期限</div>
@@ -54,7 +50,7 @@
         this.close()
       },
       submit() {
-        this.$confirm('【'+this.row.category_name+'】\n期限为'+this.appointDay+'小时，请确认保存', '提示', {
+        this.$confirm('【'+this.row.categoryName+'】\n期限为'+this.appointDay+'小时，请确认保存', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -71,7 +67,7 @@
       // 提交
       async insertDeadline() {
         await insertDeadline({
-          category_guid: this.row.category_guid,
+          category_guid: this.row.categoryGuid,
           day: this.appointDay
         }).then(res => {
           console.log(res);

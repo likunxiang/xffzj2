@@ -10,7 +10,7 @@
       <el-table-column label="变更记录" align="center">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="text" @click="changeRecord(scope.row)">{{scope.row.createTime}}</el-button>
+            <el-button type="text" @click="changeRecord(scope.row)">{{scope.row.updateTime}}</el-button>
           </el-row>
         </template>
       </el-table-column>
