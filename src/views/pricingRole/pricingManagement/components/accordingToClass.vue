@@ -21,7 +21,7 @@
       <el-row class="flex mb20 flex-center">
         <div class="bold" style="width: 120px;">收取比例</div>
         <div class="flex flex-center">
-          <el-input placeholder="请输入整数" v-model="collectRatio" style="width: 110px;"></el-input>
+          <el-input placeholder="请输入整数" v-model="collectRatio" style="width: 110px;" type="number"></el-input>
           <div>%</div>
         </div>
       </el-row>
@@ -33,7 +33,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button type="primary" @click="submit" :disabled="!collectRatio.trim()">确 定</el-button>
     </span>
   </el-dialog>
 </template>

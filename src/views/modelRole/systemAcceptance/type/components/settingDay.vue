@@ -8,7 +8,7 @@
       <div class="flex mb20 flex-center">
         <div class="my-label bold">验收期限</div>
         <div class="flex flex-center">
-          <el-input style="width: 80px;margin-right: 10px;" v-model="appointDay" placeholder="请填写"></el-input>小时
+          <el-input style="width: 80px;margin-right: 10px;" v-model="appointDay" placeholder="请填写" type="number"></el-input>小时
         </div>
       </div>
     </el-row>
@@ -17,7 +17,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button type="primary" @click="submit" :disabled="!appointDay.trim()">确 定</el-button>
     </span>
   </el-dialog>
 
