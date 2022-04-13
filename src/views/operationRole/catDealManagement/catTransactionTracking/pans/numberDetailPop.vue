@@ -6,13 +6,14 @@
     </el-table>
     <el-divider></el-divider>
     <div style="padding-bottom: 68px;">
-      <searchCom @toSearch='searchData' :searchResult='searchResult' :placeholderText="openType == '1'?'请输入联系电话':'请输入供应主体名称'"></searchCom>
+      <searchCom @toSearch='searchData' :searchResult='searchResult'
+        :placeholderText="openType == '1'?'请输入联系电话':'请输入供应主体名称'"></searchCom>
       <el-table v-loading="loading" :data="tableData" border>
         <el-table-column prop="supplyCompanyName" label="供方主体" align="center" v-if="openType=='2'"></el-table-column>
         <el-table-column prop="userName" label="姓名" align="center"></el-table-column>
         <el-table-column prop="nation" label="区号" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="userTag" label="联系电话" align="center"></el-table-column>
+        <el-table-column prop="roleType" label="角色类型" align="center"></el-table-column>
       </el-table>
       <pages :total="pageTotal" @changePage="changePage" :page="page"></pages>
     </div>
@@ -50,7 +51,7 @@
         searchVal: '',
         tableData: [],
         openType: '1',
-		loading: true
+        loading: true
       };
     },
     methods: {
@@ -81,44 +82,73 @@
         }
       },
       async getMode1Suppliers() {
-		this.loading = true
+        this.loading = true
         await getMode1Suppliers({
           phonenumber: this.searchVal || '',
           categoryGuid: this.openRow.categoryGuid,
           page: this.page,
           size: '20'
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           let data = []
           if (res.Tag.length) {
             data = res.Tag[0].Table
+            // 从字典获取角色类型
+            this.getDicts("user_tag").then(response => {
+              var statusOptions = response.Tag;
+              console.log('statusOptions', statusOptions);
+              for (var j in data) {
+                for (var i in statusOptions) {
+                  if (data[j].userTag == statusOptions[i].dictValue) {
+                    data[j].roleType = statusOptions[i].dictLabel
+                  }
+                }
+              }
+              this.tableData = data
+
+            });
           } else {
             data = []
+            this.tableData = data
           }
-          this.tableData = data
+
           this.searchResult = this.tableData.length
           this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
         })
       },
       //
       async getMode2SupplierInfos() {
-		this.loading = true
+        this.loading = true
         await getMode2SupplierInfos({
           supplyCompanyName: this.searchVal || '',
           categoryGuid: this.openRow.categoryGuid,
           page: this.page,
           size: '20'
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           let data = []
           if (res.Tag.length) {
             data = res.Tag[0].Table
+            // 从字典获取角色类型
+            this.getDicts("user_tag").then(response => {
+              var statusOptions = response.Tag;
+              console.log('statusOptions', statusOptions);
+              for (var j in data) {
+                for (var i in statusOptions) {
+                  if (data[j].userTag == statusOptions[i].dictValue) {
+                    data[j].roleType = statusOptions[i].dictLabel
+                  }
+                }
+              }
+              this.tableData = data
+
+            });
           } else {
             data = []
+            this.tableData = data
           }
-          this.tableData = data
           this.searchResult = this.tableData.length
           this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
         })

@@ -44,11 +44,11 @@
         page: 1,
         pageTotal: 0,
         searchResult: 0,
-		searchVal: '',
+        searchVal: '',
         tableData: [],
         isDetail: false,
         isOrder: false,
-		loading: true,
+        loading: true,
       };
     },
     methods: {
@@ -73,20 +73,20 @@
       },
       searchData(data) {
         this.searchVal = data
-		this.page = 1
+        this.page = 1
         this.getBriefMode2List(data)
       },
       async getBriefMode2List(data) {
-		this.loading = true
+        this.loading = true
         await getBriefMode2List({
           categoryName: this.searchVal || '',
           page: this.page,
           size: '20'
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           let data = []
-          if(res.Tag.length) {
+          if (res.Tag.length) {
             data = res.Tag[0].Table
           } else {
             data = []

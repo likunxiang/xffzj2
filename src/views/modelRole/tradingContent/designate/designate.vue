@@ -209,9 +209,13 @@
 						this.priceList[i].check = false
 					}
 				}
+        if(index == 0) {
+          this.radioAssign = 1
+        } else {
+          this.radioAssign = 2
+        }
 				console.log(this.priceList);
 				this.priceList = this.clone(this.priceList)
-				this.radioAssign = 1
 			},
 			// 查询和发布先调用这个接口
 			async existsByCGuid(name, cid, did, callback) {
@@ -272,13 +276,23 @@
 					assignGuid: id
 				}).then(res => {
 					console.log(res);
-					// if (res.Tag.length) {
-					//   let data = res.Tag[0].Table
-					//   for(let i in data) {
-					//     data[i].check = false
-					//   }
-					//   this.priceList = data
-					// }
+					if (res.Tag.length) {
+					  let ruleType = res.Tag[0].Table[0].ruleType
+            let priceList = this.priceList
+            if(ruleType == 0) {
+              for (let i in priceList) {
+                priceList[i].check  = false
+              }
+            } else {
+              if (ruleType == 1) {
+                priceList[0].check  = true
+              } else if (ruleType == 2) {
+                priceList[1].check  = true
+              }
+
+            }
+            this.priceList = priceList
+					}
 				})
 			},
 			async getAssigns() {
