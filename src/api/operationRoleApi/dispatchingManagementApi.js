@@ -131,7 +131,7 @@ export function getOutComeNumList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=WEB\\guide\\getOutComeNumList&DBC=w_m',
+    url: '/QueryData?SqlCmdName=WEB\\guide\\getOutComeNumList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -142,7 +142,51 @@ export function getOutComeCountByMonth(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=com\\guide\\getOutComeCountByMonth&DBC=w_m',
+    url: '/QueryData?SqlCmdName=com\\guide\\getOutComeCountByMonth_1_0_2&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-用户自己采购成果统计列表_1_0_1
+export function getUserSelfDeOrderStatiList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guide\\getUserSelfDeOrderStatiList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-用户自己月份采购成果详情_1_0_1
+export function getUserSelfDeOrderList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guide\\getUserSelfDeOrderList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-用户自己供应成果统计列表_1_0_1
+export function getUserSelfSuOrderStatiList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guide\\getUserSelfSuOrderStatiList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-用户自己月份供应成果详情_1_0_1
+export function getUserSelfSuOrderList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guide\\getUserSelfSuOrderList_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -153,7 +197,7 @@ export function getUserOrderCountByDate(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=com\\order\\getUserOrderCountByDate&DBC=w_m',
+    url: '/QueryData?SqlCmdName=com\\order\\getUserOrderCountByDate_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -164,7 +208,7 @@ export function getOutComeDetail(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=com\\guide\\getOutComeDetail&DBC=w_m',
+    url: '/QueryData?SqlCmdName=com\\guide\\getOutComeDetail_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -241,7 +285,7 @@ export function getOrderStatisticMonth(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\order\\getOrderStatisticMonth&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\order\\getOrderStatisticMonth_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -396,7 +440,7 @@ export function getOrderDemandMonthList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=com\\order\\getOrderDemandMonthList&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\order\\getOrderDemandMonthList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })

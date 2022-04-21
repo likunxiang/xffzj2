@@ -67,7 +67,7 @@
     data() {
       return {
         supplyObj: {},
-        imgUrl: this.$store.state.basics.imgUrl,
+        imgUrl: this.$store.state.basics.img_url_plate,
         loading: true,
       };
     },

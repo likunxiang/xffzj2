@@ -7,7 +7,13 @@
           <span>2021-09-18</span>
         </el-form-item>
         <el-form-item label="付款证明" prop="imgUrl">
-          <el-image style="width: 100px; height: 100px" :src="url" fit="fit"></el-image>
+          <template v-if="url.length > 0">
+            <el-image style="width: 100px; height: 100px" :src="url" fit="fit"></el-image>
+          </template>
+          <template v-else>
+            <div>无</div>
+          </template>
+          
         </el-form-item>
       </el-form>
       <div class="title-bg mb10">适用规则</div>
@@ -31,8 +37,8 @@
       return {
         isOpen: true,
         ruleForm: {
-          explain: '感谢每一份努力9999',
-          imgUrl: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          explain: '无',
+          imgUrl: [''],
         },
       };
     },

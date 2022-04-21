@@ -258,7 +258,7 @@
       // 用户采购成果详情-月份详情
       async getOrderDemandMonthList() {
         await getOrderDemandMonthList({
-          userId:this.userResultList[0].guidedUserId,
+          recordLogGuid:this.userResultList[0].recordLogGuid,
           month: this.userOrderResult.month
         }).then(res => {
           if (res.Tag.length) {
@@ -329,7 +329,7 @@
       // 引导成果统计 -- 用户间接成果详情
       async getOutComeCountByMonth() {
         await getOutComeCountByMonth({
-          guidedUserId: this.userResultList[0].userId,
+          recordLogGuid: this.userResultList[0].recordLogGuid,
           type: 1
         }).then(res => {
           console.log(res);
@@ -344,7 +344,7 @@
       // 用户间接成果详情-月份统计
       async getOrderStatisticMonth() {
         await getOrderStatisticMonth({
-          userId: this.userResultList[0].userId
+          recordLogGuid: this.userResultList[0].recordLogGuid
         }).then(res => {
           console.log(res);
 
@@ -359,7 +359,7 @@
       async getUserOrderCountByDate(row) {
         console.log(row);
         await getUserOrderCountByDate({
-          UserId: this.userResultList[0].userId,
+          recordLogGuid: this.userResultList[0].recordLogGuid,
           date: row.month
         }).then(res => {
           console.log(res);

@@ -6,7 +6,13 @@
           <span>{{ruleForm.date}}</span>
         </el-form-item>
         <el-form-item label="付款证明" prop="imgUrl">
-          <el-image style="width: 100px; height: 100px;margin-right: 10px;" :src="imgBasicUrl + img" fit="fit" v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+          <template v-if="ruleForm.imgUrl[0].length > 0">
+            <el-image class="mr10" style="width: 100px; height: 100px" :src="imgBasicUrl + img" fit="fit"
+              v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+          </template>
+          <template v-else>
+            <div>无</div>
+          </template>
         </el-form-item>
       </el-form>
       <div class="title-bg mb10">适用规则</div>
@@ -16,7 +22,9 @@
 </template>
 
 <script>
-  import { getPayDetail } from '@/api/settleRoleApi/supplierSupplySettlement/supplyBadPunish.js'
+  import {
+    getPayDetail
+  } from '@/api/settleRoleApi/supplierSupplySettlement/supplyBadPunish.js'
   export default {
     name: "index",
     props: {
@@ -32,7 +40,7 @@
         isOpen: true,
         ruleForm: {
           date: '',
-          imgUrl: ['https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg','https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'],
+          imgUrl: [''],
           bizRuleName: '',
           bizRuleGuid: ''
         },

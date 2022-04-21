@@ -6,7 +6,12 @@
           <span>{{ruleForm.date}}</span>
         </el-form-item>
         <el-form-item label="付款证明" prop="imgUrl">
-          <el-image class="mr10" style="width: 100px; height: 100px" :src="imgBasicUrl + img" fit="fit" v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+		  <template v-if="ruleForm.imgUrl[0].length > 0">
+			  <el-image class="mr10" style="width: 100px; height: 100px" :src="imgBasicUrl + img" fit="fit" v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+		  </template>
+          <template v-else>
+			  <div>无</div>
+		  </template>
         </el-form-item>
       </el-form>
       <div class="title-bg mb10">适用规则</div>
@@ -32,7 +37,7 @@
         isOpen: true,
         ruleForm: {
           date: '',
-          imgUrl: [],
+          imgUrl: [''],
           bizRuleName: '',
           bizRuleGuid: ''
         },

@@ -6,7 +6,13 @@
           <span>{{ruleForm.date}}</span>
         </el-form-item>
         <el-form-item label="付款证明" prop="imgUrl">
-          <el-image class="mr10" style="width: 100px; height: 100px" :src="imgBasicUrl + img" fit="fit" v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+          <template v-if="ruleForm.imgUrl[0].length > 0">
+            <el-image class="mr10" style="width: 100px; height: 100px" :src="imgBasicUrl + img" fit="fit"
+              v-for="(img,index) in ruleForm.imgUrl" :key="index"></el-image>
+          </template>
+          <template v-else>
+            <div>无</div>
+          </template>
         </el-form-item>
         <el-form-item label="付款说明" prop="explain">
           <el-input disabled type="textarea" placeholder="无" v-model="ruleForm.explain"></el-input>
@@ -17,7 +23,9 @@
 </template>
 
 <script>
-  import { supplyObeygetPaidProve } from '@/api/settleRoleApi/buyerPurchaseSettlement/supplyBadPay.js'
+  import {
+    supplyObeygetPaidProve
+  } from '@/api/settleRoleApi/buyerPurchaseSettlement/supplyBadPay.js'
   export default {
     name: "index",
     props: {
@@ -34,7 +42,7 @@
         ruleForm: {
           explain: '无',
           date: '',
-          imgUrl: [],
+          imgUrl: [''],
         },
         imgBasicUrl: this.$store.state.basics.img_url_set_obe
       };

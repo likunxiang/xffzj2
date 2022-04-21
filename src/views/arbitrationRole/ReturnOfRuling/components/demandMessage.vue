@@ -47,7 +47,7 @@
     data() {
       return {
         tableData: [],
-        imgUrl: this.$store.state.basics.imgUrl,
+        imgUrl: this.$store.state.basics.img_url_plate,
         loading: false,
       };
     },

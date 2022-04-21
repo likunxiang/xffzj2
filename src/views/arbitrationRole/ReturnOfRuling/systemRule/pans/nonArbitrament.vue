@@ -58,10 +58,10 @@
       </el-table>
     </div>
 
-    <orderDetail v-if="isSupplyOrder" @close="closeSupplyOrder"></orderDetail>
-    <orderDetail v-if="isDemandOrder" @close="closeDemandOrder"></orderDetail>
+    <orderDetail v-if="isSupplyOrder" @close="closeSupplyOrder" :openRow="openRow" orderType="supply"></orderDetail>
+    <orderDetail v-if="isDemandOrder" @close="closeDemandOrder" :openRow="openRow" orderType="demand"></orderDetail>
     <arbitrationApply v-if="isArbitrationApply" @close="closeCheckArbitration" :openRow='openRow'></arbitrationApply>
-    <findingResultSys v-if="isFinding" @close="closeFindingDetail" :openRow='openRow'></findingResultSys>
+    <findingResultSys v-if="isFinding" @close="closeFindingDetail" :row='openRow' @refresh="getSysWaitJudgeList"></findingResultSys>
     <userMessage v-if="isDemandAccount" @close="closeDemandAccount"></userMessage>
     <resultManagement v-if="isResult" @close="closeCheckResult" :openRow='openRow'></resultManagement>
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
@@ -177,7 +177,8 @@
         this.isSupplyAccount = false
       },
       // 采购订单详情
-      supplyOrderDetail() {
+      supplyOrderDetail(row) {
+        this.openRow = row
         this.isSupplyOrder = true
       },
       closeSupplyOrder() {
@@ -191,15 +192,17 @@
         this.isDemandAccount = false
       },
       // 供应订单详情
-      demandOrderDetail() {
+      demandOrderDetail(row) {
         this.isDemandOrder = true
+        this.openRow = row
       },
       closeDemandOrder() {
         this.isDemandOrder = false
       },
       // 裁决结果批复
-      findingDetail() {
+      findingDetail(row) {
         this.isFinding = true
+        this.openRow = row
       },
       closeFindingDetail() {
         this.isFinding = false

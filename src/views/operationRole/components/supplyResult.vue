@@ -1,5 +1,6 @@
 <template>
-  <el-dialog title="供应成果（用户自己直接使用）" width="900px" :visible.sync="isOpen" append-to-body destroy-on-close @close="beforeClose">
+  <el-dialog title="供应成果（用户自己直接使用）" width="900px" :visible.sync="isOpen" append-to-body destroy-on-close
+    @close="beforeClose">
     <el-table :data="tableData2" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column prop="username" label="姓名" align="center">
       </el-table-column>
@@ -10,14 +11,14 @@
     </el-table>
     <el-row style="padding-bottom: 40px;">
       <el-table v-loading="loading" :data="tableData3" border style="width: 100%;">
-        <el-table-column prop="month" label="统计月份" align="center">
+        <el-table-column prop="createTime" label="统计月份" align="center">
         </el-table-column>
-        <el-table-column prop="count" label="月份成果" align="center">
+        <el-table-column prop="orderNum" label="月份成果" align="center">
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-row>
-              <el-button @click="toResultDetail(scope.row)" type="text" size="small">用户月份间接成果详情</el-button>
+              <el-button @click="toResultDetail(scope.row)" type="text" size="small">用户月份供应成果详情</el-button>
             </el-row>
           </template>
         </el-table-column>
@@ -27,7 +28,7 @@
       @close="beforeCloseResultDetail">
       <div style="width: 100%;padding-bottom: 40px;">
         <el-table v-loading="loading" :data="supplyDetailList" border style="width: 100%;">
-          <el-table-column prop="orderDate" label="订单日期" align="center">
+          <el-table-column prop="createTime" label="订单日期" align="center">
           </el-table-column>
           <el-table-column prop="categoryName" label="品类名称" align="center">
           </el-table-column>
@@ -54,7 +55,12 @@
 <script>
   import orderDetail from '@/views/components/common/orderDetail.vue'
   import userMessage from '@/views/components/common/userMessage'
-  import { getOutComeCountByMonth,getOrderSupplyMonthList } from '@/api/operationRoleApi/dispatchingManagementApi.js'
+  import {
+    getOutComeCountByMonth,
+    getOrderSupplyMonthList,
+    getUserSelfSuOrderStatiList,
+    getUserSelfSuOrderList
+  } from '@/api/operationRoleApi/dispatchingManagementApi.js'
   export default {
     name: "index",
     components: {
@@ -79,7 +85,7 @@
         tableData3: [],
         supplyDetailList: [],
         openRow: {},
-		loading: true
+        loading: true
       };
     },
     methods: {
@@ -95,8 +101,8 @@
       },
       toResultDetail(row) {
         this.isResultDetail = true
-        let month = row.month
-        this.getOrderSupplyMonthList(month)
+        let month = row.createTime
+        this.getUserSelfSuOrderList(month)
       },
       closeResultDetail() {
         this.isResultDetail = false
@@ -119,13 +125,14 @@
         this.isOrder = false
       },
       // 引导成果统计 -- 用户间接成果详情
-      async getOutComeCountByMonth() {
-		this.loading = true
-        await getOutComeCountByMonth({
-          guidedUserId: this.row.userId,
-          type: 3
+      async getUserSelfSuOrderStatiList() {
+        this.loading = true
+        await getUserSelfSuOrderStatiList({
+          userId: this.row.userId,
+          size: '200',
+          page: 1,
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             this.tableData3 = res.Tag[0].Table
@@ -134,13 +141,13 @@
           }
         })
       },
-      async getOrderSupplyMonthList(month) {
-		this.loading = true
-        await getOrderSupplyMonthList({
+      async getUserSelfSuOrderList(month) {
+        this.loading = true
+        await getUserSelfSuOrderList({
           userId: this.row.userId,
-          month: month
+          createTime: month
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             this.supplyDetailList = res.Tag[0].Table
@@ -153,7 +160,7 @@
     created() {
       this.tableData2.push(this.row)
       console.log(this.row);
-      this.getOutComeCountByMonth()
+      this.getUserSelfSuOrderStatiList()
     }
   };
 </script>

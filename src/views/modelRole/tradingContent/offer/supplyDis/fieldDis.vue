@@ -166,7 +166,7 @@
             let data = res.Tag[0].Table
             for (let i in data) {
               if (data[i].relatedFlag == '1') {
-                this.radio = data[i].plateGuid
+                this.radio = data[i].plateTypeGuid
               }
             }
             this.plate = data

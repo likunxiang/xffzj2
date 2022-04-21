@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="flex flex-center mb20">
-      <el-input placeholder="请输入你要找的品类名称" clearable v-model="searchVal"
-        @keyup.enter.native="search" style="width: 200px;margin-right: 20px;" @clear="search">
-		<i class="el-icon-search el-input__icon" slot="suffix" @click="search" />
+      <el-input placeholder="请输入你要找的品类名称" clearable v-model="searchVal" @keyup.enter.native="search"
+        style="width: 200px;margin-right: 20px;" @clear="search">
+        <i class="el-icon-search el-input__icon" slot="suffix" @click="search" />
       </el-input>
       <div class="" v-if="isToSearch">搜索结果：{{searchResult}}</div>
     </div>
@@ -18,7 +18,8 @@
             <el-row>{{scope.row.publishTime}}</el-row>
           </div>
           <div v-else>未发布</div>
-          <div class="del-icon el-icon-d-arrow-right" @click="openRecord(scope.row)" v-if="scope.row.publishTime || true"></div>
+          <div class="del-icon el-icon-d-arrow-right" @click="openRecord(scope.row)"
+            v-if="scope.row.publishTime || true"></div>
           <div class="del-icon el-icon-d-arrow-right" style="color: #CCCCCC;" v-else></div>
         </template>
       </el-table-column>
@@ -31,7 +32,8 @@
             <el-button @click="messageSort(scope.row)" type="text" size="small">信息格式排序管理</el-button>
           </el-row>
           <el-row>
-            <el-button @click="release(scope.row)" type="text" size="small" :disabled="scope.row.publishFlag==2">发布</el-button>
+            <el-button @click="release(scope.row)" type="text" size="small" :disabled="scope.row.publishFlag==2">发布
+            </el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -68,7 +70,7 @@
         isRecord: false,
         page: 1,
         pageTotal: 0,
-		loading: true,
+        loading: true,
       };
     },
     methods: {
@@ -78,7 +80,7 @@
         } else {
           this.isToSearch = false
         }
-		this.page = 1
+        this.page = 1
         this.getSupplyPriceList()
       },
       changePage(page) {
@@ -89,7 +91,7 @@
         let obj = row
         obj.type = 'supply'
         obj.bizType = '2'
-        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, ()=> {
+        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, () => {
           this.$router.push({
             path: "offerSupply/supplyDis",
             query: obj,
@@ -101,7 +103,7 @@
         let obj = row
         obj.type = 'supply'
         obj.bizType = '2'
-        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, ()=> {
+        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, () => {
           this.$router.push({
             path: "messageSort/messageSort",
             query: obj,
@@ -110,12 +112,12 @@
 
       },
       // 判断是否可以发布
-      async supplypriceIsCanPublish(id,sid) {
+      async supplypriceIsCanPublish(id, sid) {
         await supplypriceIsCanPublish({
           categoryGuid: id
         }).then(res => {
-      console.log(res);
-          if(res.Tag[0].Table[0].canPublish>0){
+          console.log(res);
+          if (res.Tag[0].Table[0].canPublish > 0) {
             // 可以发布
             this.supplypricePublish(sid)
           } else {
@@ -123,8 +125,7 @@
             // 不可以发布
             this.$alert(msg, '', {
               confirmButtonText: '知道了',
-              callback: action => {
-              }
+              callback: action => {}
             });
           }
         })
@@ -165,19 +166,19 @@
         await supplypricePublish({
           supplyPriceGuid: id
         }).then(res => {
-          let isFirst = res.Tag[0].Table[0].publishNum > 0?false:true
+          let isFirst = res.Tag[0].Table[0].publishNum > 0 ? false : true
           if (isFirst) {
             this.$alert('发布成功', '', {
               confirmButtonText: '知道了',
               callback: action => {
-				this.getSupplyPriceList()
+                this.getSupplyPriceList()
               }
             });
           } else {
             this.$alert('发布成功且覆盖原来版本，刷新后可使用。', '', {
               confirmButtonText: '知道了',
               callback: action => {
-				this.getSupplyPriceList()
+                this.getSupplyPriceList()
               }
             });
           }
@@ -185,7 +186,7 @@
         })
       },
       release(row) {
-        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, ()=> {
+        this.existsByCGuid(row.categoryName, row.categoryGuid, row.supplyPriceGuid, () => {
           this.supplypriceIsCanPublish(row.categoryGuid, row.supplyPriceGuid)
         })
       },
@@ -207,13 +208,13 @@
         });
       },
       async getSupplyPriceList() {
-		this.loading = true
+        this.loading = true
         await getSupplyPriceList({
           categoryName: this.searchVal,
           page: this.page,
           size: '20'
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table
@@ -222,7 +223,7 @@
             this.tableData = []
           }
           this.searchResult = this.tableData.length
-		  this.pageTotal = this.tableData.length > 0?(this.page - 1) * 20 + 21:(this.page - 1) * 20 + 1
+          this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
         })
       }
     },
