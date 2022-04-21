@@ -377,7 +377,7 @@
       },
       // 删除场景
       delScreen() {
-        this.$confirm('确认删除' + this.editSelf.name, '提示', {
+        this.$confirm('确认删除【' + this.editSelf.name + '】', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
