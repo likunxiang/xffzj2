@@ -148,7 +148,8 @@
     insertType3,
     updateType3,
     deleteType3,
-    updateType3Norder
+    updateType3Norder,
+    existNTByCatTreeGuid
   } from '@/api/categoryRole/categoryCommon.js'
   import newBatch from '@/views/screenRole/demandScreen/components/newBatch.vue'
   export default {
@@ -375,9 +376,43 @@
           this.closeEdit()
         })
       },
-      // 删除场景
+      // 删除场景--没有生成器
       delScreen() {
         this.$confirm('确认删除【' + this.editSelf.name + '】', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteType3({
+            guid: this.editSelf.guid
+          }).then(res => {
+            let parent = this.editNode.parent;
+            let children = parent.childNodes;
+            let index
+            for (let i in children) {
+              console.log('2', i);
+              if (this.editData.guid == children[i].data.guid) {
+                console.log('3', i);
+                index = i
+                children.splice(index, 1);
+              }
+            }
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getTableData()
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      // 删除场景--有生成器
+      delScreenHas() {
+        this.$confirm('该场景有品类生成器，删除该场景，APP端的品类搜索器也同步删除了。', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -563,7 +598,8 @@
         if (key == 1) {
           this.openEdit()
         } else if (key == 2) {
-          this.delScreen()
+          // this.delScreen()
+          this.existNTByCatTreeGuid() // 4-21新版
         }
         this.closeMenu()
       },
@@ -583,6 +619,23 @@
             this.getSonList(data)
           }
 
+        })
+      },
+      // 有无品类生成器判断
+      async existNTByCatTreeGuid() {
+        await existNTByCatTreeGuid({
+          catreeGuid: this.editData.guid
+        }).then(res => {
+          console.log(res);
+          let hasCatNTFlag = res.Tag[0].Table[0].hasCatNTFlag
+          if (hasCatNTFlag > 0) {
+            // 有生成器
+            this.delScreenHas()
+            
+          } else {
+            // 没有生成器
+            this.delScreen()
+          }
         })
       }
     },

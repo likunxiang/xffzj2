@@ -151,3 +151,14 @@ export function exportSModelsAndBNames(categoryGuid,OutputFileName) {
     method: 'get'
   })
 }
+
+// web-查询品类字节标题
+export function existNTByCatTreeGuid(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\cat\\existNTByCatTreeGuid_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
