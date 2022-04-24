@@ -14,11 +14,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-row v-if="true">
+          <el-row>
             <el-button type="text" @click="openSettle(scope.row)">结算管理</el-button>
-          </el-row>
-          <el-row v-else>
-            <el-button type="text" :disabled="true">统计中</el-button>
           </el-row>
         </template>
       </el-table-column>

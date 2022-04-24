@@ -32,10 +32,10 @@
             <el-table-column label="操作" align="center" fixed="right" width="100">
               <template slot-scope="scope">
                 <el-row>
-                  <el-button type="text" @click="submitPayProve(scope.row)">查看业绩信息</el-button>
+                  <el-button type="text" @click="openSuccess(scope.row)">查看业绩信息</el-button>
                 </el-row>
                 <el-row>
-                  <el-button type="text" @click="submitPayProve(scope.row)">提交结算证明</el-button>
+                  <el-button type="text" @click="openSubmit(scope.row)">提交结算证明</el-button>
                 </el-row>
               </template>
             </el-table-column>
@@ -63,7 +63,7 @@
             <el-table-column label="操作" align="center" fixed="right" width="100">
               <template slot-scope="scope">
                 <el-row>
-                  <el-button type="text" @click="checkPayProve(scope.row)">查看结算证明</el-button>
+                  <el-button type="text" @click="openProve(scope.row)">查看结算证明</el-button>
                 </el-row>
               </template>
             </el-table-column>
@@ -73,16 +73,24 @@
     </el-tabs>
 
     <pages :total="pageTotal" @changePage="changePage" :page="page"></pages>
-
+    <settleProve :openRow='openRow' v-if="isProve" @close="closeProve"></settleProve>
+    <submitSettle :openRow='openRow' v-if="isSubmit" @close="closeSubmit" @refresh=""></submitSettle>
+    <successfulMessage :openRow='openRow' v-if="isSuccess" @close="closeSuccess"></successfulMessage>
   </el-dialog>
 </template>
 
 <script>
+  import settleProve from '../components/settleProve.vue'
+  import submitSettle from '../components/submitSettle.vue'
+  import successfulMessage from '../components/successfulMessage.vue'
   import pages from '@/views/components/common/pages'
   export default {
     name: "index",
     components: {
-      pages
+      pages,
+      settleProve, // 查看结算证明
+      submitSettle, // 提交结算证明
+      successfulMessage // 查看业绩信息
     },
     props: {
       row: {
@@ -103,7 +111,10 @@
         page: 1,
         pageTotal: 20,
         loading: true,
-        openRow: {}
+        openRow: {},
+        isProve: false,
+        isSubmit: false,
+        isSuccess: false
       };
     },
     methods: {
@@ -130,7 +141,28 @@
         } else {
           this.isToSearch = false
         }
-        
+
+      },
+      openSuccess(row) {
+        this.openRow = row
+        this.isSuccess = true
+      },
+      closeSuccess() {
+        this.isSuccess = false
+      },
+      openSubmit(row) {
+        this.openRow = row
+        this.isSubmit = true
+      },
+      closeSubmit() {
+        this.isSubmit = false
+      },
+      openProve(row) {
+        this.openRow = row
+        this.isProve = true
+      },
+      closeProve() {
+        this.isProve = false
       },
       changePage(data) {
         this.page = page
