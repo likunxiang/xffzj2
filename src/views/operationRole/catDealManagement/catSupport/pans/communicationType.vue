@@ -12,7 +12,7 @@
       </el-table-column>
       <el-table-column prop="publishFlag" label="供需需求信息是否发布" align="center">
         <template slot-scope="scope">
-          {{scope.row.publishFlag == 2?'是':''}}
+          {{scope.row.chatModePublishFlag == 2?'是':''}}
         </template>
       </el-table-column>
     </el-table>
