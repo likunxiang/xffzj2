@@ -14,6 +14,7 @@ const basics = {
     file_url_addphone: process.env.VUE_APP_BASE_URL_ASSETS + '/Enclosure/GUIDE/WEB/ADDPHONE/EXCEL/',  // 增加人力资源上传文件文件夹
     img_url_plate: process.env.VUE_APP_BASE_URL_ASSETS + '/Enclosure/PLATE/IMAGES/',  // 板块图片文件夹
     file_url_plate: process.env.VUE_APP_BASE_URL_ASSETS + '/Enclosure/PLATE/FILES/',  // 板块文件文件夹
+    file_url_sign: process.env.VUE_APP_BASE_URL_ASSETS + '/Enclosure/ORG/SIGN/IMAGES/',  // 机构签约文件夹
   },
   mutations: {
 
