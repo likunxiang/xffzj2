@@ -11,8 +11,8 @@
 
 <script>
   import {
-    insertPlateField
-  } from '@/api/modelRoleApi/tradingContent.js'
+    orgInsertOrgName,
+  } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
     props: {
@@ -44,42 +44,43 @@
         let data = this.fieldObj
         let arr = data.content.split('\n')
         this.newFieldList = arr
-        this.insertPlateField()
+        this.orgInsertOrgName()
         // this.$emit('submitNewBatch', arr)
         // this.close()
       },
-      async insertPlateField() {
+      async orgInsertOrgName() {
         let arr = []
         let data = this.newFieldList
         for (let i in data) {
           if (data[i].trim() === '') {
-            
+
           } else {
             let obj = {
-              catTreeCode: this.openRow.type || this.openRow.catTreeCode,
-              bizType: this.openRow.bizType,
-              categoryGuid: this.openRow.categoryGuid,
-              plateFieldName: data[i].trim()
+              orgName: data[i].trim(),
+              curUserId: this.$store.state.user.adminId
             }
             arr.push(obj)
           }
         }
-        await insertPlateField(JSON.stringify(arr)).then(res => {
+        await orgInsertOrgName(JSON.stringify(arr)).then(res => {
           console.log(res);
-          if (res.Tag[0] > 0) {
-            this.$message({
-              type: 'success',
-              message: '新建成功'
-            })
-            this.$emit('refresh')
-            this.close()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '新建失败'
-            })
+          if(res.OK == 'True') {
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功'
+              })
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '机构名称已存在!'
+              })
+            }
+            // 新增成功，刷新列表
           }
-          // 新增成功，刷新列表
+
         })
       },
     },

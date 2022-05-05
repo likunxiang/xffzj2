@@ -9,19 +9,20 @@
       </div>
     </div>
     <el-table :data="tableData" border v-loading="loading">
-      <el-table-column prop="cattypeName" label="机构名称" align="center"></el-table-column>
+      <el-table-column prop="orgName" label="机构名称" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="editOrg(scope.row)">编辑机构名称</el-button>
-          <el-button type="text" @click="delPOrg(scope.row)">删除机构名称</el-button>
+          <el-button type="text" @click="delOrg(scope.row)">删除机构名称</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
-    <newOrganization v-if="isNew" @close="closeNew" @refresh=""></newOrganization>
-    <batchOrganization v-if="isImport" @close="closeImport" @refresh=""></batchOrganization>
-    <editOrganization v-if="isEdit" @close="closeEdit" @refresh=""></editOrganization>
+    <newOrganization v-if="isNew" @close="closeNew" @refresh="orgGetList"></newOrganization>
+    <batchOrganization v-if="isImport" @close="closeImport" @refresh="orgGetList"></batchOrganization>
+    <editOrganization v-if="isEdit" @close="closeEdit" :row="openRow" @refresh="orgGetList"></editOrganization>
   </div>
 </template>
 
@@ -31,6 +32,12 @@
   import newOrganization from '@/views/choseManager/agencyInformation/components/newOrganization'
   import batchOrganization from '@/views/choseManager/agencyInformation/components/batchOrganization'
   import editOrganization from '@/views/choseManager/agencyInformation/components/editOrganization'
+  import {
+    orgGetList,
+    orgInsertOrgName,
+    orgUpdateOrgName,
+    orgDelOrgName,
+  } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
     components: {
@@ -42,7 +49,7 @@
     },
     data() {
       return {
-        loading: true,
+        loading: false,
         tableData: [],
         openRow: {},
         page: 1,
@@ -58,10 +65,12 @@
       search(data) {
         this.searchVal = data
         this.page = 1
+        this.orgGetList()
         //
       },
       changePage(page) {
         this.page = page
+        this.orgGetList()
         //
       },
       openNew() {
@@ -84,38 +93,79 @@
         this.isEdit = false
       },
       delOrg(row) {
-        if (true) {
-          // 已注册或已签约
-          this.$confirm(
-            '<p align="left">机构名称</p><p align="left">已注册或者已签约，不能删除。</p>',
-            '提示', {
-              confirmButtonText: '知道了',
-              dangerouslyUseHTMLString: true,
-              cancelButtonText: '取消',
-              showCancelButton: false,
-              type: 'warning',
-              center: true
-            }).then(() => {
-              //
-          }).catch(() => {});
-        } else {
-          this.$confirm(
-            '<p align="left">机构名称</p><p align="left">删除后，全网不可见这个机构的有关信息。确认删除？</p>',
-            '提示', {
-              confirmButtonText: '确认',
-              dangerouslyUseHTMLString: true,
-              cancelButtonText: '取消',
-              type: 'warning',
-              center: true
-            }).then(() => {
-              //
-          }).catch(() => {});
-        }
+
+        this.$confirm(
+          '<p align="left">机构名称</p><p align="left">删除后，全网不可见这个机构的有关信息。确认删除？</p>',
+          '', {
+            confirmButtonText: '确认',
+            dangerouslyUseHTMLString: true,
+            cancelButtonText: '取消',
+            type: 'warning',
+          }).then(() => {
+          this.orgDelOrgName(row.orgNameGuid)
+        }).catch(() => {});
+
 
       },
+
+      async orgGetList() {
+        this.loading = true
+        await orgGetList({
+          orgName: this.searchVal,
+          size: '20',
+          page: this.page
+        }).then( res => {
+          this.loading = false
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag.length > 0) {
+              let data = res.Tag[0].Table
+              this.tableData = data
+            } else {
+              this.tableData = []
+            }
+            this.searchResult = this.tableData.length
+            this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
+          }
+        })
+      },
+      async orgDelOrgName(id) {
+        await orgDelOrgName({
+          orgNameGuid: id,
+          curUserId: this.$store.state.user.adminId,
+          deptId: this.$store.state.user.deptId,
+        }).then(res => {
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0].Table[0].delType < 2) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.orgGetList()
+            } else {
+              // 已注册或已签约
+              this.$confirm(
+                '<p align="left">机构名称</p><p align="left">已注册或者已签约，不能删除。</p>',
+                '', {
+                  confirmButtonText: '知道了',
+                  dangerouslyUseHTMLString: true,
+                  cancelButtonText: '取消',
+                  showCancelButton: false,
+                  type: 'warning',
+                }).then(() => {
+                //
+              }).catch(() => {});
+            }
+
+          }
+        })
+      }
     },
     created() {
-
+      this.orgGetList()
     }
   }
 </script>

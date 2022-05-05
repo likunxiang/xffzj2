@@ -29,6 +29,9 @@
 </template>
 
 <script>
+  import {
+    introducerAdd
+  } from '@/api/choseGovernorApi/choseGovernorCom.js'
   export default {
     name: "index",
     data() {
@@ -46,8 +49,9 @@
           }],
           phone: [{
             required: true,
-            message: '必填',
-            trigger: 'change'
+            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+            message: "请输入正确的手机号码",
+            trigger: "blur"
           }],
         }
 
@@ -64,13 +68,39 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit')
+            this.introducerAdd()
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
+      async introducerAdd() {
+        await introducerAdd({
+          nickName: this.ruleForm.name,
+          phonenumber: this.ruleForm.phone,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '账号名称或联系电话已存在!'
+              });
+            }
+
+          }
+        })
+      }
     },
     created() {
 

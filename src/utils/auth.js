@@ -4,6 +4,8 @@ const TokenKey = 'Admin-Token'
 
 const AdminId = 'Admin-Id'
 
+const DeptId = 'Dept-Id'
+
 const ExpiresInKey = 'Admin-Expires-In'
 
 export function getToken() {
@@ -24,6 +26,18 @@ export function setAdminId(userid) {
 
 export function removeAdminId() {
   return Cookies.remove(AdminId)
+}
+
+export function getDeptId() {
+  return Cookies.get(DeptId)
+}
+
+export function setDeptId(deptId) {
+  return Cookies.set(DeptId, deptId)
+}
+
+export function removeDeptId() {
+  return Cookies.remove(DeptId)
 }
 
 export function removeToken() {

@@ -12,6 +12,9 @@
 </template>
 
 <script>
+  import {
+    orgInsertOrgName,
+  } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
     data() {
@@ -28,10 +31,33 @@
       beforeClose() {
         this.close()
       },
+      async orgInsertOrgName() {
+        await orgInsertOrgName({
+          orgName: this.inputField,
+          curUserId: this.$store.state.user.adminId
+        }).then(res => {
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '机构名称已存在!'
+              });
+            }
+
+          }
+        })
+      },
       submitNew() {
-        let data =  this.inputField
-        this.$emit('submitNewField',data)
-        this.close()
+        this.orgInsertOrgName()
       }
     },
     created() {

@@ -3,15 +3,15 @@
     <div class="p20">
       <el-row class="flex flex-center mb10">
         <div class="my-label">姓名</div>
-        <div>林都</div>
+        <div>{{row.nickName}}</div>
       </el-row>
       <el-row class="flex flex-center mb10">
         <div class="my-label">国家/地区</div>
-        <div>中国大陆（+86）</div>
+        <div>{{row.nation}}</div>
       </el-row>
       <el-row class="flex flex-center mb10">
         <div class="my-label">联系电话</div>
-        <div>18650767213</div>
+        <div>{{row.phonenumber}}</div>
       </el-row>
       <el-row class="flex flex-center mb10">
         <div>已开通账号，不能删除。</div>
@@ -26,6 +26,14 @@
 <script>
   export default {
     name: "index",
+    props: {
+      row: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
+    },
     data() {
       return {
         isOpen: true,

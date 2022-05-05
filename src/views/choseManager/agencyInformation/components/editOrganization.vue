@@ -6,25 +6,30 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim()">保存</el-button>
+      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim() || inputField==row.orgName">保存</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
+  import {
+    orgUpdateOrgName,
+  } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
+    props: {
+      row: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
+    },
     data() {
       return {
         isOpen: true,
         inputField: ''
       };
-    },
-    props: {
-      name: {
-        type: String,
-        default: ''
-      }
     },
     methods: {
       close() {
@@ -34,9 +39,39 @@
       beforeClose() {
         this.close()
       },
+      submitNew() {
+        this.orgUpdateOrgName()
+      },
+      async orgUpdateOrgName() {
+        await orgUpdateOrgName({
+          orgNameGuid: this.row.orgNameGuid,
+          orgName: this.inputField,
+          curUserId: this.$store.state.user.adminId,
+          deptId: this.$store.state.user.deptId
+        }).then(res  => {
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '机构名称已存在!'
+              });
+            }
+
+          }
+        })
+      }
     },
     created() {
-      this.inputField = this.name
+      this.inputField = this.row.orgName
     }
   };
 </script>
