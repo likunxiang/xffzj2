@@ -77,4 +77,7 @@
 </script>
 
 <style lang="scss" scoped>
+	.input-text {
+		width: 90px;
+	}
 </style>

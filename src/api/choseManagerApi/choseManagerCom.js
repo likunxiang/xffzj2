@@ -155,4 +155,57 @@ export function getUserDetail(data) {
   })
 }
 
+// web-查询引导专员权限管理列表
+export function getValidStaffList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getValidStaffList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
 
+// web-查询引导专员机构合作详情--未合作
+export function getValidStaffOrgSignRecords(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgSignRecords_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询引导专员机构合作详情--在合作
+export function getValidStaffOrgNoSignRecords(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgNoSignRecords_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// // web-查询引导专员机构合作详情
+// export function getValidStaffOrgSignRecords(data) {
+//   axios.defaults.baseURL = '/api'
+//   return request({
+//     xf_url: '/api',
+//     url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgSignRecords_1_0_1&DBC=w_m',
+//     method: 'post',
+//     data: data
+//   })
+// }
+
+// web-根据机构领取记录收回引导专员机构
+export function tkByOrgCoGuid(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\org\\takeback\\tkByOrgCoGuid_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

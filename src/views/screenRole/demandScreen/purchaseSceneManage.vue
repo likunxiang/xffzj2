@@ -77,7 +77,7 @@
       </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeFather">取 消</el-button>
-        <el-button type="primary" @click="submitFather">确 定</el-button>
+        <el-button type="primary" @click="submitFather" :disabled="!fatherScene.guid">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -135,7 +135,7 @@
       </span>
     </el-dialog>
 
-    <newBatch v-if="isBatch" @close="closeNewBatch" title="批量新增" @submitNewBatch="submitBatch"
+    <newBatch v-if="isBatch" @close="closeNewBatch" title="批量新建" @submitNewBatch="submitBatch"
       @openFather="openFather" :fatherSceneSureName="fatherSceneSure.name" :treeTitleString="treeTitleString"
     ></newBatch>
 
@@ -475,6 +475,7 @@
       // 选择父级场景
       openFather() {
         this.isFather = true
+        this.fatherScene = {}
         this.closeMenu()
       },
       closeFather() {
@@ -631,7 +632,7 @@
           if (hasCatNTFlag > 0) {
             // 有生成器
             this.delScreenHas()
-            
+
           } else {
             // 没有生成器
             this.delScreen()

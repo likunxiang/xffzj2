@@ -10,15 +10,25 @@
         <div>{{row.orgCollectTime}}</div>
       </el-row>
       <div class="flex flex-center">
-        <el-button type="primary" @click="openSginForm" v-if="tableData.length > 0" :disabled="tableData && tableData[0].signBtn==0">签约</el-button>
-        <el-button type="primary" @click="openSginForm" v-else>签约</el-button>
-        <!-- <el-button type="primary" @click="openAdd">续约</el-button> -->
+        <el-row class="mr20">
+          <el-button type="primary" @click="openSginForm('1')" v-if="tableData.length > 0"
+            :disabled="tableData && tableData[0].signBtn==0">签约</el-button>
+          <el-button type="primary" @click="openSginForm('1')" v-else>签约</el-button>
+        </el-row>
+        <el-row>
+          <el-button type="primary" @click="openSginForm('2')" v-if="tableData.length > 0"
+            :disabled="tableData && tableData[0].signAgainBtn==0">续约</el-button>
+            <!-- <el-button type="primary" @click="openSginForm('2')" v-if="tableData.length > 0"
+              :disabled="tableData && tableData[0].signAgainBtn!=0">续约</el-button> -->
+          <el-button type="primary" @click="openSginForm('2')" v-else>续约</el-button>
+        </el-row>
       </div>
       <div class="mt20">
         <el-table :data="tableData" border v-loading="loading">
-          <el-table-column align="center" width="50" >
+          <el-table-column align="center" width="50">
             <template slot-scope="scope">
-              <div class="el-icon-question" style="font-size: 20px;" v-if="!scope.row.orgUserGuid" @click="openQuestion"></div>
+              <div class="el-icon-question" style="font-size: 20px;" v-if="!scope.row.orgUserGuid"
+                @click="openQuestion"></div>
             </template>
           </el-table-column>
           <el-table-column type="index" label="序号" align="center" width="60">
@@ -35,7 +45,8 @@
         </el-table>
       </div>
     </div>
-    <sginedForm v-if="isSgin" @close="closeSginForm" :row="row" @refresh="getOneValidOrgSignRecords" @refreshList="refreshSignList"></sginedForm>
+    <sginedForm v-if="isSgin" @close="closeSginForm" :row="row" :signStatus="signStatus" :sginGuid="sginGuid" @refresh="getOneValidOrgSignRecords"
+      @refreshList="refreshSignList"></sginedForm>
     <questionTips v-if="isQuestion" @close="closeQuestion"></questionTips>
   </el-dialog>
 </template>
@@ -67,7 +78,9 @@
         loading: false,
         isSgin: false,
         isQuestion: false,
-        tableData: []
+        tableData: [],
+        signStatus: '1', // 签约状态，用于判断是签约还是续约
+        sginGuid: '', // 续签时要用到的签约guid
       };
     },
     methods: {
@@ -88,12 +101,18 @@
             cancelButtonText: '取消',
             type: 'warning',
           }).then(() => {
-            //
-            this.delOrgSignBySignGuid(row.orgSignGuid)
+          //
+          this.delOrgSignBySignGuid(row.orgSignGuid)
         }).catch(() => {});
       },
-      openSginForm() {
+      openSginForm(status) {
         this.isSgin = true
+        this.signStatus = status
+        if(status == '2') {
+          this.sginGuid = this.tableData[0].orgSignGuid
+        } else {
+          this.sginGuid = ''
+        }
       },
       closeSginForm() {
         this.isSgin = false
@@ -111,9 +130,9 @@
           curUserId: this.$store.state.user.adminId,
           size: '20',
           page: 1
-        }).then(res=> {
+        }).then(res => {
           this.loading = false
-          if(res.OK == 'True') {
+          if (res.OK == 'True') {
 
             console.log(res);
             if (res.Tag.length > 0) {

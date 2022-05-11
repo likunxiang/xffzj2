@@ -20,11 +20,17 @@
           <el-row>
             <el-button @click="openPricing(scope.row,0)" type="text" size="small">按品类收取</el-button>
           </el-row>
-          <el-row>
+          <!-- <el-row>
             <el-button @click="openPricing(scope.row,1)" type="text" size="small">按供方型号收取</el-button>
           </el-row>
           <el-row>
             <el-button @click="openPricing(scope.row,2)" type="text" size="small">按我方型号收取</el-button>
+          </el-row> -->
+          <el-row>
+            <el-button @click="openPricing(scope.row,1)" type="text" size="small">按型号类型</el-button>
+          </el-row>
+          <el-row>
+            <el-button @click="openPricing(scope.row,2)" type="text" size="small">按型号名称</el-button>
           </el-row>
         </template>
       </el-table-column>

@@ -201,10 +201,6 @@
             });
             this.getAddedModels()
           } else {
-            this.$message({
-              type: 'error',
-              message: '操作失败!'
-            });
           }
         })
       },

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="账号密码设置" width="700px" :visible.sync="isOpen" @close="beforeClose">
+  <el-dialog title="账号启用设置" width="700px" :visible.sync="isOpen" @close="beforeClose">
     <el-table :data="tableList" border>
       <el-table-column prop="userName" label="账号名称">
       </el-table-column>

@@ -18,6 +18,10 @@
         <div class="bold" style="width: 120px;">收取对象</div>
         <div>{{targetObject == 'supply'?'供方':'需方'}}</div>
       </el-row>
+      <el-row class="flex mb20">
+        <div class="bold" style="width: 120px;">收取方式</div>
+        <div>按比例</div>
+      </el-row>
       <el-row class="flex mb20 flex-center">
         <div class="bold" style="width: 120px;">收取比例</div>
         <div class="flex flex-center">
@@ -32,8 +36,8 @@
       </el-row>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submit" :disabled="!collectRatio.trim()">确 定</el-button>
+      <el-button @click="close">取消</el-button>
+      <el-button type="primary" @click="submit" :disabled="!collectRatio.trim()">保存</el-button>
     </span>
   </el-dialog>
 </template>

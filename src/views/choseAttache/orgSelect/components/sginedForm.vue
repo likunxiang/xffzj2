@@ -104,7 +104,9 @@
 
 <script>
   import {
-    insertFirstSign
+    insertFirstSign,  // 签约
+    getSignDetail, // 获取签约详情
+    inserAgainSign, // 续约
   } from '@/api/choseAttacheApi/choseAttacheCom.js'
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import {
@@ -121,21 +123,40 @@
         default: () => {
           return {}
         }
+      },
+      signStatus: {
+        type: String,
+        default: '1'
+      },
+      sginGuid: {
+        type: String,
+        default: ''
       }
     },
     computed: {
       contractEnd() {
-        console.log(this.ruleForm.contractStart.split('-'));
-
-        if (this.ruleForm.contractStart && this.ruleForm.contractTime) {
-          let contractStart = this.ruleForm.contractStart.split('-')
-          this.ruleForm.contractEnd = parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' +
-            contractStart[1] + '-' + contractStart[2]
-          return parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' + contractStart[1] + '-' +
-            contractStart[2]
+        if (this.signStatus == '2') {
+          if (this.ruleForm.contractStart && this.ruleForm.contractTime) {
+            let contractStart = this.oldEndDate.split('-')
+            this.ruleForm.contractEnd = parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' +
+              contractStart[1] + '-' + contractStart[2]
+            return parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' + contractStart[1] + '-' +
+              contractStart[2]
+          } else {
+            return ''
+          }
         } else {
-          return ''
+          if (this.ruleForm.contractStart && this.ruleForm.contractTime) {
+            let contractStart = this.ruleForm.contractStart.split('-')
+            this.ruleForm.contractEnd = parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' +
+              contractStart[1] + '-' + contractStart[2]
+            return parseInt(contractStart[0]) + parseInt(this.ruleForm.contractTime) + '-' + contractStart[1] + '-' +
+              contractStart[2]
+          } else {
+            return ''
+          }
         }
+
 
 
 
@@ -221,6 +242,7 @@
         fileList: [], // 上传文件列表
         loading: false, // 上传文件提示
         accptSting: '.rar, .zip', // 文件类型限制
+        oldEndDate: '', // 老合同的结束日期
       };
     },
     methods: {
@@ -359,7 +381,11 @@
               type: 'success',
               message: res.Message
             })
-            this.insertFirstSign()
+            if (this.signStatus == '2') {
+              this.inserAgainSign()
+            } else {
+              this.insertFirstSign()
+            }
             // this.$emit('refresh')
             // this.close()
           } else {
@@ -414,10 +440,70 @@
             }
           }
         })
+      },
+      // 获取签约详情
+      async getSignDetail() {
+        this.loading = true
+        await getSignDetail({
+          orgSignGuid: this.sginGuid,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          this.loading = false
+          if (res.OK == 'True') {
+            let data = res.Tag[0].Table[0]
+            this.ruleForm.address = data.orgAddr
+            this.ruleForm.legal = data.legalPerson
+            this.ruleForm.linkman = data.contractPhonePerson
+            this.ruleForm.phone = data.contractPhone
+            this.ruleForm.contractStart = this.getNewDay(data.endDate,1)
+            this.oldEndDate = data.endDate
+          }
+        })
+      },
+      // 提交续签数据
+      async inserAgainSign() {
+        await inserAgainSign({
+          orgCollectGuid: this.row.orgCollectGuid,
+          orgValidGuid: this.row.orgValidGuid,
+          orgNameGuid: this.row.orgNameGuid,
+          orgName: this.row.orgName,
+          orgAddr: this.ruleForm.address,
+          legalPerson: this.ruleForm.legal,
+          contractPhonePerson: this.ruleForm.linkman,
+          contractPhone: this.ruleForm.phone,
+          contractNation: '中国大陆',
+          contractNo: this.ruleForm.contractNumber,
+          startDate: this.ruleForm.contractStart,
+          endDate: this.ruleForm.contractEnd,
+          contractDuration: this.ruleForm.contractTime * 12, // 转成月份
+          efiles: this.fileList.length > 0 ? this.fileList[0].name : '',
+          curUserId: this.$store.state.user.adminId,
+          lastEndDate: this.oldEndDate
+        }).then(res => {
+          if (res.OK == 'True') {
+            this.loading = false
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.$emit('refreshList')
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '操作失败!'
+              });
+            }
+          }
+        })
       }
     },
     created() {
-
+      if(this.signStatus == '2') {
+        this.getSignDetail()
+      }
     }
   };
 </script>

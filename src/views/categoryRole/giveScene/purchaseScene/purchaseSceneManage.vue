@@ -125,7 +125,7 @@
       </span>
     </el-dialog>
 
-    <newBatch v-if="isBatch" @close="closeNewBatch" title="批量新增" @submitNewBatch="submitBatch"
+    <newBatch v-if="isBatch" @close="closeNewBatch" title="批量新建" @submitNewBatch="submitBatch"
       @openFather="openFather" :fatherSceneSureName="fatherSceneSure.name"
     ></newBatch>
 

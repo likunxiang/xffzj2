@@ -83,7 +83,7 @@ export function getSignDetail(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/ExSql?SqlCmdName=web\\org\\getSignDetail_1_0_1&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\org\\getSignDetail_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -150,6 +150,17 @@ export function getCollectDetailListByTime(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\org\\getCollectDetailListByTime_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询机构回收详情
+export function getTakebackDetailListByTime(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getTakebackDetailListByTime_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })
