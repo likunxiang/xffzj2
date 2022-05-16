@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="flex flex-center mb20">
-      <el-input placeholder="请输入你要找的品类名称" clearable v-model="searchVal"
-        @keyup.enter.native="search" style="width: 200px;margin-right: 20px;" @clear="search">
-		<i class="el-icon-search el-input__icon" slot="suffix" @click="search" />
+      <el-input placeholder="请输入你要找的品类名称" clearable v-model="searchVal" @keyup.enter.native="search"
+        style="width: 200px;margin-right: 20px;" @clear="search">
+        <i class="el-icon-search el-input__icon" slot="suffix" @click="search" />
       </el-input>
       <div class="" v-if="isToSearch">搜索结果：{{searchResult}}</div>
     </div>
@@ -38,8 +38,10 @@
 
     <pages :total="pageTotal" @changePage="changePage" :page="page"></pages>
     <toClass v-if="isSetting && collectType == 0" @close="closePricing" :openRow="openRow"></toClass>
-    <toSupply v-if="isSetting && collectType == 1" @close="closePricing" :openRow="openRow"></toSupply>
-    <toOur v-if="isSetting && collectType == 2" @close="closePricing" :openRow="openRow"></toOur>
+    <!-- <toSupply v-if="isSetting && collectType == 1" @close="closePricing" :openRow="openRow"></toSupply>
+    <toOur v-if="isSetting && collectType == 2" @close="closePricing" :openRow="openRow"></toOur> -->
+    <toModelType v-if="isSetting && collectType == 1" @close="closePricing" :openRow="openRow"></toModelType>
+    <toModelName v-if="isSetting && collectType == 2" @close="closePricing" :openRow="openRow"></toModelName>
   </div>
 </template>
 
@@ -50,6 +52,8 @@
   import toClass from '@/views/pricingRole/pricingManagement/components/accordingToClass.vue'
   import toSupply from '@/views/pricingRole/pricingManagement/components/accordingToSupply.vue'
   import toOur from '@/views/pricingRole/pricingManagement/components/accordingToOur.vue'
+  import toModelType from '@/views/pricingRole/pricingManagement/components/accordingToModelType.vue'
+  import toModelName from '@/views/pricingRole/pricingManagement/components/accordingToModelName.vue'
   import pages from '@/views/components/common/pages'
   export default {
     name: "index",
@@ -57,7 +61,9 @@
       toClass,
       toSupply,
       toOur,
-      pages
+      pages,
+      toModelType,
+      toModelName
     },
     data() {
       return {
@@ -68,7 +74,7 @@
         page: 1,
         pageTotal: 0,
         isSetting: false,
-		loading: false
+        loading: false
       };
     },
     methods: {
@@ -78,7 +84,7 @@
         } else {
           this.isToSearch = false
         }
-		this.page = 1
+        this.page = 1
         this.getList()
       },
       toSetting(row) {
@@ -102,13 +108,13 @@
         this.getList()
       },
       async getList() {
-		this.loading = true
+        this.loading = true
         await getList({
           categoryName: this.searchVal,
           size: '20',
           page: this.page
         }).then(res => {
-		  this.loading = false
+          this.loading = false
           console.log(res);
           if (res.Tag.length) {
             let data = res.Tag[0].Table

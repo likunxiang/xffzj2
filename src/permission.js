@@ -28,7 +28,8 @@ router.beforeEach((to, from, next) => {
           })
         }).catch(err => {
             store.dispatch('LogOut').then(() => {
-              Message.error(err)
+              // Message.error(err)
+			  Message.error('登录已失效，请重新登录')
               next({ path: '/' })
             })
           })

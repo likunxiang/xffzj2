@@ -209,3 +209,26 @@ export function tkByOrgCoGuid(data) {
     data: data
   })
 }
+
+// web-统计引导专员机构合作数量-未合作
+export function getValidStaffOrgNoSignNum(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgNoSignNum_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+
+// web-统计引导专员机构合作数量-在合作
+export function getValidStaffOrgSignNum(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgSignNum_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

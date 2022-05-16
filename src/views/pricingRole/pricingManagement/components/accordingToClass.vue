@@ -1,51 +1,44 @@
 <template>
-  <el-dialog title="服务定价设置" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
-    <div v-loading="loading">
+  <el-dialog title="按品类收取管理" :visible.sync="isOpen" width="700px" @close="beforeClose">
+    <div style="padding-bottom: 60px;">
+      <el-row class="flex mb20 mt10">
+        <div class="bold" style="width: 120px;">品类类型</div>
+        <div>{{openRow.cattypeName}}</div>
+      </el-row>
       <el-row class="flex mb20 mt10">
         <div class="bold" style="width: 120px;">品类名称</div>
         <div>{{openRow.categoryName}}</div>
       </el-row>
-      <el-row class="flex mb20">
+      <el-row class="flex mb20 mt10">
         <div class="bold" style="width: 120px;">收取范围</div>
-        <div>{{collectType==0?'按品类':collectType==1?'按供方型号':'按我方型号'}}</div>
+        <div>按品类</div>
       </el-row>
       <el-divider></el-divider>
-      <!-- 按品类 -->
-      <el-row>
-        <div class="bold mb20">型号服务费设置信息</div>
-      </el-row>
-      <el-row class="flex mb20">
-        <div class="bold" style="width: 120px;">收取对象</div>
-        <div>{{targetObject == 'supply'?'供方':'需方'}}</div>
-      </el-row>
-      <el-row class="flex mb20">
-        <div class="bold" style="width: 120px;">收取方式</div>
-        <div>按比例</div>
-      </el-row>
-      <el-row class="flex mb20 flex-center">
-        <div class="bold" style="width: 120px;">收取比例</div>
-        <div class="flex flex-center">
-          <el-input placeholder="请输入整数" v-model="collectRatio" style="width: 110px;" type="number"></el-input>
-          <div>%</div>
-        </div>
-      </el-row>
-      <el-row>
-        提示：在供方的服务定价基数上加服务费，即服务费=采购数量（购买数量）*收取比例*服务定价基数
-
-                 供方的结算款=采购数量（购买数量）*服务定价基数
-      </el-row>
+      <el-button type="primary" class="mb20" @click="openPricing">新建服务定价</el-button>
+      <el-table :data="tableData" border v-loading="loading">
+        <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
+        <el-table-column prop="targetObject" label="收取对象" align="center"></el-table-column>
+        <el-table-column prop="chargeType" label="收取方式" align="center"></el-table-column>
+        <el-table-column prop="chargeValue" label="收取数值" align="center"></el-table-column>
+      </el-table>
+      <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
+      <pricingClass v-if="isSetting" @close="closePricing" :openRow="openRow" @refresh="getAcctoCatLogList"></pricingClass>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="close">取消</el-button>
-      <el-button type="primary" @click="submit" :disabled="!collectRatio.trim()">保存</el-button>
-    </span>
   </el-dialog>
 </template>
 
 <script>
-   import { getDetailOfType1,insertRatioOfType1 } from '@/api/pricingRoleApi/pricingManagement.js'
+  import pages from '@/views/components/common/pages'
+  import pricingClass from '@/views/pricingRole/pricingManagement/components/pricingClass.vue'
+  import {
+    getAcctoCatLogList
+  } from '@/api/pricingRoleApi/pricingManagement.js'
   export default {
     name: "index",
+    components: {
+      pages,
+      pricingClass
+    },
     props: {
       openRow: {
         type: Object,
@@ -53,23 +46,15 @@
           return {}
         }
       },
-      /**
-       * 收取类型
-       * 0 按品类
-       * 1 按供方型号
-       * 2 按我方型号
-       */
-      collectType: {
-        type: Number,
-        default: 0,
-      },
     },
     data() {
       return {
         isOpen: true,
-        targetObject: '',
-        collectRatio: '',
-        loading: true,
+        page: 1,
+        pageTotal: 0,
+        tableData: [],
+        loading: false,
+        isSetting: false,
       };
     },
     methods: {
@@ -80,47 +65,43 @@
       beforeClose() {
         this.close()
       },
-      submit() {
-        this.insertRatioOfType1()
+      changePage(page) {
+        this.page = page
+        this.getAcctoCatLogList()
+        //
       },
-      // web-设置定价-按品类
-      async insertRatioOfType1() {
-        await insertRatioOfType1({
+      openPricing() {
+        this.isSetting = true
+      },
+      closePricing() {
+        this.isSetting = false
+      },
+      async getAcctoCatLogList() {
+        this.loading = true
+        await getAcctoCatLogList({
+          curUserId: this.$store.state.user.adminId,
           categoryGuid: this.openRow.categoryGuid,
-          ratio: parseInt(this.collectRatio)
-        }).then(res => {
-          console.log(res);
-          if(res.Tag[0]>0) {
-            this.$message({
-              type: 'success',
-              message: '设置成功!'
-            });
-            this.close()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '设置失败!'
-            });
-          }
-        })
-      },
-      // 按品类
-      async getDetailOfType1() {
-        await getDetailOfType1({
-          categoryGuid: this.openRow.categoryGuid
+          size: '20',
+          page: this.page
         }).then(res => {
           this.loading = false
-          console.log(res);
-          if(res.Tag.length) {
-            let data = res.Tag[0].Table[0]
-            this.collectRatio = data.ratio
-            this.targetObject = data.targetObject
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag.length > 0) {
+              let data = res.Tag[0].Table
+              this.tableData = data
+            } else {
+              this.tableData = []
+            }
+            this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
           }
         })
-      },
+      }
     },
     created() {
-      this.getDetailOfType1()
+      console.log(999);
+      this.getAcctoCatLogList()
     }
   };
 </script>

@@ -7,8 +7,8 @@
         <el-descriptions-item label-class-name="my-label" label="姓名">{{row.nickName}}</el-descriptions-item>
         <el-descriptions-item label-class-name="my-label" label="国家/区号">{{row.nation}}</el-descriptions-item>
         <el-descriptions-item label-class-name="my-label" label="联系电话">{{row.phonenumber}}</el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" label="未合作数量" v-if="pageStatus == 1">{{row.noSignOrgNum}}</el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" label="在合作数量" v-else>{{row.signOrgNum}}</el-descriptions-item>
+        <el-descriptions-item label-class-name="my-label" label="未合作数量" v-if="pageStatus == 1">{{noSignOrgNum}}</el-descriptions-item>
+        <el-descriptions-item label-class-name="my-label" label="在合作数量" v-else>{{signOrgNum}}</el-descriptions-item>
       </el-descriptions>
     </div>
     <el-divider></el-divider>
@@ -36,7 +36,9 @@
   import {
     getValidStaffOrgSignRecords,
     getValidStaffOrgNoSignRecords,
-    tkByOrgCoGuid
+    tkByOrgCoGuid,
+    getValidStaffOrgNoSignNum,
+    getValidStaffOrgSignNum
   } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
@@ -55,6 +57,8 @@
         searchResult: 0,
         searchVal: '',
         pageStatus: 1,
+        noSignOrgNum: 0, //未合作数量
+        signOrgNum: 0, //在合作数量
       };
     },
     methods: {
@@ -170,8 +174,10 @@
               });
               if (this.pageStatus == '2') {
                 this.getValidStaffOrgNoSignRecords()
+                this.getValidStaffOrgSignNum()
               } else {
                 this.getValidStaffOrgSignRecords()
+                this.getValidStaffOrgNoSignNum()
               }
             } else {
               this.$message({
@@ -182,6 +188,31 @@
 
           }
         })
+      },
+
+      // 机构合作数量-未合作
+      async getValidStaffOrgNoSignNum() {
+        await getValidStaffOrgNoSignNum({
+          userId: this.row.userId,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          if (res.OK == 'True') {
+            let noSignOrgNum = res.Tag[0].Table[0].noSignOrgNum
+            this.noSignOrgNum = noSignOrgNum
+          }
+        })
+      },
+      // 机构合作数量-再合作
+      async getValidStaffOrgSignNum() {
+        await getValidStaffOrgSignNum({
+          userId: this.row.userId,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          if (res.OK == 'True') {
+            let signOrgNum = res.Tag[0].Table[0].signOrgNum
+            this.signOrgNum = signOrgNum
+          }
+        })
       }
     },
     created() {
@@ -190,8 +221,10 @@
       console.log('query',this.row);
       if (this.pageStatus == '2') {
         this.getValidStaffOrgNoSignRecords()
+        this.getValidStaffOrgSignNum()
       } else {
         this.getValidStaffOrgSignRecords()
+        this.getValidStaffOrgNoSignNum()
       }
 
     }
