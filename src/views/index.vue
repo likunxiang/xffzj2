@@ -1,7 +1,7 @@
 <template>
   <div class="app-container home1">
     <div class="home1Text">欢迎来到消费者之家</div>
-    <div class="version">v1.0.7</div>
+    <div class="version">v1.0.8</div>
   </div>
 </template>
 

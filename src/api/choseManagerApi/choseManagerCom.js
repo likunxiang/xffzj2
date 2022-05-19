@@ -17,7 +17,7 @@ export function orgGetList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\org\\info\\getList_1_0_1&DBC=w_m',
+    url: '/QueryData?SqlCmdName=web\\org\\info\\getList_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -28,7 +28,7 @@ export function orgInsertOrgName(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/ExSql?SqlCmdName=web\\org\\info\\insertOrgName_1_0_1&DBC=w_m',
+    url: '/ExSql?SqlCmdName=web\\org\\info\\insertOrgName_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -39,7 +39,7 @@ export function orgUpdateOrgName(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/ExSql?SqlCmdName=web\\org\\info\\updateOrgName_1_0_1&DBC=w_m',
+    url: '/ExSql?SqlCmdName=web\\org\\info\\updateOrgName_1_0_2&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -228,6 +228,106 @@ export function getValidStaffOrgSignNum(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\org\\getValidStaffOrgSignNum_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 5-11
+// web-新增机构路径字节内容
+export function pathInsert(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\org\\path\\insert_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询机构路径顶级节点列表
+export function pathGetTopParList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\path\\getTopParList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询机构路径儿子节点列表
+export function pathGetSonList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\path\\getSonList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-编辑机构路径字节内容
+export function pathUpdate(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\org\\path\\update_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-删除机构路径字节内容
+export function pathDelete(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\org\\path\\delete_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-复制黏贴机构路径字节内容
+export function web_orgpathtitle_paste(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ProxyService/web_orgpathtitle_paste?CustomMimeType=application/json',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-根据层级查询机构路径节点列表
+export function pathGetListByLevel(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\path\\getListByLevel_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询机构路径字节标题列表
+export function pathGetOrgPathTitleList(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\path\\getOrgPathTitleList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-修改机构路径字节标题
+export function pathUpdateOrgPathTitle(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\org\\path\\updateOrgPathTitle_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })

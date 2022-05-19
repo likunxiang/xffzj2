@@ -2,6 +2,10 @@
   <el-dialog title="批量新建机构名称" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
     <p>机构名称(1行1个)</p>
     <el-input class="mb10" type="textarea" placeholder="请输入" :rows="10" v-model="fieldObj.content"></el-input>
+    <el-row class="mb10">
+      关联机构路径
+    </el-row>
+    <orgPathTree @getPathOrg="getPathOrg"></orgPathTree>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="submit" :disabled="!fieldObj.content.trim()">保存</el-button>
@@ -10,11 +14,15 @@
 </template>
 
 <script>
+  import orgPathTree from '@/views/choseManager/agencyInformation/components/orgPathTree'
   import {
     orgInsertOrgName,
   } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
+    components: {
+      orgPathTree
+    },
     props: {
       openRow: {
         type: Object,
@@ -29,7 +37,8 @@
         fieldObj: {
           content: ''
         },
-        newFieldList: []
+        newFieldList: [],
+        orgPathGuid: '',
       };
     },
     methods: {
@@ -39,6 +48,10 @@
       },
       beforeClose() {
         this.close()
+      },
+      // 获取选中的节点
+      getPathOrg(data) {
+        this.orgPathGuid = data.orgPathGuid
       },
       submit() {
         let data = this.fieldObj
@@ -57,6 +70,7 @@
           } else {
             let obj = {
               orgName: data[i].trim(),
+              orgPathGuid: this.orgPathGuid,
               curUserId: this.$store.state.user.adminId
             }
             arr.push(obj)

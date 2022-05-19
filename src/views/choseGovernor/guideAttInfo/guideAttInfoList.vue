@@ -13,9 +13,15 @@
       <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
       <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="sourceStr" label="来源" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button type="text" @click="delInfo(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
     <addAtt v-if="isAdd" @close="closeAdd" @refresh="introducerGetList"></addAtt>
+    <delTips v-if="isTips" :row="openRow" @close="closeDelTips"></delTips>
   </div>
 </template>
 
@@ -23,15 +29,18 @@
   import searchCom from '@/views/components/common/searchCom.vue'
   import pages from '@/views/components/common/pages'
   import addAtt from '@/views/choseGovernor/guideAttInfo/components/addAtt'
+  import delTips from '@/views/choseGovernor/guideAttInfo/components/delTips'
   import {
-    introducerGetList
+    introducerGetList,
+    introducerDelete
   } from '@/api/choseGovernorApi/choseGovernorCom.js'
   export default {
     name: "index",
     components: {
       searchCom,
       pages,
-      addAtt
+      addAtt,
+      delTips
     },
     data() {
       return {
@@ -44,7 +53,8 @@
         pageTotal: 0,
         searchResult: 0,
         searchVal: '',
-        isAdd: false
+        isAdd: false,
+        isTips: false,
       };
     },
     methods: {
@@ -64,6 +74,43 @@
       },
       closeAdd() {
         this.isAdd = false
+      },
+      delInfo(row) {
+        if(row.userId) {
+          // 已经开通了
+          this.openRow = row
+          this.isTips = true
+        } else {
+          // 未开通，走删除
+          this.introducerDelete(row.introducerGuid)
+        }
+      },
+      async introducerDelete(id) {
+        await introducerDelete({
+          introducerGuid: id,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          if (res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.introducerGetList()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '操作失败!'
+              });
+            }
+
+          }
+        })
+      },
+      closeDelTips() {
+        this.isTips = false
       },
       async introducerGetList() {
         this.loading = true

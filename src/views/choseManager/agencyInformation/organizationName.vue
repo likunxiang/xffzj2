@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-
+    <!-- 字节标题 -->
+    <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch"></chooseByteTitle>
     <div class="flex jsb flex-center">
       <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称'></searchCom>
       <div>
@@ -32,6 +33,7 @@
   import newOrganization from '@/views/choseManager/agencyInformation/components/newOrganization'
   import batchOrganization from '@/views/choseManager/agencyInformation/components/batchOrganization'
   import editOrganization from '@/views/choseManager/agencyInformation/components/editOrganization'
+  import chooseByteTitle from '@/views/choseManager/agencyInformation/components/chooseByteTitle.vue'
   import {
     orgGetList,
     orgInsertOrgName,
@@ -44,6 +46,7 @@
       newOrganization,
       batchOrganization,
       editOrganization,
+      chooseByteTitle,
       searchCom,
       pages
     },
@@ -51,6 +54,7 @@
       return {
         loading: false,
         tableData: [],
+        guidList: [], // 字节内容guid列表
         openRow: {},
         page: 1,
         pageTotal: 0,
@@ -67,6 +71,13 @@
         this.page = 1
         this.orgGetList()
         //
+      },
+      toSearch() {
+        this.page = 1
+        this.orgGetList()
+      },
+      getByteGuid(data) {
+        this.guidList = data
       },
       changePage(page) {
         this.page = page
@@ -113,7 +124,18 @@
         await orgGetList({
           orgName: this.searchVal,
           size: '20',
-          page: this.page
+          page: this.page,
+          curUserId: this.$store.state.user.adminId,
+          orgPathContent1: this.guidList[1] ? this.guidList[1] : '',
+          orgPathContent2: this.guidList[2] ? this.guidList[2] : '',
+          orgPathContent3: this.guidList[3] ? this.guidList[3] : '',
+          orgPathContent4: this.guidList[4] ? this.guidList[4] : '',
+          orgPathContent5: this.guidList[5] ? this.guidList[5] : '',
+          orgPathContent6: this.guidList[6] ? this.guidList[6] : '',
+          orgPathContent7: this.guidList[7] ? this.guidList[7] : '',
+          orgPathContent8: this.guidList[8] ? this.guidList[8] : '',
+          orgPathContent9: this.guidList[9] ? this.guidList[9] : '',
+          orgPathContent10: this.guidList[10] ? this.guidList[10] : '',
         }).then( res => {
           this.loading = false
           if(res.OK == 'True') {
