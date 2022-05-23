@@ -21,12 +21,12 @@
         <el-menu-item index="2" class="menuItem">
           <span slot="title">删除字节内容</span>
         </el-menu-item>
-        <el-menu-item index="3" class="menuItem">
+        <!-- <el-menu-item index="3" class="menuItem">
           <span slot="title">复制字节内容</span>
         </el-menu-item>
         <el-menu-item index="4" class="menuItem">
           <span slot="title">黏贴字节内容</span>
-        </el-menu-item>
+        </el-menu-item> -->
       </el-menu>
     </div>
 
