@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 字节标题 -->
-    <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch"></chooseByteTitle>
+    <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch" @getLastGuid='getLastGuid'></chooseByteTitle>
     <div class="flex jsb flex-center">
       <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称'></searchCom>
       <div>
@@ -62,10 +62,15 @@
         searchVal: '',
         isNew: false,
         isImport: false,
-        isEdit: false
+        isEdit: false,
+        lastOrgPathContentGuid: '0',  // 最大层级机构字节内容guid
       };
     },
     methods: {
+      getLastGuid(data) {
+        console.log('1112',data);
+        this.lastOrgPathContentGuid = data
+      },
       search(data) {
         this.searchVal = data
         this.page = 1
@@ -136,6 +141,7 @@
           orgPathContent8: this.guidList[8] ? this.guidList[8] : '',
           orgPathContent9: this.guidList[9] ? this.guidList[9] : '',
           orgPathContent10: this.guidList[10] ? this.guidList[10] : '',
+          lastOrgPathContentGuid: this.lastOrgPathContentGuid
         }).then( res => {
           this.loading = false
           if(res.OK == 'True') {

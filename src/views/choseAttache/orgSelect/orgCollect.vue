@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 字节标题 -->
-    <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch"></chooseByteTitle>
+    <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch" @getLastGuid='getLastGuid'></chooseByteTitle>
     <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称'></searchCom>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="orgName" label="机构名称" align="center"></el-table-column>
@@ -41,9 +41,14 @@
         pageTotal: 0,
         searchResult: 0,
         searchVal: '',
+        lastOrgPathContentGuid: '0',  // 最大层级机构字节内容guid
       };
     },
     methods: {
+      getLastGuid(data) {
+        console.log('1112',data);
+        this.lastOrgPathContentGuid = data
+      },
       openDetail(row) {
         this.openRow = row
         this.isDetail = true
@@ -115,6 +120,7 @@
           orgPathContent8: this.guidList[8] ? this.guidList[8] : '',
           orgPathContent9: this.guidList[9] ? this.guidList[9] : '',
           orgPathContent10: this.guidList[10] ? this.guidList[10] : '',
+          lastOrgPathContentGuid: this.lastOrgPathContentGuid
         }).then(res => {
           this.loading = false
           if(res.OK == 'True') {

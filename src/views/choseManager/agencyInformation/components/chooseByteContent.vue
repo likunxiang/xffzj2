@@ -81,6 +81,8 @@
       submit() {
         let data = this.checkedByte
         this.$emit('getByteGuid', data)
+        console.log('3333',data);
+        this.$emit('getLastGuid',data.orgPathGuid)
         this.close()
       },
       getTableData() {

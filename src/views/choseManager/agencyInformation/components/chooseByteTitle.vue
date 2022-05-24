@@ -9,7 +9,7 @@
       </el-input>
     </div>
     <chooseByteContent v-if="isByte" @close="closeByte" :openRow="chooseRow" :guidList='guidList' :byteIndex="byteIndex"
-      @getByteGuid="getByteGuid"></chooseByteContent>
+      @getByteGuid="getByteGuid" @getLastGuid="getLastGuid"></chooseByteContent>
   </div>
 </template>
 
@@ -40,9 +40,14 @@
         guidListName: [], // 字段内容中文
         byteIndex: 0, // 正在操作的字节下标
         checkedList: [], // 选中的字节内容
+        lastOrgPathContentGuid: '0',  // 最大层级机构字节内容guid
       };
     },
     methods: {
+      getLastGuid(data) {
+        console.log('2222',data);
+        this.$emit('getLastGuid',data)
+      },
       openByte(row, index) {
         this.chooseRow = row
         this.byteIndex = index + 1

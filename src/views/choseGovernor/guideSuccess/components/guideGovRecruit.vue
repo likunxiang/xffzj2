@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="引导主管招募成果" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog title="引导主管招募成果" :visible.sync="isOpen" width="800px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
@@ -9,8 +9,8 @@
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       </el-table>
       <div class="flex flex-center mb20">
-        <div class="title-bg">机构权限成果</div>
-        <div>统计该引导主管当前招募情况以及方便引导主管查阅当前招募名单的账号状态便于快速开账号</div>
+        <div class="title-bg">引导主管招募成果</div>
+        <div class="ml0">统计该引导主管当前招募情况以及方便引导主管查阅当前招募名单的账号状态便于快速开账号</div>
       </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="专员招募名单" name="first">
@@ -54,7 +54,11 @@
 <script>
   import pages from '@/views/components/common/pages'
   import searchCom from '@/views/components/common/searchCom.vue'
-  import { introducerGetList,introducerGetRegisteredList,introducerGetUnRegisteredList } from '@/api/choseManagerApi/choseManagerCom.js'
+  import { introducerGetList } from '@/api/choseManagerApi/choseManagerCom.js'
+  import {
+    introducerGetRegisteredList,
+    introducerGetUnRegisteredList
+  } from '@/api/choseGovernorApi/choseGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -106,7 +110,7 @@
         //
       },
       getData() {
-        if(this.activeName == 'first' || this.activeName == 'third') {
+        if(this.activeName == 'first') {
           this.introducerGetList()
         } else if (this.activeName == 'second'){
           this.introducerGetUnRegisteredList()
@@ -197,7 +201,7 @@
 
 <style lang="scss" scoped>
   .title-bg {
-    width: 200px;
+    width: 150px;
     padding: 10px 0;
     background-color: #D7D7D7;
   }

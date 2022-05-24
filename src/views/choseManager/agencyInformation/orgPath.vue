@@ -21,12 +21,12 @@
         <el-menu-item index="2" class="menuItem">
           <span slot="title">删除字节内容</span>
         </el-menu-item>
-        <!-- <el-menu-item index="3" class="menuItem">
+        <el-menu-item index="3" class="menuItem">
           <span slot="title">复制字节内容</span>
         </el-menu-item>
         <el-menu-item index="4" class="menuItem">
           <span slot="title">黏贴字节内容</span>
-        </el-menu-item> -->
+        </el-menu-item>
       </el-menu>
     </div>
 
@@ -53,8 +53,8 @@
     pathGetTopParList, // 获取顶级
     pathGetSonList, // 查询儿子
     updateNameTreeNorder1_0_1, // 变更字节内容节点
-    deleteNameTree,
-    web_pasteNameTree_1_0_1
+    pathDelete,
+    web_orgpathtitle_paste
   } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
@@ -316,7 +316,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteNameTree(this.editSelf.guid)
+          this.pathDelete(this.editSelf.orgPathGuid)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -325,27 +325,31 @@
         });
       },
 
-      async deleteNameTree(id) {
-        await deleteNameTree({
-          catNameTreeGuid: id
+      async pathDelete(id) {
+        await pathDelete({
+          orgPathGuid: id,
+          curUserId: this.$store.state.user.adminId,
         }).then(res => {
           console.log(res);
-          // let parent = this.editNode.parent;
-          // let children = parent.childNodes;
-          // let index
-          // for (let i in children) {
-          //   console.log('2', i);
-          //   if (this.editData.guid == children[i].data.guid) {
-          //     console.log('3', i);
-          //     index = i
-          //     children.splice(index, 1);
-          //   }
-          // }
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          this.getTableData()
+
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.getTableData()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '删除失败!'
+              });
+            }
+          }
+
+
         })
       },
 
@@ -392,8 +396,8 @@
         this.pasteData = this.editData
         console.log('copyData', this.copyData);
         console.log('pasteData', this.pasteData);
-        if (this.copyData.guid && this.pasteData.guid) {
-          this.web_pasteNameTree_1_0_1()
+        if (this.copyData.orgPathGuid && this.pasteData.orgPathGuid) {
+          this.web_orgpathtitle_paste()
         } else {
           this.$message({
             type: 'error',
@@ -402,6 +406,37 @@
         }
 
       },
+      //
+      async web_orgpathtitle_paste() {
+        await web_orgpathtitle_paste({
+          sourceOrgPathGuid: this.copyData.orgPathGuid,
+          targetOrgPathGuid: this.pasteData.orgPathGuid,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          console.log(res);
+          if(res.OK == 'True') {
+            if (res.Tag > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              let data = this.editFather
+              if (data.length > 0) {
+                this.getTableData()
+              } else {
+                this.getSonList(data)
+              }
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.Message || '操作失败！'
+              });
+            }
+          }
+          
+        })
+      },
+
       // 拖拽接口
       async updateType3Norder(data) {
         this.loading = true

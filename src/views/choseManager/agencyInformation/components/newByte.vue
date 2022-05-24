@@ -168,21 +168,24 @@
         await pathUpdate({
           pathParentGuid: this.fatherSceneSure.orgPathGuid ? this.fatherSceneSure.orgPathGuid : '0',
           orgPathGuid: this.editObj.orgPathGuid,
-          name: this.ownByte
+          content: this.ownByte,
+          curUserId: this.$store.state.user.adminId,
         }).then(res => {
           console.log(res);
-          if (res.Tag[0] > 0) {
-            this.$message({
-              type: 'success',
-              message: '操作成功!'
-            });
-            this.$emit('refresh')
-            this.close()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '内容过长或当前父级已存在该内容!'
-            });
+          if(res.OK=='True') {
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.$emit('refresh')
+              this.close()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '内容过长或当前父级已存在该内容!'
+              });
+            }
           }
         })
       },
@@ -191,7 +194,7 @@
       this.title = this.byteType == 'new' ? '新建字节内容' : '编辑字节内容'
       if (this.byteType == 'edit') {
         console.log('editObj',this.editObj);
-        this.fatherSceneSure.content = this.editObj.content
+        this.fatherSceneSure.content = this.editObj.parentContent
         this.fatherSceneSure.orgPathGuid = this.editObj.orgPathParGuid
         this.fatherSceneSure.treeTitleString = this.editObj.treeTitleString
         this.ownByte = this.editObj.content
