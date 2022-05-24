@@ -256,12 +256,23 @@ export function pathGetTopParList(data) {
   })
 }
 
-// web-查询机构路径儿子节点列表
+// web-查询机构路径儿子节点列表--通过guid
 export function pathGetSonList(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\org\\path\\getSonList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-查询机构路径儿子节点列表--通过id
+export function pathGetSonListById(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\org\\path\\getSonListById_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })
