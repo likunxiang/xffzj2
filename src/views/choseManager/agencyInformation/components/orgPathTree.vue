@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-tree :data="tableData" :highlight-current="true" :props="defaultProps" @node-expand="getSon" @node-click="choosePath" v-loading="loading">
+    <el-tree ref="treeBox" :data="tableData" :highlight-current="true" node-key="orgPathGuid" :props="defaultProps"
+      @node-expand="getSon" @node-click="choosePath" v-loading="loading">
     </el-tree>
   </div>
 </template>
@@ -9,9 +10,20 @@
   import {
     pathGetTopParList, // 获取顶级
     pathGetSonList, // 查询儿子
+    pathGetSonListById, // 查询儿子，通过id
   } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
+    props: {
+      type: {
+        type: String,
+        default: ''
+      },
+      allparId: {
+        type: String,
+        default: ''
+      },
+    },
     data() {
       return {
         tableData: [],
@@ -19,7 +31,8 @@
           children: 'children',
           label: 'content',
         },
-        loading: false
+        loading: false,
+        allparIdArr: []
       };
     },
     methods: {
@@ -44,6 +57,10 @@
           }
           console.log('tableData', this.tableData);
           this.tableData = this.clone(this.tableData)
+          this.$nextTick(() => {
+            // treeBox 元素的ref   value 绑定的node-key
+            this.$refs.treeBox.setCurrentKey(this.tableData[1].orgPathGuid);
+          });
         })
       },
       getSon(data) {
@@ -74,7 +91,32 @@
               }
             }
             data.children = arr
-            console.log('data.children',data.children);
+            console.log('data.children', data.children);
+            data = this.clone(data)
+          } else {
+            data.children = []
+          }
+        })
+      },
+      async pathGetSonListById() {
+        await pathGetSonListById({
+          orgPathallParentId: this.allparId,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          this.loading = false
+          console.log(res);
+          if (res.Tag.length) {
+            // let data = res.Tag[0].Table
+            let arr = res.Tag[0].Table
+            for (let i in arr) {
+              if (arr[i].hasSon == '1') {
+                arr[i].children = [{
+                  content: '加载中...'
+                }]
+              }
+            }
+            data.children = arr
+            console.log('data.children', data.children);
             data = this.clone(data)
           } else {
             data.children = []
@@ -84,11 +126,16 @@
       choosePath(data, node, nodeself) {
         console.log(data);
         this.fatherScene = data
-        this.$emit('getPathOrg',data)
+        this.$emit('getPathOrg', data)
       },
     },
     created() {
-      this.getTableData()
+
+      if(this.type == 'edit') {
+        this.pathGetSonListById()
+      } else {
+        this.getTableData()
+      }
     }
   }
 </script>
