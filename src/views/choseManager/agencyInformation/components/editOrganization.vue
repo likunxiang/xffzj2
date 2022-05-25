@@ -7,10 +7,10 @@
     <el-row class="mb10">
       关联机构路径
     </el-row>
-    <orgPathTree @getPathOrg="getPathOrg" type="edit" :allparId="row.orgPathallParentId" :topGuid="row.orgPathTopGuid"></orgPathTree>
+    <orgPathTree @getPathOrg="getPathOrg" type="edit" :allparId="row.orgPathallParentId" :topGuid="row.orgPathTopGuid" :pathGuid="row.orgPathGuid" :pathParGuid="row.parent_guid"></orgPathTree>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim() || inputField==row.orgName">保存</el-button>
+      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim()">保存</el-button>
     </span>
   </el-dialog>
 </template>
