@@ -3,23 +3,23 @@
     <div>
       <el-row class="flex mb10 flex-center">
         <div class="my-label">角色类型</div>
-        <div>{{openRow.createTime}}</div>
+        <div>服务经理</div>
       </el-row>
       <el-row class="flex mb10 flex-center">
         <div class="my-label">账号名称</div>
-        <div>{{openRow.targetObject}}</div>
+        <div>{{openRow.userName}}</div>
       </el-row>
       <el-row class="flex mb10 flex-center">
         <div class="my-label">姓名</div>
-        <div>{{openRow.chargeType}}</div>
+        <div>{{openRow.nickName}}</div>
       </el-row>
       <el-row class="flex mb10 flex-center">
         <div class="my-label">国家/地区</div>
-        <div>{{openRow.chargeValue}}</div>
+        <div>{{openRow.nation}}</div>
       </el-row>
       <el-row class="flex mb10 flex-center">
         <div class="my-label">联系电话</div>
-        <div>{{openRow.startDate}}</div>
+        <div>{{openRow.phonenumber}}</div>
       </el-row>
       <el-row class="flex mb10 flex-center">
         <div>确认删除？</div>
@@ -34,8 +34,8 @@
 
 <script>
   import {
-    deleteMn
-  } from '@/api/pricingRoleApi/pricingManagement.js'
+    selectDelDirector
+  } from '@/api/choseManagerApi/choseManagerCom.js'
   export default {
     name: "index",
     props: {
@@ -60,11 +60,11 @@
         this.close()
       },
       submit() {
-        this.deleteMn()
+        this.selectDelDirector()
       },
-      async deleteMn() {
-        await deleteMn({
-          serviceFeeMnGuid: this.openRow.serviceFeeMnGuid,
+      async selectDelDirector() {
+        await selectDelDirector({
+          userId: this.openRow.userId,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           if (res.OK == 'True') {

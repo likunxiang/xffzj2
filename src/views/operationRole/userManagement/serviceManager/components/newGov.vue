@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
     <div class="" v-loading="loading">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-row>
@@ -11,7 +11,7 @@
           <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
               <!-- <treeselect v-model="ruleForm.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" /> -->
-              市场部
+              服务部门
             </el-form-item>
           </el-col>
         </el-row>
@@ -104,7 +104,7 @@
         deptOptions: undefined,
         ruleForm: {
           nickName: '',
-          deptId: 111,
+          deptId: '456a6035-a717-4d5d-aee1-e171e76a421e',
           password: '',
           name: '',
           userTel: '',
@@ -148,7 +148,7 @@
         passwordStr: '', // 密文
         oldForm: {
           nickName: '',
-          deptId: 111,
+          deptId: '456a6035-a717-4d5d-aee1-e171e76a421e',
           password: '',
           name: '',
           userTel: '',
@@ -255,7 +255,7 @@
           nickName: this.ruleForm.name,
           phonenumber: this.ruleForm.userTel,
           status: this.ruleForm.status,
-          roleKey: 'selectDirectorRole',
+          roleKey: 'serveManagerRole',
           curUserId: this.$store.state.user.adminId,
           deptId: this.ruleForm.deptId,
         }).then(res => {
@@ -325,7 +325,7 @@
           this.ruleForm.password = data.password
           this.ruleForm.userTel = data.phonenumber
           this.ruleForm.status = data.status
-          this.ruleForm.roleKey = 'selectDirectorRole',
+          this.ruleForm.roleKey = 'serveManagerRole',
           this.ruleForm.deptId = data.deptId
           // this.oldForm = this.ruleForm
           this.oldForm.nickName = data.userName
@@ -333,7 +333,7 @@
           this.oldForm.password = data.password
           this.oldForm.userTel = data.phonenumber
           this.oldForm.status = data.status
-          this.oldForm.roleKey = 'selectDirectorRole',
+          this.oldForm.roleKey = 'serveManagerRole',
           this.oldForm.deptId = data.deptId
         })
       }
