@@ -20,7 +20,7 @@
           </el-col>
           <el-col :span="18">
             <el-form-item label="所在地点" prop="region">
-              <el-input v-model="ruleForm.region" placeholder="请选择" maxlength="30" />
+              <el-input v-model="ruleForm.region" @focus="openProvinces" placeholder="请选择" maxlength="30" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -30,15 +30,20 @@
       <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
       <el-button @click="close">取 消</el-button>
     </div>
+    <chooseProvinces v-if="isProvinces" @close="closeProvinces" @getProvinces="getProvinces"></chooseProvinces>
   </el-dialog>
 </template>
 
 <script>
+  import chooseProvinces from '@/views/serviceManager/agencyInformation/components/chooseProvinces.vue'
   import {
-    introducerAdd
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+    introducerInsert
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
+    components: {
+      chooseProvinces
+    },
     data() {
       return {
         isOpen: true,
@@ -64,8 +69,10 @@
             message: '必填',
             trigger: 'change'
           }],
-        }
-
+        },
+        provincesObj: {},
+        isProvinces: false,
+        nation: '中国大陆（+86）'
       };
     },
     methods: {
@@ -76,19 +83,37 @@
       beforeClose() {
         this.close()
       },
+      // 选择服务区域
+      openProvinces() {
+        this.isProvinces = true
+      },
+      closeProvinces() {
+        this.isProvinces = false
+      },
+      // 获取选择的省市区
+      getProvinces(data) {
+        this.provincesObj = data
+        console.log('provincesObj',this.provincesObj);
+        console.log(data.address);
+        this.ruleForm.region = data.address
+
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.introducerAdd()
+            this.introducerInsert()
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-      async introducerAdd() {
-        await introducerAdd({
+      async introducerInsert() {
+        await introducerInsert({
           nickName: this.ruleForm.name,
+          nation: this.nation,
+          cityCodeId: this.provincesObj.cityId,
+          location: this.ruleForm.region,
           phonenumber: this.ruleForm.phone,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {

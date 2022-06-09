@@ -1,24 +1,36 @@
 <template>
-  <el-dialog title="编辑机构名称" :visible.sync="isOpen" width="700px" @close="beforeClose">
-    <el-row class="mt20 pb20 flex flex-center">
-      <div style="flex-shrink: 0;margin-right: 20px;">机构名称</div>
-      <el-input placeholder="请输入机构名称" v-model="inputField" clearable></el-input>
+  <el-dialog title="编辑服务对象" :visible.sync="isOpen" width="700px" @close="beforeClose">
+    <el-row class="mt10 pb20 flex flex-center">
+      <div style="flex-shrink: 0;margin-right: 20px;width: 60px;">姓名</div>
+      <el-input placeholder="请填写" v-model="nickName" clearable></el-input>
+    </el-row>
+    <el-row class="mt10 pb20 flex flex-center">
+      <div style="flex-shrink: 0;margin-right: 20px;width: 60px;">国家/地区</div>
+      <div>{{nation}}</div>
+    </el-row>
+    <el-row class="mt10 pb20 flex flex-center">
+      <div style="flex-shrink: 0;margin-right: 20px;width: 60px;">联系电话</div>
+      <div>{{phonenumber}}</div>
+    </el-row>
+    <el-row class="mt10 pb20 flex flex-center">
+      <div style="flex-shrink: 0;margin-right: 20px;width: 60px;">任职机构</div>
+      <el-input placeholder="请填写" v-model="employedOrgName" clearable></el-input>
     </el-row>
     <el-row class="mb10">
       关联机构路径
     </el-row>
-    <orgPathTree @getPathOrg="getPathOrg" type="edit" :allparId="row.orgPathallParentId" :topGuid="row.orgPathTopGuid" :pathGuid="row.orgPathGuid" :pathParGuid="row.parent_guid"></orgPathTree>
+    <orgPathTree @getPathOrg="getPathOrg" type="edit" :allparId="row.userPathAllPid" :pathGuid="row.userPathGuid" :pathParGuid="row.parent_guid"></orgPathTree>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submitNew" :disabled="!inputField.trim()">保存</el-button>
+      <el-button type="primary" @click="submitNew" :disabled="!nickName.trim() || !employedOrgName.trim()">保存</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
   import {
-    orgUpdateOrgName,
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    namelistUpdate,
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   import orgPathTree from '@/views/serviceManager/agencyInformation/components/orgPathTree'
   export default {
     name: "index",
@@ -36,8 +48,11 @@
     data() {
       return {
         isOpen: true,
-        inputField: '',
-        orgPathGuid: '',
+        nickName: '',
+        phonenumber: '',
+        nation: '中国大陆（+86）',
+        employedOrgName: '',
+        userPathGuid: '-1',
       };
     },
     methods: {
@@ -50,18 +65,18 @@
       },
       // 获取选中的节点
       getPathOrg(data) {
-        this.orgPathGuid = data.orgPathGuid
+        this.userPathGuid = data.pathGuid
       },
       submitNew() {
-        this.orgUpdateOrgName()
+        this.namelistUpdate()
       },
-      async orgUpdateOrgName() {
-        await orgUpdateOrgName({
-          orgPathGuid: this.orgPathGuid,
-          orgNameGuid: this.row.orgNameGuid,
-          orgName: this.inputField,
+      async namelistUpdate() {
+        await namelistUpdate({
+          namelistGuid: this.row.namelistGuid,
+          nickName: this.nickName,
+          employedOrgName: this.employedOrgName,
+          userPathGuid: this.userPathGuid,
           curUserId: this.$store.state.user.adminId,
-          deptId: this.$store.state.user.deptId
         }).then(res  => {
           if(res.OK == 'True') {
 
@@ -85,7 +100,10 @@
       }
     },
     created() {
-      this.inputField = this.row.orgName
+      this.nickName = this.row.nickName
+      this.phonenumber = this.row.phonenumber
+      this.nation = this.row.nation
+      this.employedOrgName = this.row.employedOrgName
     }
   };
 </script>

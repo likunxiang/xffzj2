@@ -17,7 +17,7 @@
   import orgPathTree from '@/views/serviceManager/agencyInformation/components/orgPathTree'
   import {
     orgInsertOrgName,
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     components: {

@@ -4,7 +4,7 @@
     </el-tree>
     <span slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
-      <el-button type="primary" @click="submitFather" :disabled="!fatherScene.orgPathGuid">确 定</el-button>
+      <el-button type="primary" @click="submitFather" :disabled="!fatherScene.pathGuid">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -13,7 +13,7 @@
   import {
     pathGetTopParList, // 获取顶级
     pathGetSonList, // 查询儿子
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     props: {
@@ -84,7 +84,7 @@
         this.treeTitle1 = []
         this.treeTitleString1 = ''
         this.getParent(node)
-        if (this.byteType=='edit' && this.parentId === data.orgPathGuid) {
+        if (this.byteType=='edit' && this.parentId === data.pathGuid) {
           this.$message({
             type: 'error',
             message: '不可以选择本身!'
@@ -128,7 +128,7 @@
         let id = this.chooseRadio
         let data = {}
         for (let i in this.chooseList) {
-          if (id == this.chooseList[i].orgPathGuid) {
+          if (id == this.chooseList[i].pathGuid) {
             data = this.chooseList[i]
           }
         }
@@ -170,9 +170,9 @@
 
       },
       async getSonList(data) {
-        let id = data.orgPathGuid
+        let id = data.pathGuid
         await pathGetSonList({
-          orgPathParGuid: id,
+          parentGuid: id,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false

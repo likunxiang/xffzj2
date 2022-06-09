@@ -1,26 +1,26 @@
 <template>
-  <el-dialog title="查看服务专员详情" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog title="查看服务专员服务详情" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
     <div style="padding-bottom: 60px;">
       <el-descriptions :colon="false" class="margin-top" :column="1" :border="true" style="margin-bottom: 20px;">
         <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="年份">{{row.year}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="月份">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="月份">{{row.month}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="日期">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="日期">{{secRow.day}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="账号名称">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="账号名称">{{thrRow.userName}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="账号开通日期">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="账号开通日期">{{thrRow.registerTime}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="姓名">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="姓名">{{thrRow.nickName}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="国家/区号">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="国家/区号">{{thrRow.nation}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="联系电话">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="联系电话">{{thrRow.phonenumber}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="所在地点">{{row.mouth}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="所在地点">{{thrRow.location}}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="新增注册对象数量" v-if="pageStatus == '1'">{{row.objNumber}}
+        <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="新增注册对象数量" v-if="pageStatus == '1'">{{thrRow.registerNum}}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="my-label" content-class-name="my-content" label="采购验收通过订单数量" v-if="pageStatus == '2'">{{row.objNumber}}
         </el-descriptions-item>
@@ -34,8 +34,6 @@
         <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="任职机构" align="center"></el-table-column>
-        <el-table-column prop="phonenumber" label="岗位类型" align="center"></el-table-column>
-        <el-table-column prop="phonenumber" label="岗位名称" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
         <el-table-column prop="createTime" label="注册日期" align="center" v-if="pageStatus == '1'"></el-table-column>
         <el-table-column prop="nickName" label="采购需求成交订单数量" align="center" v-if="pageStatus == '2'">
@@ -57,6 +55,9 @@
 <script>
   import searchCom from '@/views/components/common/searchCom.vue'
   import pages from '@/views/components/common/pages'
+  import {
+    statisticGetDayRegDetailListByIntroUserId
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -65,6 +66,18 @@
     },
     props: {
       row: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      },
+      secRow: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      },
+      thrRow: {
         type: Object,
         default: () => {
           return {}
@@ -96,16 +109,45 @@
       },
       changePage(page) {
         this.page = page
+        this.getData()
         //
       },
       search(data) {
         this.searchVal = data
         this.page = 1
+        this.getData()
         //
       },
+      getData() {
+        this.statisticGetDayRegDetailListByIntroUserId()
+      },
+      async statisticGetDayRegDetailListByIntroUserId() {
+        await statisticGetDayRegDetailListByIntroUserId({
+          queryFields: this.searchVal,
+          day: this.row.year + '-' + this.row.month + '-' + this.secRow.day.replace('日',''),
+          introducerUserId: this.thrRow.introducerUserId,
+          curUserId: this.$store.state.user.adminId,
+          size: '20',
+          page: this.page
+        }).then(res => {
+          this.loading = false
+          if (res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag.length > 0) {
+              let data = res.Tag[0].Table
+              this.tableData = data
+            } else {
+              this.tableData = []
+            }
+            this.searchResult = this.tableData.length
+            this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
+          }
+        })
+      }
     },
     created() {
-
+      this.getData()
     }
   };
 </script>

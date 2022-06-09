@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tree ref="treeBox" :data="tableData" :highlight-current="true" :default-expanded-keys="[pathParGuid]" node-key="orgPathGuid" :props="defaultProps"
+    <el-tree ref="treeBox" :data="tableData" :highlight-current="true" :default-expanded-keys="[pathParGuid]" node-key="pathGuid" :props="defaultProps"
       @node-expand="getSon" @node-click="choosePath" v-loading="loading">
     </el-tree>
   </div>
@@ -11,7 +11,7 @@
     pathGetTopParList, // 获取顶级
     pathGetSonList, // 查询儿子
     pathGetSonListById, // 查询儿子，通过id
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     props: {
@@ -79,9 +79,9 @@
 
       },
       async getSonList(data) {
-        let id = data.orgPathGuid
+        let id = data.pathGuid
         await pathGetSonList({
-          orgPathParGuid: id,
+          parentGuid: id,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false
@@ -106,11 +106,11 @@
       },
       async pathGetSonListById() {
         await pathGetSonListById({
-          orgPathallParentId: this.allparId,
+          allParentId: this.allparId,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false
-          this.tableData = this.handleTree(res.Tag[0].Table, "orgPathGuid","orgPathParGuid");
+          this.tableData = this.handleTree(res.Tag[0].Table, "pathGuid","parentGuid");
           for (let i in this.tableData) {
             if (this.tableData[i].hasSon == '1' && this.tableData[i].children == undefined) {
               this.tableData[i].children = [{

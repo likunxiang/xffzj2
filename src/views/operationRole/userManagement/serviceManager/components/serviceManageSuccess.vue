@@ -1,6 +1,6 @@
 <template>
-  <el-dialog title="服务经理成果" :visible.sync="isOpen" width="700px" @close="beforeClose">
-    <div>
+  <el-dialog title="服务经理成果" :visible.sync="isOpen" width="900px" @close="beforeClose">
+    <div style="padding-bottom: 20px;">
       <el-table :data="tableData" border v-loading="loading">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
@@ -13,17 +13,25 @@
           </template>
         </el-table-column>
       </el-table>
-      <successDetail v-if="isSuccess" @close='closeSuccess'></successDetail>
+      <successDetail v-if="isSuccess" @close='closeSuccess' :row="row"></successDetail>
     </div>
   </el-dialog>
 </template>
 
 <script>
-  import successDetail from '@/views/operationRole/userManagement/serviceManager/components/serviceManageSuccess'
+  import successDetail from '@/views/operationRole/userManagement/serviceManager/components/successDetail'
   export default {
     name: "index",
-    props: {
+    components: {
       successDetail
+    },
+    props: {
+      row: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
     },
     data() {
       return {
@@ -51,7 +59,7 @@
       }
     },
     created() {
-
+      this.tableData.push(this.row)
     }
   };
 </script>

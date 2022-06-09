@@ -10,7 +10,7 @@
 <script>
   import {
     pathUpdateOrgPathTitle
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     props: {

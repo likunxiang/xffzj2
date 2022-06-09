@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="服务主管招募成果" :visible.sync="isOpen" width="800px" @close="beforeClose">
+  <el-dialog title="服务主管招募成果" :visible.sync="isOpen" width="800px" @close="beforeClose" append-to-body>
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>

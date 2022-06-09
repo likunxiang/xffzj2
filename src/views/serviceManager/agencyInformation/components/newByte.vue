@@ -3,6 +3,15 @@
     <div v-if="byteType=='new'">
       <div class="input-box">
         <div class="flex flex-center">
+          <div class="input-text">服务区域选择</div>
+          <el-input type="text" :value="provincesObj.cityName" placeholder="请选择" suffix-icon="el-icon-search"
+            @focus="openProvinces" />
+        </div>
+        <div class="flex flex-center mt10">
+          <div class="input-text"></div>
+          <div>{{provincesObj.treeTitleString}}</div>
+        </div>
+        <div class="flex flex-center mt10">
           <div class="input-text">父级字节内容</div>
           <el-input type="text" :value="fatherSceneSure.content" placeholder="请选择" suffix-icon="el-icon-search"
             @focus="openFather" />
@@ -38,19 +47,22 @@
       <el-button type="primary" @click="submit" :disabled="!ownByte.trim()">保存</el-button>
     </span>
     <chooseByte v-if="isChoose" @close="closeFather" @getFather="getFather" :pageTitle="pageTitle" :treeTitle="treeTitle" :guid="guid" :parentId='editObj.guid' :byteType="byteType"></chooseByte>
+    <chooseProvinces v-if="isProvinces" @close="closeProvinces" @getProvinces="getProvinces"></chooseProvinces>
   </el-dialog>
 </template>
 
 <script>
   import chooseByte from '@/views/serviceManager/agencyInformation/components/chooseByte.vue'
+  import chooseProvinces from '@/views/serviceManager/agencyInformation/components/chooseProvinces.vue'
   import {
     pathInsert,
     pathUpdate,
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     components: {
-      chooseByte
+      chooseByte,
+      chooseProvinces
     },
     props: {
       byteType: {
@@ -98,6 +110,8 @@
         title: '新建字节内容',
         fatherSceneSure: {},
         treeTitleString: '',
+        provincesObj: {},
+        isProvinces: false,
       };
     },
     methods: {
@@ -115,6 +129,14 @@
       },
       closeFather() {
         this.isChoose = false
+      },
+
+      // 选择服务区域
+      openProvinces() {
+        this.isProvinces = true
+      },
+      closeProvinces() {
+        this.isProvinces = false
       },
 
       submit() {
@@ -135,6 +157,11 @@
         console.log(data);
         this.fatherSceneSure = data
       },
+      // 获取选择的省市区
+      getProvinces(data) {
+        this.provincesObj = data
+        console.log('provincesObj',this.provincesObj);
+      },
       getRadio(data) {
         console.log(data);
         this.byteObj = data // 上级字节内容对象
@@ -142,7 +169,8 @@
       },
       async pathInsert() {
         await pathInsert({
-          pathParentGuid: this.fatherSceneSure.orgPathGuid ? this.fatherSceneSure.orgPathGuid : '0',
+          cityCodeId: this.provincesObj.cityId,
+          parentGuid: this.fatherSceneSure.pathGuid ? this.fatherSceneSure.pathGuid : '0',
           curUserId: this.$store.state.user.adminId,
           content: this.ownByte.trim()
         }).then(res => {
@@ -166,8 +194,9 @@
       },
       async pathUpdate() {
         await pathUpdate({
-          pathParentGuid: this.fatherSceneSure.orgPathGuid ? this.fatherSceneSure.orgPathGuid : '0',
-          orgPathGuid: this.editObj.orgPathGuid,
+          cityCodeId: this.provincesObj.cityId,
+          parentGuid: this.fatherSceneSure.pathGuid ? this.fatherSceneSure.pathGuid : '0',
+          pathGuid: this.editObj.pathGuid,
           content: this.ownByte,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
@@ -195,8 +224,9 @@
       if (this.byteType == 'edit') {
         console.log('editObj',this.editObj);
         this.fatherSceneSure.content = this.editObj.parentContent
-        this.fatherSceneSure.orgPathGuid = this.editObj.orgPathParGuid
+        this.fatherSceneSure.pathGuid = this.editObj.parentGuid
         this.fatherSceneSure.treeTitleString = this.editObj.treeTitleString
+        this.provincesObj.cityId = this.editObj.cityCodeId
         this.ownByte = this.editObj.content
       }
     }

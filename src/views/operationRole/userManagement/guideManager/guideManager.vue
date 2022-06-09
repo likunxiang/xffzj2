@@ -18,7 +18,7 @@
             <el-button type="text" @click="toManage(scope.row)">账号信息管理</el-button>
           </el-row>
           <el-row>
-            <el-button type="text" @click="toSuccess(scope.row)">服务经理成果</el-button>
+            <el-button type="text" @click="toSuccess(scope.row)">服务经理成果1</el-button>
           </el-row>
         </template>
       </el-table-column>

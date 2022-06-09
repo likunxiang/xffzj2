@@ -22,7 +22,7 @@
         <el-table-column prop="phonenumber" label="供应验收通过订单数量" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" @click="openAttDetail(scope.row)">查看服务专员详情</el-button>
+            <el-button type="text" @click="openAttDetail(scope.row)">查看服务专员服务详情</el-button>
           </template>
         </el-table-column>
       </el-table>

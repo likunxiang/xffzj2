@@ -13,7 +13,7 @@
     pathGetTopParList, // 获取顶级
     pathGetSonList, // 查询儿子
     pathDelete,
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     data() {
@@ -64,9 +64,9 @@
 
       },
       async getSonList(data) {
-        let id = data.orgPathGuid
+        let id = data.pathGuid
         await pathGetSonList({
-          orgPathParGuid: id,
+          parentGuid: id,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false
@@ -114,7 +114,7 @@
         let arr = []
         for (let i in this.delList) {
           let obj = {
-            orgPathGuid: this.delList[i].orgPathGuid,
+            pathGuid: this.delList[i].pathGuid,
             curUserId: this.$store.state.user.adminId,
           }
           arr.push(obj)

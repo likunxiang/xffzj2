@@ -9,10 +9,15 @@
       <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="任职机构" align="center"></el-table-column>
-      <el-table-column prop="phonenumber" label="岗位类型" align="center"></el-table-column>
-      <el-table-column prop="phonenumber" label="岗位名称" align="center"></el-table-column>
       <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
       <el-table-column prop="createTime" label="注册日期" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-row>
+            <el-button type="text" @click="toManage(scope.row)">归属专员管理</el-button>
+          </el-row>
+        </template>
+      </el-table-column>
     </el-table>
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
   </div>
@@ -22,12 +27,14 @@
   import searchCom from '@/views/components/common/searchCom.vue'
   import pages from '@/views/components/common/pages'
   import chooseByteTitle from '@/views/choseManager/agencyInformation/components/chooseByteTitle.vue'
+  import affiliationAttManage from '@/views/operationRole/affiliationObjectManagement/serviceObject/components/affiliationAttManage.vue'
   export default {
     name: "index",
     components: {
       searchCom,
       pages,
-      chooseByteTitle
+      chooseByteTitle,
+      affiliationAttManage
     },
     data() {
       return {
@@ -39,6 +46,7 @@
         searchVal: '',
         guidList: [], // 字节内容guid列表
         lastOrgPathContentGuid: '0',  // 最大层级机构字节内容guid
+        openRow: {}
       };
     },
     methods: {
@@ -62,6 +70,13 @@
         console.log('1112',data);
         this.lastOrgPathContentGuid = data
       },
+      toManage(row) {
+        this.isManage = true
+        this.openRow = row
+      },
+      closeManage() {
+        this.isManage = false
+      }
     },
     created() {
 

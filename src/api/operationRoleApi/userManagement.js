@@ -51,3 +51,36 @@ export function changePassword(data) {
     data: data
   })
 }
+
+// web-查询服务专员列表
+export function introducerGetListOfDir(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guidance\\introducer\\getListOfDir_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-将服务专员授权归属主管
+export function introducerGrant2Dir(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\guidance\\introducer\\grant2Dir_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// web-将服务专员脱离归属主管
+export function introducerUnGrant2Dir(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ExSql?SqlCmdName=web\\guidance\\introducer\\unGrant_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

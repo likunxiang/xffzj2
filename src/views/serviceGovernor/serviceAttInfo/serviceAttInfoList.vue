@@ -19,7 +19,7 @@
       </el-table-column>
     </el-table>
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
-    <addAtt v-if="isAdd" @close="closeAdd" @refresh="introducerGetList"></addAtt>
+    <addAtt v-if="isAdd" @close="closeAdd" @refresh="introducerGetListByDirId"></addAtt>
     <delTips v-if="isTips" :row="openRow" @close="closeDelTips"></delTips>
   </div>
 </template>
@@ -30,9 +30,9 @@
   import addAtt from '@/views/serviceGovernor/serviceAttInfo/components/addAtt'
   import delTips from '@/views/serviceGovernor/serviceAttInfo/components/delTips'
   import {
-    introducerGetList,
+    introducerGetListByDirId,
     introducerDelete
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -60,12 +60,12 @@
       search(data) {
         this.searchVal = data
         this.page = 1
-        this.introducerGetList()
+        this.introducerGetListByDirId()
         //
       },
       changePage(page) {
         this.page = page
-        this.introducerGetList()
+        this.introducerGetListByDirId()
         //
       },
       openAdd() {
@@ -97,7 +97,7 @@
                 type: 'success',
                 message: '操作成功!'
               });
-              this.introducerGetList()
+              this.introducerGetListByDirId()
             } else {
               this.$message({
                 type: 'error',
@@ -111,12 +111,11 @@
       closeDelTips() {
         this.isTips = false
       },
-      async introducerGetList() {
+      async introducerGetListByDirId() {
         this.loading = true
-        await introducerGetList({
+        await introducerGetListByDirId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
-          source: '2',
           size: '20',
           page: this.page
         }).then(res => {
@@ -137,7 +136,7 @@
       }
     },
     created() {
-      this.introducerGetList()
+      this.introducerGetListByDirId()
     }
   }
 </script>

@@ -3,7 +3,7 @@
     <div style="margin: 20px 0;">
       <el-button type="primary" @click="openNew">新建字节内容</el-button>
       <el-button type="primary" @click="openNewBatch">批量导入字节内容</el-button>
-      <el-button type="primary" @click="toByteMain">机构路径字节标题管理</el-button>
+      <el-button type="primary" @click="toByteMain">对象路径字节标题管理</el-button>
       <el-button type="primary" @click="toBatchDel">批量删除字节内容</el-button>
     </div>
 
@@ -54,8 +54,8 @@
     pathGetSonList, // 查询儿子
     updateNameTreeNorder1_0_1, // 变更字节内容节点
     pathDelete,
-    web_orgpathtitle_paste
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    web_guidancepathcontent_paste
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     components: {
@@ -316,7 +316,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.pathDelete(this.editSelf.orgPathGuid)
+          this.pathDelete(this.editSelf.pathGuid)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -327,7 +327,7 @@
 
       async pathDelete(id) {
         await pathDelete({
-          orgPathGuid: id,
+          pathGuid: id,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           console.log(res);
@@ -396,8 +396,8 @@
         this.pasteData = this.editData
         console.log('copyData', this.copyData);
         console.log('pasteData', this.pasteData);
-        if (this.copyData.orgPathGuid && this.pasteData.orgPathGuid) {
-          this.web_orgpathtitle_paste()
+        if (this.copyData.pathGuid && this.pasteData.pathGuid) {
+          this.web_guidancepathcontent_paste()
         } else {
           this.$message({
             type: 'error',
@@ -407,13 +407,15 @@
 
       },
       //
-      async web_orgpathtitle_paste() {
-        await web_orgpathtitle_paste({
-          sourceOrgPathGuid: this.copyData.orgPathGuid,
-          targetOrgPathGuid: this.pasteData.orgPathGuid,
+      async web_guidancepathcontent_paste() {
+        this.loading = true
+        await web_guidancepathcontent_paste({
+          sourcePathGuid: this.copyData.pathGuid,
+          targetPathGuid: this.pasteData.pathGuid,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           console.log(res);
+          this.loading = false
           if(res.OK == 'True') {
             if (res.Tag > 0) {
               this.$message({
@@ -433,7 +435,7 @@
               });
             }
           }
-          
+
         })
       },
 
@@ -488,9 +490,9 @@
 
       },
       async getSonList(data) {
-        let id = data.orgPathGuid
+        let id = data.pathGuid
         await pathGetSonList({
-          orgPathParGuid: id,
+          parentGuid: id,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false

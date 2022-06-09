@@ -2,25 +2,25 @@
   <div class="app-container">
     <div class="flex flex-center mb20">
       <div class="mr10">年份</div>
-      <el-date-picker v-model="value1" type="year" placeholder="选择年份">
+      <el-date-picker v-model="year" type="year" format="yyyy" placeholder="选择年份">
       </el-date-picker>
     </div>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="year" label="年份" align="center"></el-table-column>
-      <el-table-column prop="mouth" label="月份" align="center"></el-table-column>
-      <el-table-column prop="nickName" label="新增注册对象数量" align="center">
+      <el-table-column prop="month" label="月份" align="center"></el-table-column>
+      <el-table-column prop="registerNum" label="新增注册对象数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openRegisterDetail(scope.row)">{{scope.row.objNumber}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openRegisterDetail(scope.row)">{{scope.row.registerNum}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="nickName" label="采购验收通过订单数量" align="center">
+      <el-table-column prop="demandAcceptOkNum" label="采购验收通过订单数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openDemandOrder(scope.row)">{{scope.row.demandNumber}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openDemandOrder(scope.row)">{{scope.row.demandAcceptOkNum}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="nickName" label="供应验收通过订单数量" align="center">
+      <el-table-column prop="supplyAcceptOkNum" label="供应验收通过订单数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openSupplyOrder(scope.row)">{{scope.row.supplyNumber}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openSupplyOrder(scope.row)">{{scope.row.supplyAcceptOkNum}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,6 +36,9 @@
   import addRegisterObj from '@/views/serviceGovernor/serviceProgress/components/addRegisterObj'
   import demandCheckOrder from '@/views/serviceGovernor/serviceProgress/components/demandCheckOrder'
   import supplyCheckOrder from '@/views/serviceGovernor/serviceProgress/components/supplyCheckOrder'
+  import {
+    statisticGetYearByDirId
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -56,7 +59,7 @@
         }],
         page: 1,
         pageTotal: 0,
-        value1: '',
+        year: '2022',
         openRow: {},
         isRegister: false,
         isDemand: false,
@@ -64,8 +67,13 @@
       };
     },
     methods: {
+      getYear() {
+        let data = new Date()
+        this.year = data.getFullYear().toString()
+      },
       changePage(page) {
         this.page = page
+        this.statisticGetYearByDirId()
         //
       },
       openRegisterDetail(row) {
@@ -89,10 +97,34 @@
       closeSupplyOrder() {
         this.isSupply = false
       },
+      async statisticGetYearByDirId() {
+        this.loading = true
+        await statisticGetYearByDirId({
+          year: this.year,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          this.loading = false
+          if(res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag.length > 0) {
+              let data = res.Tag[0].Table
+              this.tableData = data
+            } else {
+              this.tableData = []
+            }
+            this.searchResult = this.tableData.length
+            this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
+          }
+        })
+      }
+    },
+    beforeCreate() {
 
     },
     created() {
-
+      this.getYear()
+      this.statisticGetYearByDirId()
     }
   }
 </script>

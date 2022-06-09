@@ -36,7 +36,7 @@
     <!-- <pages @changePage="changePage" :total="pageTotal" :page="page"></pages> -->
 
     <editByte v-if="isEdit" :row="openRow" :length="tableData.length" @close="closeEdit"
-      @refresh="pathGetOrgPathTitleList"></editByte>
+      @refresh="pathGetPathTitleList"></editByte>
   </div>
 </template>
 
@@ -46,8 +46,8 @@
   import {
     getNameListByCatreeGuidAndLevel,
     deleteNameTree,
-    pathGetOrgPathTitleList
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    pathGetPathTitleList
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     components: {
@@ -151,9 +151,9 @@
       //   })
       // }
 
-      async pathGetOrgPathTitleList() {
+      async pathGetPathTitleList() {
         this.loading = true
-        await pathGetOrgPathTitleList({
+        await pathGetPathTitleList({
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false
@@ -168,7 +168,7 @@
       },
     },
     created() {
-      this.pathGetOrgPathTitleList()
+      this.pathGetPathTitleList()
     }
   }
 </script>

@@ -74,3 +74,36 @@ export function getUploadResult(guid) {
     method: 'get',
   })
 }
+
+// 获取省列表
+export function getProvince(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=com\\getProvince&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 获取市列表
+export function getCity(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=com\\getCity&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 获取县/区列表
+export function getCounty(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=com\\getCounty&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}

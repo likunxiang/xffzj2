@@ -18,8 +18,8 @@
   import searchCom from '@/views/components/common/searchCom.vue'
   import pages from '@/views/components/common/pages'
   import {
-    introducerGetRegisteredList
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+    introducerGetRegisteredListByDirId
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -42,15 +42,15 @@
       search(data) {
         this.searchVal = data
         this.page = 1
-        this.introducerGetRegisteredList()
+        this.introducerGetRegisteredListByDirId()
       },
       changePage(page) {
         this.page = page
-        this.introducerGetRegisteredList()
+        this.introducerGetRegisteredListByDirId()
       },
-      async introducerGetRegisteredList() {
+      async introducerGetRegisteredListByDirId() {
         this.loading = true
-        await introducerGetRegisteredList({
+        await introducerGetRegisteredListByDirId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
           size: '20',
@@ -73,7 +73,7 @@
       }
     },
     created() {
-      this.introducerGetRegisteredList()
+      this.introducerGetRegisteredListByDirId()
     }
   }
 </script>

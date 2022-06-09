@@ -1,29 +1,33 @@
 <template>
   <div class="app-container">
     <!-- 字节标题 -->
+    <serviceArea @getProvinces="getProvinces" @toSearch="toSearch"></serviceArea>
     <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch" @getLastGuid='getLastGuid'></chooseByteTitle>
     <div class="flex jsb flex-center">
       <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称'></searchCom>
       <div>
-        <el-button type="primary" @click="openNew">新建机构名称</el-button>
-        <el-button type="primary" @click="openImport">批量新建机构名称</el-button>
+        <el-button type="primary" @click="openNew">新建服务对象</el-button>
+        <el-button type="primary" @click="openImport">批量新建服务对象</el-button>
       </div>
     </div>
     <el-table :data="tableData" border v-loading="loading">
-      <el-table-column prop="orgName" label="机构名称" align="center"></el-table-column>
-      <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
+      <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
+      <el-table-column prop="createTime" label="创建日期" align="center" ></el-table-column>
+      <el-table-column label="操作" align="center" width='240'>
         <template slot-scope="scope">
-          <el-button type="text" @click="editOrg(scope.row)">编辑机构名称</el-button>
-          <el-button type="text" @click="delOrg(scope.row)">删除机构名称</el-button>
+          <el-button type="text" @click="editOrg(scope.row)">编辑服务对象</el-button>
+          <el-button type="text" @click="delOrg(scope.row)">删除服务对象</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
-    <newOrganization v-if="isNew" @close="closeNew" @refresh="orgGetList"></newOrganization>
-    <batchOrganization v-if="isImport" @close="closeImport" @refresh="orgGetList"></batchOrganization>
-    <editOrganization v-if="isEdit" @close="closeEdit" :row="openRow" @refresh="orgGetList"></editOrganization>
+    <newOrganization v-if="isNew" @close="closeNew" @refresh="namelistGetList"></newOrganization>
+    <batchOrganization v-if="isImport" @close="closeImport" @refresh="namelistGetList"></batchOrganization>
+    <editOrganization v-if="isEdit" @close="closeEdit" :row="openRow" @refresh="namelistGetList"></editOrganization>
   </div>
 </template>
 
@@ -34,12 +38,13 @@
   import batchOrganization from '@/views/serviceManager/agencyInformation/components/batchOrganization'
   import editOrganization from '@/views/serviceManager/agencyInformation/components/editOrganization'
   import chooseByteTitle from '@/views/serviceManager/agencyInformation/components/chooseByteTitle.vue'
+  import serviceArea from '@/views/serviceManager/agencyInformation/components/serviceArea.vue'
   import {
-    orgGetList,
+    namelistGetList,
     orgInsertOrgName,
     orgUpdateOrgName,
-    orgDelOrgName,
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    namelistDel,
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     components: {
@@ -47,6 +52,7 @@
       batchOrganization,
       editOrganization,
       chooseByteTitle,
+      serviceArea,
       searchCom,
       pages
     },
@@ -63,30 +69,33 @@
         isNew: false,
         isImport: false,
         isEdit: false,
-        lastOrgPathContentGuid: '0',  // 最大层级机构字节内容guid
+        lastOrgPathContentGuid: '0', // 最大层级机构字节内容guid
+        cityCodeId: '0', //
       };
     },
     methods: {
       getLastGuid(data) {
-        console.log('1112',data);
         this.lastOrgPathContentGuid = data
+      },
+      getProvinces(data) {
+        this.cityCodeId = data.cityId
       },
       search(data) {
         this.searchVal = data
         this.page = 1
-        this.orgGetList()
+        this.namelistGetList()
         //
       },
       toSearch() {
         this.page = 1
-        this.orgGetList()
+        this.namelistGetList()
       },
       getByteGuid(data) {
         this.guidList = data
       },
       changePage(page) {
         this.page = page
-        this.orgGetList()
+        this.namelistGetList()
         //
       },
       openNew() {
@@ -109,42 +118,48 @@
         this.isEdit = false
       },
       delOrg(row) {
+        if (!row.namelistUserId) {
+          this.$confirm(
+            '<p align="left">姓名：' + row.nickName + '</p>' + '<p align="left">国家/区号：' + row.nation + '</p>' +
+            '<p align="left">联系电话：' + row.phonenumber + '</p>' +
+            '<p align="left">该用户未注册，删除后，全网不可见这个服务对象的有关信息。确认删除？</p>',
+            '', {
+              confirmButtonText: '确认',
+              dangerouslyUseHTMLString: true,
+              cancelButtonText: '取消',
+              type: 'warning',
+            }).then(() => {
+            this.namelistDel(row.namelistGuid)
+          }).catch(() => {});
 
-        this.$confirm(
-          '<p align="left">机构名称</p><p align="left">删除后，全网不可见这个机构的有关信息。确认删除？</p>',
-          '', {
-            confirmButtonText: '确认',
-            dangerouslyUseHTMLString: true,
-            cancelButtonText: '取消',
-            type: 'warning',
-          }).then(() => {
-          this.orgDelOrgName(row.orgNameGuid)
-        }).catch(() => {});
+        } else {
+          this.$confirm(
+            '<p align="left">姓名：' + row.nickName + '</p>' + '<p align="left">国家/区号：' + row.nation + '</p>' +
+            '<p align="left">联系电话：' + row.phonenumber + '</p>' + '<p align="left">该用户已经注册，不能删除。</p>',
+            '', {
+              confirmButtonText: '知道了',
+              dangerouslyUseHTMLString: true,
+              showCancelButton: false,
+              cancelButtonText: '取消',
+              type: 'warning',
+            }).then(() => {}).catch(() => {});
+        }
 
 
       },
 
-      async orgGetList() {
+      async namelistGetList() {
         this.loading = true
-        await orgGetList({
-          orgName: this.searchVal,
+        await namelistGetList({
+          cityCodeId: this.cityCodeId,
           size: '20',
           page: this.page,
           curUserId: this.$store.state.user.adminId,
-          orgPathContent1: this.guidList[1] ? this.guidList[1] : '',
-          orgPathContent2: this.guidList[2] ? this.guidList[2] : '',
-          orgPathContent3: this.guidList[3] ? this.guidList[3] : '',
-          orgPathContent4: this.guidList[4] ? this.guidList[4] : '',
-          orgPathContent5: this.guidList[5] ? this.guidList[5] : '',
-          orgPathContent6: this.guidList[6] ? this.guidList[6] : '',
-          orgPathContent7: this.guidList[7] ? this.guidList[7] : '',
-          orgPathContent8: this.guidList[8] ? this.guidList[8] : '',
-          orgPathContent9: this.guidList[9] ? this.guidList[9] : '',
-          orgPathContent10: this.guidList[10] ? this.guidList[10] : '',
-          lastOrgPathContentGuid: this.lastOrgPathContentGuid
-        }).then( res => {
+          userPathGuid: this.lastOrgPathContentGuid,
+          queryFields: this.searchVal
+        }).then(res => {
           this.loading = false
-          if(res.OK == 'True') {
+          if (res.OK == 'True') {
 
             console.log(res);
             if (res.Tag.length > 0) {
@@ -158,34 +173,26 @@
           }
         })
       },
-      async orgDelOrgName(id) {
-        await orgDelOrgName({
-          orgNameGuid: id,
+      async namelistDel(id) {
+        await namelistDel({
+          namelistGuid: id,
           curUserId: this.$store.state.user.adminId,
           deptId: this.$store.state.user.deptId,
         }).then(res => {
-          if(res.OK == 'True') {
+          if (res.OK == 'True') {
 
             console.log(res);
-            if (res.Tag[0].Table[0].delType < 2) {
+            if (res.Tag[0] > 0) {
               this.$message({
                 type: 'success',
                 message: '操作成功!'
               });
-              this.orgGetList()
+              this.namelistGetList()
             } else {
-              // 已注册或已签约
-              this.$confirm(
-                '<p align="left">机构名称</p><p align="left">已注册或者已签约，不能删除。</p>',
-                '', {
-                  confirmButtonText: '知道了',
-                  dangerouslyUseHTMLString: true,
-                  cancelButtonText: '取消',
-                  showCancelButton: false,
-                  type: 'warning',
-                }).then(() => {
-                //
-              }).catch(() => {});
+              this.$message({
+                type: 'error',
+                message: '操作失败!'
+              });
             }
 
           }
@@ -193,7 +200,7 @@
       }
     },
     created() {
-      this.orgGetList()
+      this.namelistGetList()
     }
   }
 </script>

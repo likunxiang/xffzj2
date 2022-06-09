@@ -15,8 +15,8 @@
 
 <script>
   import {
-    pathGetOrgPathTitleList
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    pathGetPathTitleList
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   import chooseByteContent from './chooseByteContent.vue'
   export default {
     name: "index",
@@ -77,7 +77,7 @@
       getByteGuid(data) {
         this.checkedList[this.byteIndex - 1] = data
         this.resetCheckedList(this.byteIndex)
-        this.guidList[this.byteIndex] = data.orgPathGuid
+        this.guidList[this.byteIndex] = data.pathGuid
         this.guidList.splice(this.byteIndex + 1, )
         this.guidListName[this.byteIndex] = data.content
         this.guidListName.splice(this.byteIndex + 1, )
@@ -95,8 +95,8 @@
         }
         this.checkedList = this.clone(this.checkedList)
       },
-      async pathGetOrgPathTitleList() {
-        await pathGetOrgPathTitleList({
+      async pathGetPathTitleList() {
+        await pathGetPathTitleList({
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           if (res.Tag.length) {
@@ -119,7 +119,7 @@
     },
     created() {
       this.guidList[0] = this.openRow.guid
-      this.pathGetOrgPathTitleList()
+      this.pathGetPathTitleList()
     }
   }
 </script>

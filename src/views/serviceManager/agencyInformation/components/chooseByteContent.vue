@@ -9,7 +9,7 @@
       <el-row class="mt20">
         <el-radio-group v-model="radio" @change="getByteObj">
           <el-row style="margin-bottom: 5px;" v-for="(item,index) in tableData" :key="index">
-            <el-radio :label="item.orgPathGuid">{{item.content}}</el-radio>
+            <el-radio :label="item.pathGuid">{{item.content}}</el-radio>
           </el-row>
 
         </el-radio-group>
@@ -25,10 +25,10 @@
   import {
     getTopParentNameList_1_0_1, // 获取顶级
     getChildNameList_1_0_1,// 查询儿子
-    pathGetTopParList,
+    pathGetSerchTopParList,
     pathGetListByLevel,
-    pathGetSonList
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    pathGetSearchSonList
+  } from '@/api/serviceManagerApi/serviceManagerCom.js'
   export default {
     name: "index",
     props: {
@@ -73,7 +73,7 @@
       getByteObj(val) {
         // 通过切换匹配对象
         for (let i in this.tableData) {
-          if (this.tableData[i].orgPathGuid === val) {
+          if (this.tableData[i].pathGuid === val) {
             this.checkedByte = this.tableData[i]
           }
         }
@@ -82,24 +82,22 @@
         let data = this.checkedByte
         this.$emit('getByteGuid', data)
         console.log('3333',data);
-        this.$emit('getLastGuid',data.orgPathGuid)
+        this.$emit('getLastGuid',data.pathGuid)
         this.close()
       },
       getTableData() {
         this.loading = true
         let id = this.guidList[this.byteIndex - 1]
+        console.log('this.guidList',this.guidList);
         if (this.byteIndex > 1) {
           this.getSonList(id)
         } else {
-          this.pathGetTopParList()
+          this.pathGetSerchTopParList()
         }
       },
-      async pathGetTopParList() {
-        await pathGetListByLevel({
-          level: this.openRow.level,
+      async pathGetSerchTopParList() {
+        await pathGetSerchTopParList({
           content: this.searchVal,
-          size: '2000',
-          page: 1,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false
@@ -112,8 +110,9 @@
         })
       },
       async getSonList(id) {
-        await pathGetSonList({
-          orgPathParGuid: id,
+        await pathGetSearchSonList({
+          parentGuid: id,
+          content: this.searchVal,
           curUserId: this.$store.state.user.adminId,
         }).then(res => {
           this.loading = false

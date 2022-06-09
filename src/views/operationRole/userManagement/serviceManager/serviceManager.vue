@@ -26,7 +26,7 @@
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
     <newGov v-if="isNew" @close="closeNew" :pageStatus="pageStatus" :row="openRow" @refresh="getList"></newGov>
     <accountMessage v-if="isManage" @close="closeManage" :row="openRow" @refresh="getList"></accountMessage>
-    <serviceManageSuccess v-if="isSuccess" @close="closeSuccess"></serviceManageSuccess>
+    <serviceManageSuccess v-if="isSuccess" @close="closeSuccess" :row="openRow"></serviceManageSuccess>
   </div>
 </template>
 

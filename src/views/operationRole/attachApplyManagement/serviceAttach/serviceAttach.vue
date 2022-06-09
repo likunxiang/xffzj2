@@ -7,7 +7,7 @@
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
       <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-      <el-table-column prop="phonenumber" label="所在地区" align="center"></el-table-column>
+      <el-table-column prop="location" label="所在地区" align="center"></el-table-column>
       <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
       <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="来源" align="center"></el-table-column>
@@ -26,6 +26,12 @@
   import searchCom from '@/views/components/common/searchCom.vue'
   import pages from '@/views/components/common/pages'
   import delTips from '@/views/choseGovernor/guideAttInfo/components/delTips'
+  import {
+    introducerGetListBySource
+  } from "@/api/operationRoleApi/attachApplyManagement.js"
+  import {
+    introducerDelete
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -65,12 +71,57 @@
           this.introducerDelete(row.introducerGuid)
         }
       },
+      async introducerDelete(id) {
+        await introducerDelete({
+          introducerGuid: id,
+          curUserId: this.$store.state.user.adminId,
+        }).then(res => {
+          if (res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag[0] > 0) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              this.introducerGetListBySource()
+            } else {
+              this.$message({
+                type: 'error',
+                message: '操作失败!'
+              });
+            }
+
+          }
+        })
+      },
       closeDelTips() {
         this.isTips = false
       },
+
+      async introducerGetListBySource() {
+        this.loading = true
+        await introducerGetListBySource({
+          phonenumber: this.searchVal,
+          source: '3',
+          curUserId: this.$store.state.user.adminId,
+          size: '20',
+          page: this.page
+        }).then(res => {
+          this.loading = false
+          if (res.Tag.length) {
+            let data = res.Tag[0].Table
+            this.tableData = data
+            this.pageTotal = (this.page - 1) * 20 + 21
+          } else {
+            this.tableData = []
+            this.pageTotal = (this.page - 1) * 20 + 1
+          }
+        })
+      }
     },
     created() {
-
+      this.introducerGetListBySource()
     }
   }
 </script>

@@ -7,12 +7,12 @@
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
       <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-      <el-table-column prop="phonenumber" label="所在地点" align="center"></el-table-column>
-      <el-table-column prop="cattypeName" label="权限机构数量" align="center">
+      <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
+      <!-- <el-table-column prop="cattypeName" label="权限机构数量" align="center">
         <template slot-scope="scope">
           {{parseInt(scope.row.noSignOrgNum) + parseInt(scope.row.signOrgNum)}}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="openDetail(scope.row)">查看权限服务对象数量详情</el-button>
@@ -29,8 +29,8 @@
   import pages from '@/views/components/common/pages'
   import jurisdictionNumber from '@/views/serviceGovernor/serviceProgress/components/jurisdictionNumber'
   import {
-    getValidStaffList
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+    introducerGetValidNMListByInUserId
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -61,15 +61,15 @@
       search(data) {
         this.searchVal = data
         this.page = 1
-        this.getValidStaffList()
+        this.introducerGetValidNMListByInUserId()
       },
       changePage(page) {
         this.page = page
-        this.getValidStaffList()
+        this.introducerGetValidNMListByInUserId()
       },
-      async getValidStaffList() {
+      async introducerGetValidNMListByInUserId() {
         this.loading = true
-        await getValidStaffList({
+        await introducerGetValidNMListByInUserId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
           size: '20',
@@ -92,7 +92,7 @@
       }
     },
     created() {
-      this.getValidStaffList()
+      this.introducerGetValidNMListByInUserId()
     }
   }
 </script>
