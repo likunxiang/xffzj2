@@ -1,24 +1,24 @@
 <template>
-  <el-dialog title="归属主管管理" :visible.sync="isOpen" width="900px" @close="beforeClose">
+  <el-dialog title="归属主管管理" :visible.sync="isOpen" width="1000px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
+        <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
       </el-table>
       <div class="flex flex-center mb20">
         <template v-if="isAllocation">
-          <div class="title-bg">归属主管管理</div>
+          <div class="title-bg1">归属主管管理</div>
           <div class="ml0">
             <el-button type="primary" @click="allocation">授权归属主管</el-button>
             <el-button type="primary" :disabled="row.directorUserId == '-1'" @click="relieveAllocation">脱离归属主管</el-button>
           </div>
         </template>
         <template v-else>
-          <div class="title-bg">专员归属管理</div>
+          <div class="title-bg1">专员归属管理</div>
           <div class="ml0">
             <el-button type="primary" @click="saveAllocation" :disabled="!unitInfo.userId.length">确定</el-button>
           </div>
@@ -43,7 +43,7 @@
         <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       </el-table>
       <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
@@ -93,7 +93,11 @@
         chooseList: [],
         unitInfo: {
           userId: '',
-          name: ''
+          name: '',
+          userName: '',
+          nickName: '',
+          nation: '',
+          phonenumber : '',
         }, // 归属的选中数据
       };
     },
@@ -110,7 +114,12 @@
         if (data) {
           this.unitInfo.userId = data.userId
           this.unitInfo.name = data.username
+          this.unitInfo.userName = data.userName
+          this.unitInfo.nickName =data.nickName
+          this.unitInfo.nation = data.nation
+          this.unitInfo.phonenumber =data.phonenumber
         }
+        console.log('unitInfo',this.unitInfo);
       },
 
       search(data) {
@@ -129,12 +138,16 @@
         this.isAllocation = false
         this.unitInfo = {
           userId: '',
-          name: ''
+          name: '',
+          userName: '',
+          nickName: '',
+          nation: '',
+          phonenumber : '',
         }
         this.getRoleUserList()
       },
       relieveAllocation() {
-        let row = this.tableDataFirst[0]
+        let row = this.tableData[0]
         this.$confirm(
           '<p align="left">账号名称：' + row.userName + '</p>' +
           '<p align="left">姓名：' + row.nickName + '</p>' +
@@ -152,7 +165,7 @@
       },
       // 确认归属
       saveAllocation() {
-        let row = this.tableData[0]
+        let row = this.unitInfo
         this.$confirm(
           '<p align="left">账号名称：' + row.userName + '</p>' +
           '<p align="left">姓名：' + row.nickName + '</p>' +
@@ -271,4 +284,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .title-bg1 {
+    background-color: #F2F2F2;
+    padding: 10px;
+    width: 200px;
+  }
 </style>

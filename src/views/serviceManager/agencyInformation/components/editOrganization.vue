@@ -104,6 +104,7 @@
       this.phonenumber = this.row.phonenumber
       this.nation = this.row.nation
       this.employedOrgName = this.row.employedOrgName
+      this.userPathGuid = this.row.userPathGuid
     }
   };
 </script>

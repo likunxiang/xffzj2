@@ -5,7 +5,7 @@
       <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
       <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
     </el-table>

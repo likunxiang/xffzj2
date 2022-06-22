@@ -1,15 +1,15 @@
 <template>
-  <el-dialog title="服务主管招募成果" :visible.sync="isOpen" width="800px" @close="beforeClose">
+  <el-dialog title="服务主管招募成果" :visible.sync="isOpen" width="1000px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
+        <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       </el-table>
       <div class="flex flex-center mb20">
-        <div class="title-bg">服务主管招募成果</div>
+        <div class="title-bg1">服务主管招募成果</div>
         <div class="ml0">统计主管当前的服务专员招募名单以及这些名单是否已经开通账号</div>
       </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -17,7 +17,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的电话号码'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="所在地点" align="center"></el-table-column>
             <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
@@ -29,7 +29,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的电话号码'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="所在地点" align="center"></el-table-column>
             <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
@@ -40,7 +40,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的电话号码'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="所在地点" align="center"></el-table-column>
             <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
@@ -57,11 +57,11 @@
 <script>
   import pages from '@/views/components/common/pages'
   import searchCom from '@/views/components/common/searchCom.vue'
-  import { introducerGetList } from '@/api/choseManagerApi/choseManagerCom.js'
   import {
-    introducerGetRegisteredList,
-    introducerGetUnRegisteredList
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+    introducerGetListByDirId,
+    introducerGetUnRegisterListByDirId, // 未开通
+    introducerGetRegisterListByDirId, // 已开通
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -114,20 +114,20 @@
       },
       getData() {
         if(this.activeName == 'first') {
-          this.introducerGetList()
+          this.introducerGetListByDirId()
         } else if (this.activeName == 'second'){
-          this.introducerGetUnRegisteredList()
+          this.introducerGetUnRegisterListByDirId()
         } else {
-          this.introducerGetRegisteredList()
+          this.introducerGetRegisterListByDirId()
         }
       },
+
       // 总的招募名单
-      async introducerGetList() {
+      async introducerGetListByDirId() {
         this.loading = true
-        await introducerGetList({
+        await introducerGetListByDirId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
-          source: '2',
           size: '20',
           page: this.page
         }).then(res => {
@@ -147,13 +147,14 @@
         })
       },
       // 已开通
-      async introducerGetRegisteredList() {
+      async introducerGetRegisterListByDirId() {
         this.loading = true
-        await introducerGetRegisteredList({
+        await introducerGetRegisterListByDirId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
           size: '20',
-          page: this.page
+          page: this.page,
+          dirUserId: this.row.userId
         }).then(res => {
           this.loading = false
           if (res.OK == 'True') {
@@ -171,13 +172,14 @@
         })
       },
       // 未开通
-      async introducerGetUnRegisteredList() {
+      async introducerGetUnRegisterListByDirId() {
         this.loading = true
-        await introducerGetUnRegisteredList({
+        await introducerGetUnRegisterListByDirId({
           phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
           size: '20',
-          page: this.page
+          page: this.page,
+          dirUserId: this.row.userId
         }).then(res => {
           this.loading = false
           if (res.OK == 'True') {
@@ -203,7 +205,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .title-bg {
+  .title-bg1 {
     width: 150px;
     padding: 10px 0;
     background-color: #D7D7D7;

@@ -117,7 +117,7 @@ export function pathUpdateOrgPathTitle(data) {
   axios.defaults.baseURL = '/api'
   return request({
     xf_url: '/api',
-    url: '/QueryData?SqlCmdName=web\\guidance\\path\\updateOrgPathTitle_1_0_1&DBC=w_m',
+    url: '/Exsql?SqlCmdName=web\\guidance\\path\\updateOrgPathTitle_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })
@@ -162,6 +162,17 @@ export function namelistGetList(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=web\\guidance\\namelist\\getList_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+//web-批量新增服务对象(文件导入)
+export function web_addByFileForNM(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ProxyService/web_addByFileForNM?CustomMimeType=application/json',
     method: 'post',
     data: data
   })

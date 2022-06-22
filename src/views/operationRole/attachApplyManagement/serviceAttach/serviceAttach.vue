@@ -5,7 +5,7 @@
     </div>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       <el-table-column prop="location" label="所在地区" align="center"></el-table-column>
       <el-table-column prop="createTime" label="添加日期" align="center"></el-table-column>
@@ -55,10 +55,12 @@
       search(data) {
         this.searchVal = data
         this.page = 1
+        this.introducerGetListBySource()
         //
       },
       changePage(page) {
         this.page = page
+        this.introducerGetListBySource()
         //
       },
       delInfo(row) {
@@ -117,6 +119,7 @@
             this.tableData = []
             this.pageTotal = (this.page - 1) * 20 + 1
           }
+          this.searchResult = this.tableData.length
         })
       }
     },

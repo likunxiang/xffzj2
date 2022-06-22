@@ -12,7 +12,7 @@
     </div>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
       <el-table-column prop="createTime" label="创建日期" align="center" ></el-table-column>

@@ -1,17 +1,17 @@
 <template>
-  <el-dialog title="权限对象统计" :visible.sync="isOpen" width="800px" @close="beforeClose">
+  <el-dialog title="权限对象统计" :visible.sync="isOpen" width="1000px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
         <!-- <el-table-column prop="phonenumber" label="权限机构数量" align="center"></el-table-column> -->
       </el-table>
       <div class="flex flex-center mb20">
-        <div class="title-bg">权限服务对象</div>
+        <div class="title-bg1">权限服务对象</div>
         <div class="ml0">统计主管当前团队的权限服务对象状态</div>
       </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -19,7 +19,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="serveOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
@@ -31,7 +31,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="serveOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
@@ -42,7 +42,7 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
             <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
@@ -207,7 +207,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .title-bg {
+  .title-bg1 {
     width: 150px;
     padding: 10px 0;
     background-color: #D7D7D7;

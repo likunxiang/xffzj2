@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="flex flex-center mb20">
       <div class="mr10">年份</div>
-      <el-date-picker v-model="year" type="year" format="yyyy" placeholder="选择年份">
+      <el-date-picker v-model="year" type="year" value-format="yyyy" placeholder="选择年份" @change="statisticGetYearByDirId">
       </el-date-picker>
     </div>
     <el-table :data="tableData" border v-loading="loading">
@@ -10,21 +10,21 @@
       <el-table-column prop="month" label="月份" align="center"></el-table-column>
       <el-table-column prop="registerNum" label="新增注册对象数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openRegisterDetail(scope.row)">{{scope.row.registerNum}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openRegisterDetail(scope.row)" :disabled="!scope.row.registerNum >= 0">{{scope.row.registerNum}}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="demandAcceptOkNum" label="采购验收通过订单数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openDemandOrder(scope.row)">{{scope.row.demandAcceptOkNum}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openDemandOrder(scope.row)" :disabled="!scope.row.demandAcceptOkNum >= 0">{{scope.row.demandAcceptOkNum}}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="supplyAcceptOkNum" label="供应验收通过订单数量" align="center">
         <template slot-scope="scope">
-          <el-button style="text-decoration: underline;" type="text" @click="openSupplyOrder(scope.row)">{{scope.row.supplyAcceptOkNum}}</el-button>
+          <el-button style="text-decoration: underline;" type="text" @click="openSupplyOrder(scope.row)" :disabled="!scope.row.supplyAcceptOkNum >= 0">{{scope.row.supplyAcceptOkNum}}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
+    <!-- <pages @changePage="changePage" :total="pageTotal" :page="page"></pages> -->
     <addRegisterObj v-if="isRegister" @close="closeRegisterDetail" :row="openRow"></addRegisterObj>
     <demandCheckOrder v-if="isDemand" @close="closeDemandOrder" :row="openRow"></demandCheckOrder>
     <supplyCheckOrder v-if="isSupply" @close="closeSupplyOrder" :row="openRow"></supplyCheckOrder>

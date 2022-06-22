@@ -1,15 +1,15 @@
 <template>
-  <el-dialog title="服务主管服务成果" :visible.sync="isOpen" width="800px" @close="beforeClose">
+  <el-dialog title="服务主管服务成果" :visible.sync="isOpen" width="1000px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
+        <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       </el-table>
       <div class="flex flex-center mb20">
-        <div class="title-bg">服务主管服务成果</div>
+        <div class="title-bg1">服务主管服务成果</div>
         <div class="ml0">统计主管自账号开具以来的成果。</div>
       </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -17,13 +17,11 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="任职机构" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位类型" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位名称" align="center"></el-table-column>
+            <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="注册日期" align="center"></el-table-column>
+            <el-table-column prop="registerTime" label="注册日期" align="center"></el-table-column>
           </el-table>
 
         </el-tab-pane>
@@ -31,26 +29,22 @@
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="任职机构" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位类型" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位名称" align="center"></el-table-column>
+            <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="采购验收通过订单数量" align="center"></el-table-column>
+            <el-table-column prop="demandAcceptOkNum" label="采购验收通过订单数量" align="center"></el-table-column>
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="供应验收通过订单数量" name="third">
           <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称或者联系电话'></searchCom>
           <el-table :data="tableData" border v-loading="loading">
             <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-            <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+            <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
             <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="任职机构" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位类型" align="center"></el-table-column>
-            <el-table-column prop="phonenumber" label="岗位名称" align="center"></el-table-column>
+            <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="供应验收通过订单数量" align="center"></el-table-column>
+            <el-table-column prop="supplyAcceptOkNum" label="供应验收通过订单数量" align="center"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -63,11 +57,11 @@
 <script>
   import pages from '@/views/components/common/pages'
   import searchCom from '@/views/components/common/searchCom.vue'
-  import { introducerGetList } from '@/api/choseManagerApi/choseManagerCom.js'
   import {
-    introducerGetRegisteredList,
-    introducerGetUnRegisteredList
-  } from '@/api/choseGovernorApi/choseGovernorCom.js'
+    statisticGetAllBelongRegDetailListByDirUserId, // 注册
+    statisticGetAllBeloDeOrderOkNumDetailListByDirUserId, // 采购
+    statisticGetAllBeloSuOrderOkNumDetailListByDirUserId // 供应
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -120,20 +114,20 @@
       },
       getData() {
         if(this.activeName == 'first') {
-          this.introducerGetList()
+          this.statisticGetAllBelongRegDetailListByDirUserId()
         } else if (this.activeName == 'second'){
-          this.introducerGetUnRegisteredList()
+          this.statisticGetAllBeloDeOrderOkNumDetailListByDirUserId()
         } else {
-          this.introducerGetRegisteredList()
+          this.statisticGetAllBeloSuOrderOkNumDetailListByDirUserId()
         }
       },
-      // 总的招募名单
-      async introducerGetList() {
+      // 注册
+      async statisticGetAllBelongRegDetailListByDirUserId() {
         this.loading = true
-        await introducerGetList({
-          phonenumber: this.searchVal,
+        await statisticGetAllBelongRegDetailListByDirUserId({
+          queryFields: this.searchVal,
+          dirUserId: this.row.userId,
           curUserId: this.$store.state.user.adminId,
-          source: '2',
           size: '20',
           page: this.page
         }).then(res => {
@@ -152,11 +146,12 @@
           }
         })
       },
-      // 已开通
-      async introducerGetRegisteredList() {
+      // 采购
+      async statisticGetAllBeloSuOrderOkNumDetailListByDirUserId() {
         this.loading = true
-        await introducerGetRegisteredList({
-          phonenumber: this.searchVal,
+        await statisticGetAllBeloSuOrderOkNumDetailListByDirUserId({
+          queryFields: this.searchVal,
+          dirUserId: this.row.userId,
           curUserId: this.$store.state.user.adminId,
           size: '20',
           page: this.page
@@ -176,11 +171,12 @@
           }
         })
       },
-      // 未开通
-      async introducerGetUnRegisteredList() {
+      // 供应
+      async statisticGetAllBeloDeOrderOkNumDetailListByDirUserId() {
         this.loading = true
-        await introducerGetUnRegisteredList({
-          phonenumber: this.searchVal,
+        await statisticGetAllBeloDeOrderOkNumDetailListByDirUserId({
+          queryFields: this.searchVal,
+          dirUserId: this.row.userId,
           curUserId: this.$store.state.user.adminId,
           size: '20',
           page: this.page
@@ -209,7 +205,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .title-bg {
+  .title-bg1 {
     width: 150px;
     padding: 10px 0;
     background-color: #D7D7D7;

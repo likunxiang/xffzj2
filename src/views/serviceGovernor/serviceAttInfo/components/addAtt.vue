@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="添加引导专员" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog title="添加服务专员" :visible.sync="isOpen" width="700px" @close="beforeClose">
     <div style="padding-top: 20px;">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
         <el-row>

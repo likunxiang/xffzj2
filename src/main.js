@@ -13,13 +13,28 @@ import store from './store'
 import router from './router'
 import directive from './directive' //directive
 import plugins from './plugins' // plugins
-import { download } from '@/utils/request'
+import {
+  download
+} from '@/utils/request'
 
 import './assets/icons' // icon
 import './permission' // permission control
-import { getDicts } from "@/api/system/dict/data";
-import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree,clone , getNewDay } from "@/utils/ruoyi";
+import {
+  getDicts
+} from "@/api/system/dict/data";
+import {
+  getConfigKey
+} from "@/api/system/config";
+import {
+  parseTime,
+  resetForm,
+  addDateRange,
+  selectDictLabel,
+  selectDictLabels,
+  handleTree,
+  clone,
+  getNewDay
+} from "@/utils/ruoyi";
 // 分页组件
 import Pagination from "@/components/Pagination";
 // 自定义表格工具组件
@@ -51,6 +66,8 @@ Vue.prototype.clone = clone // 刷新视图
 Vue.prototype.getNewDay = getNewDay // 日期加上天数得到新的日期
 // 全局修改默认配置，按下ESC不能关闭弹窗
 Element.Dialog.props.closeOnPressEscape.default = false
+// 全局修改默认配置，点击空白处不能关闭弹窗
+Element.Dialog.props.closeOnClickModal.default = false
 
 // 全局组件挂载
 Vue.component('DictTag', DictTag)

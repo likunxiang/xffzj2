@@ -23,10 +23,10 @@
     methods: {
       close() {
         this.isOpen = false
+        this.$emit('refresh')
         this.$emit('close')
       },
       beforeClose() {
-        this.$emit('refresh')
         this.close()
       },
     },

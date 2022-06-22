@@ -1,20 +1,20 @@
 <template>
-  <el-dialog title="" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
-    <div style="padding-bottom: 60px;">
+  <el-dialog title="  " :visible.sync="isOpen" width="1000px" @close="beforeClose" append-to-body>
+    <div style="padding-bottom: 60px;padding-top: 20px; ">
       <el-table :data="tableDataFirst" border class="mb20">
         <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       </el-table>
-      <div class="title-bg mb20">引导主管招募成果</div>
+      <div class="title-bg1 mb20">服务经理服务成果</div>
       <serviceArea @getProvinces="getProvinces" @toSearch="toSearch"></serviceArea>
       <chooseByteTitle @getByteGuid="getByteGuid" @toSearch="toSearch" @getLastGuid='getLastGuid'></chooseByteTitle>
       <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的机构名称'></searchCom>
       <el-table :data="tableData" border v-loading="loading">
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="employedOrgName" label="任职机构" align="center"></el-table-column>
         <el-table-column prop="createTime" label="创建日期" align="center"></el-table-column>
@@ -70,6 +70,11 @@
       },
       beforeClose() {
         this.close()
+      },
+      // 获取选择的省市区
+      getProvinces(data) {
+        this.provincesObj = data
+        console.log('provincesObj',this.provincesObj);
       },
       getByteGuid(data) {
         this.guidList = data
@@ -127,7 +132,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .title-bg {
+  .title-bg1 {
     width: 150px;
     padding: 10px 0;
     background-color: #D7D7D7;

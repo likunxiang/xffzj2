@@ -1,11 +1,11 @@
 <template>
-  <el-dialog title="服务经理成果" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog title="服务主管成果" :visible.sync="isOpen" width="1000px" @close="beforeClose">
     <div style="padding-bottom: 60px;">
       <el-table :data="tableData" border v-loading="loading">
-        <el-table-column prop="nickName" label="账号名称" align="center"></el-table-column>
+        <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -21,9 +21,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <recruitingResults v-if="isRecruiting" @close="closeRecruitingSuccess"></recruitingResults>
-      <teamMember v-if="isTeam" @close="closeTeamMember"></teamMember>
-      <serviceResults v-if="isService" @close="closeServiceSuccess"></serviceResults>
+      <recruitingResults v-if="isRecruiting" @close="closeRecruitingSuccess" :row="openRow"></recruitingResults>
+      <teamMember v-if="isTeam" @close="closeTeamMember" :row="openRow"></teamMember>
+      <serviceResults v-if="isService" @close="closeServiceSuccess" :row="openRow"></serviceResults>
     </div>
   </el-dialog>
 </template>

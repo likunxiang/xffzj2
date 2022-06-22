@@ -5,9 +5,9 @@
     </div>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
-      <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
+      <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
       <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
@@ -27,6 +27,7 @@
     <pages @changePage="changePage" :total="pageTotal" :page="page"></pages>
     <affiliationManage v-if="isAffiliation" :row="openRow" @close="closeAffiliation" @refresh="introducerGetListOfDir"></affiliationManage>
     <jurisdictionObjStatistics v-if="isStatistics" @close="closeStatistics" :row="openRow"></jurisdictionObjStatistics>
+    <serviceResults v-if="isResult" @close="closeResult" :row="openRow"></serviceResults>
   </div>
 </template>
 
@@ -35,6 +36,7 @@
   import pages from '@/views/components/common/pages'
   import affiliationManage from '@/views/operationRole/userManagement/serviceAttach/components/affiliationManage'
   import jurisdictionObjStatistics from '@/views/operationRole/userManagement/serviceAttach/components/jurisdictionObjStatistics'
+  import serviceResults from '@/views/operationRole/userManagement/serviceAttach/components/serviceResults'
   import {
     introducerGetListOfDir
   } from "@/api/operationRoleApi/userManagement.js"
@@ -44,7 +46,8 @@
       searchCom,
       pages,
       affiliationManage,
-      jurisdictionObjStatistics
+      jurisdictionObjStatistics,
+      serviceResults
     },
     data() {
       return {
@@ -94,8 +97,10 @@
         this.isResult = false
       },
       async introducerGetListOfDir() {
+        this.loading = true
         await introducerGetListOfDir({
           curUserId: this.$store.state.user.adminId,
+          phonenumber: this.searchVal,
           page: this.page,
           size: '20',
         }).then(res => {
@@ -110,6 +115,7 @@
               this.tableData = []
               this.pageTotal = (this.page - 1) * 20 + 1
             }
+            this.searchResult = this.tableData.length
           }
         })
       }

@@ -12,12 +12,12 @@
           {{secRow.registerNum}}
         </el-descriptions-item>
       </el-descriptions>
-      <div class="title-bg">引导专员列表</div>
+      <div class="title-bg1">服务专员列表</div>
       <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的联系电话'></searchCom>
       <el-table :data="tableData" border v-loading="loading">
         <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
         <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-        <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+        <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
         <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
         <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
         <el-table-column prop="registerNum" label="新增注册对象数量" align="center"></el-table-column>
@@ -138,7 +138,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .title-bg {
+  .title-bg1 {
     background-color: #F2F2F2;
     padding: 10px;
     margin-bottom: 20px;

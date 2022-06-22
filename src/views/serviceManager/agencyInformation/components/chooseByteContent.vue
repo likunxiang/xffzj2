@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose">
+  <el-dialog :title="title" :visible.sync="isOpen" width="700px" @close="beforeClose" append-to-body>
     <div class="p20" style="min-height: 200px;" v-loading="loading">
       <el-input placeholder="请输入你要找的内容" v-model="searchVal" @keyup.enter.native="searchClass"
         style="width: 200px;" clearable @clear="searchClass">

@@ -3,10 +3,11 @@
     <searchCom @toSearch='search' :searchResult='searchResult' placeholderText='请输入你要找的联系电话'></searchCom>
     <el-table :data="tableData" border v-loading="loading">
       <el-table-column prop="userName" label="账号名称" align="center"></el-table-column>
-      <el-table-column prop="createTime" label="账号开通日期" align="center"></el-table-column>
+      <el-table-column prop="registerTime" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="nickName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="nation" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="nation" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="phonenumber" label="联系电话" align="center"></el-table-column>
+      <el-table-column prop="location" label="所在地点" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="text" @click="toServiceGovService(scope.row)">服务专员服务成果</el-button>
@@ -23,8 +24,8 @@
   import searchCom from '@/views/components/common/searchCom.vue'
   import serviceAttService from '@/views/serviceGovernor/serviceSuccess/components/serviceAttService'
   import {
-    getUserDetail
-  } from '@/api/choseManagerApi/choseManagerCom.js'
+    introducerGetRegisteredListByDirId
+  } from '@/api/serviceGovernorApi/serviceGovernorCom.js'
   export default {
     name: "index",
     components: {
@@ -55,28 +56,40 @@
       search(data) {
         this.searchVal = data
         this.page = 1
+        this.introducerGetRegisteredListByDirId()
         //
       },
       changePage(page) {
         this.page = page
+        this.introducerGetRegisteredListByDirId()
         //
       },
-      async getUserDetail() {
+      async introducerGetRegisteredListByDirId() {
         this.loading = true
-        getUserDetail({
-          userId: this.$store.state.user.adminId,
+        await introducerGetRegisteredListByDirId({
+          phonenumber: this.searchVal,
           curUserId: this.$store.state.user.adminId,
+          size: '20',
+          page: this.page
         }).then(res => {
-          console.log(res);
           this.loading = false
-          let data = res.Tag[0].Table[0]
-          this.userInfo = data
-          this.tableData.push(this.userInfo)
+          if (res.OK == 'True') {
+
+            console.log(res);
+            if (res.Tag.length > 0) {
+              let data = res.Tag[0].Table
+              this.tableData = data
+            } else {
+              this.tableData = []
+            }
+            this.searchResult = this.tableData.length
+            this.pageTotal = this.tableData.length > 0 ? (this.page - 1) * 20 + 21 : (this.page - 1) * 20 + 1
+          }
         })
       }
     },
     created() {
-      this.getUserDetail()
+      this.introducerGetRegisteredListByDirId()
     }
   }
 </script>

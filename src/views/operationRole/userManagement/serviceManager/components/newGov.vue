@@ -344,7 +344,7 @@
       this.getTreeselect();
       let pageStatus = this.pageStatus
       if (pageStatus == '1') {
-        this.title = '新建引导主管'
+        this.title = '新建服务经理'
       } else if (pageStatus == '2') {
         this.title = '修改'
         this.rules = {

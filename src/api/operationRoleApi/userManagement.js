@@ -63,6 +63,17 @@ export function introducerGetListOfDir(data) {
   })
 }
 
+// web-查询服务专员列表 -- 招募专用
+export function introducerGetListByDirIdFromM(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\guidance\\introducer\\getListByDirIdFromM_1_0_1&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
 // web-将服务专员授权归属主管
 export function introducerGrant2Dir(data) {
   axios.defaults.baseURL = '/api'
@@ -84,3 +95,4 @@ export function introducerUnGrant2Dir(data) {
     data: data
   })
 }
+

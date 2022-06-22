@@ -81,7 +81,7 @@
             } else {
               this.$message({
                 type: 'error',
-                message: '机构名称已存在!'
+                message: '手机号码或者名字重复!'
               });
             }
 

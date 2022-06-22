@@ -75,6 +75,26 @@ export function getUploadResult(guid) {
   })
 }
 
+// 获取上传进度--批量新建服务对象
+export function getFileProgress_service(guid) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/Cache?Name=GuidanceNMFileProgress&Key=' + guid,
+    method: 'get',
+  })
+}
+
+// 获取上传结果--批量新建服务对象
+export function getUploadResult_service(guid) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/Cache?Name=GuidanceNMFileHandleNum&Key=' + guid,
+    method: 'get',
+  })
+}
+
 // 获取省列表
 export function getProvince(data) {
   axios.defaults.baseURL = '/api'
@@ -103,6 +123,37 @@ export function getCounty(data) {
   return request({
     xf_url: '/api',
     url: '/QueryData?SqlCmdName=com\\getCounty&DBC=w_m',
+    method: 'post',
+    data: data
+  })
+}
+
+// 发送短信验证码接口
+export function web_SMS_Send(phonenumber,type) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ProxyService/SMS_Send?mobile=' + phonenumber + '&type=' + type,
+    method: 'get',
+  })
+}
+
+// 校验验证码是否正确
+export function web_SMS_validCode(phonenumber,code) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/ProxyService/SMS_validCode?phonenumber=' + phonenumber + '&code=' + code,
+    method: 'get',
+  })
+}
+
+// web-查询用户个人信息-根据用户id和用户角色
+export function getDetailByIdAndRK(data) {
+  axios.defaults.baseURL = '/api'
+  return request({
+    xf_url: '/api',
+    url: '/QueryData?SqlCmdName=web\\user\\info\\getDetailByIdAndRK_1_0_1&DBC=w_m',
     method: 'post',
     data: data
   })

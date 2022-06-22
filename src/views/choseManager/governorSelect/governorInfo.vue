@@ -10,7 +10,7 @@
       <el-table-column prop="cattypeName" label="账号名称" align="center"></el-table-column>
       <el-table-column prop="cattypeName" label="账号开通日期" align="center"></el-table-column>
       <el-table-column prop="cattypeName" label="姓名" align="center"></el-table-column>
-      <el-table-column prop="cattypeName" label="国家/ 地区" align="center"></el-table-column>
+      <el-table-column prop="cattypeName" label="国家/地区" align="center"></el-table-column>
       <el-table-column prop="cattypeName" label="联系电话" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
